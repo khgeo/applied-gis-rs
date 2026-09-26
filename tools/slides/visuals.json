@@ -1,0 +1,258 @@
+[
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-archive.svg",
+  "title": "ទិន្នន័យច្រើនពេកសម្រាប់កុំព្យូទ័រមួយ",
+  "bullets": [
+   "តាំងពី Sentinel-2 (២០១៥) បណ្ណសារកើនឡើងលឿនជាងមុនច្រើន។",
+   "១ PB = ១ លាន GB៖ មិនអាចទាញយកមកកុំព្យូទ័រផ្ទាល់ខ្លួនបានទេ។",
+   "តួលេខជាលំដាប់ទំហំប្រហាក់ប្រហែល សម្រាប់បង្រៀន។"
+  ],
+  "where": 0.1
+ },
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-workflows.svg",
+  "title": "នាំកូដទៅកន្លែងទិន្នន័យ",
+  "bullets": [
+   "លំហូរបុរាណ ចំណាយពេលភាគច្រើនលើការទាញយក និងរក្សាទុក។",
+   "Earth Engine រក្សាទិន្នន័យ និងគណនានៅកន្លែងតែមួយ។",
+   "យើងទាញយកតែលទ្ធផលតូចៗ៖ ផែនទី តារាង ឬក្រាប។"
+  ],
+  "where": 0.2
+ },
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-architecture.svg",
+  "title": "Earth Engine មានអ្វីខ្លះ",
+  "bullets": [
+   "កាតាឡុក៖ ទិន្នន័យដែលរៀបចំរួច (រួមទាំង L2A Landsat C2 CHIRPS SRTM)។",
+   "Code Editor៖ កន្លែងសរសេរ JavaScript ក្នុងកម្មវិធីរុករក។",
+   "Apps និងការនាំចេញ៖ ផ្លូវចែករំលែកលទ្ធផលទៅអ្នកដទៃ។"
+  ],
+  "where": 0.35
+ },
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-code-editor.svg",
+  "title": "ស្គាល់ Code Editor",
+  "bullets": [
+   "ខាងឆ្វេង៖ ស្គ្រីបរបស់អ្នក ឯកសារ API និង Assets។",
+   "កណ្ដាល៖ សរសេរកូដ ហើយចុច Run។ ខាងស្ដាំ៖ Console (print) Inspector (ចុចលើផែនទី) និង Tasks (នាំចេញ)។",
+   "ខាងក្រោម៖ ផែនទីសម្រាប់ Map.addLayer()។"
+  ],
+  "where": 0.5
+ },
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-scene-count.svg",
+  "title": "ចំនួនរូបភាពនៅកម្ពុជា",
+  "bullets": [
+   "មួយឆ្នាំមានរូបភាព Sentinel-2 ជាង ២ ០០០ ផ្ទាំងលើកម្ពុជា។",
+   "Composite មួយ ឬស៊េរីពេលវេលា អាចប្រើរូបភាពរាប់ពាន់ក្នុងការគណនាតែមួយ។",
+   "នេះជាហេតុផលចម្បងដែលវគ្គនេះប្រើ Earth Engine។"
+  ],
+  "where": 0.15
+ },
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-pros-cons.svg",
+  "title": "ប្រើ Earth Engine ពេលណា",
+  "bullets": [
+   "ល្អសម្រាប់តំបន់ធំ រយៈពេលវែង និងទិន្នន័យដែលមានក្នុងកាតាឡុក។",
+   "QGIS នៅតែល្អជាងសម្រាប់ការកែសម្រួលវ៉ិចទ័រ ប្លង់ផែនទី និងទិន្នន័យក្នុងស្រុក។",
+   "អ្នកជំនាញប្រើទាំងពីររួមគ្នា (មេរៀនទី១៣–១៤)។"
+  ],
+  "where": 0.85
+ },
+ {
+  "lesson": 1,
+  "file": "assets/svg/agv/a01-first-script.svg",
+  "title": "ប្រាំបីបន្ទាត់ ជំនួសការទាញយក ១ GB",
+  "bullets": [
+   "ImageCollection៖ បណ្ណសារទាំងមូល · filter៖ ជ្រើសតំបន់ និងកាលបរិច្ឆេទ។",
+   "sort + first៖ យករូបភាពពពកតិចបំផុត។",
+   "addLayer៖ Earth Engine គណនា និងបង្ហាញតែក្រឡាដែលអ្នកមើល។"
+  ],
+  "where": 0.65
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-client-server.svg",
+  "title": "ហេតុអ្វី if និង for ធម្មតាមិនដំណើរការលើ ee.Number",
+  "bullets": [
+   "ee.Number(5) មិនមែនលេខ ៥ ក្នុងកម្មវិធីរុករកទេ៖ វាជាការណែនាំឲ្យម៉ាស៊ីនមេគណនា។",
+   "ប្រើ .add() .gt() ee.Algorithms.If() ជំនួស + > និង if។",
+   "print() និង Map.addLayer() ស្នើលទ្ធផលពីម៉ាស៊ីនមេ។"
+  ],
+  "where": 0.15
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-objects.svg",
+  "title": "វត្ថុសំខាន់ៗ",
+  "bullets": [
+   "រ៉ាស្ទ័រ៖ ee.Image (មួយ) និង ee.ImageCollection (ច្រើន)។",
+   "វ៉ិចទ័រ៖ ee.Geometry → ee.Feature → ee.FeatureCollection (ដូចស្រទាប់ QGIS)។",
+   "Reducer៖ បម្លែងតម្លៃច្រើនទៅជាស្ថិតិ (មេរៀនទី៤)។"
+  ],
+  "where": 0.3
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-chaining.svg",
+  "title": "អានកូដពីឆ្វេងទៅស្ដាំ",
+  "bullets": [
+   "មុខងារនីមួយៗមិនប្ដូរវត្ថុដើមទេ៖ វាត្រឡប់វត្ថុថ្មី។",
+   "ត្រងឲ្យបានច្រើនមុន (filterBounds filterDate) ទើបការគណនាលឿន។",
+   "ចុងក្រោយ reducer (median) បម្លែងបណ្ដុំទៅជារូបភាពមួយ។"
+  ],
+  "where": 0.5
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-map-loop.svg",
+  "title": "គិតជា «អនុវត្តលើគ្រប់ធាតុ»",
+  "bullets": [
+   "for loop ដំណើរការក្នុងកម្មវិធីរុករក ហើយមិនស្គាល់ទំហំពិតនៃ collection។",
+   "map() ផ្ញើមុខងារទៅម៉ាស៊ីនមេ ដែលអនុវត្តលើធាតុនីមួយៗស្របគ្នា។",
+   "ក្នុង map() មិនអាចប្រើ print() getInfo() ឬ Map.addLayer() បានទេ។"
+  ],
+  "where": 0.7
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-fmr.svg",
+  "title": "លំនាំស្គ្រីប Earth Engine",
+  "bullets": [
+   "filter៖ តំបន់ កាលបរិច្ឆេទ ពពក។",
+   "map៖ លុបពពក គណនាសន្ទស្សន៍ កាត់តាមព្រំ។",
+   "reduce៖ median ពេលវេលា ឬស្ថិតិតាមតំបន់។"
+  ],
+  "where": 0.85
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-lazy.svg",
+  "title": "Earth Engine គណនាតែពេលត្រូវការ",
+  "bullets": [
+   "បន្ទាត់ var គ្រាន់តែបង្កើតផែនការ (graph) នៃការគណនា។",
+   "ការគណនាពិតកើតឡើងពេល print Map.addLayer ឬ Export។",
+   "នៅកម្រិត zoom ទាប Earth Engine គណនាលើក្រឡាធំ (pyramid) ដើម្បីលឿន។"
+  ],
+  "where": 0.4
+ },
+ {
+  "lesson": 2,
+  "file": "assets/svg/agv/a02-errors.svg",
+  "title": "អានសារកំហុស",
+  "bullets": [
+   "សារកំហុសក្នុង Console ប្រាប់លេខបន្ទាត់ និងមូលហេតុ។",
+   "កំហុសអង្គចងចាំ និងពេលវេលា ជាទូទៅដោះស្រាយដោយ Export ឬ scale ធំជាង។",
+   "ឈ្មោះក្រុមរលកខុស ជាកំហុសញឹកញាប់បំផុតពេលប្ដូរពី Sentinel-2 ទៅ Landsat។"
+  ],
+  "where": 0.95
+ },
+ {
+  "lesson": 3,
+  "file": "assets/svg/agv/a03-dates.svg",
+  "title": "គ្មានរូបភាពណាមួយស្អាតទាំងស្រុង",
+  "bullets": [
+   "រូបភាពនីមួយៗមានពពកនៅកន្លែងខុសៗគ្នា។",
+   "ប៉ុន្តែក្រឡានីមួយៗ ត្រូវបានមើលឃើញស្អាតយ៉ាងហោចណាស់ម្ដង។",
+   "Composite យកផ្នែកស្អាតពីរូបភាពផ្សេងៗ ផ្គុំជារូបភាពថ្មី។"
+  ],
+  "where": 0.5
+ },
+ {
+  "lesson": 3,
+  "file": "assets/svg/agv/a03-reducers.svg",
+  "title": "ជ្រើស reducer សម្រាប់ composite",
+  "bullets": [
+   "first() យករូបភាពមួយ ដូច្នេះពពករបស់វានៅដដែល។",
+   "max() ជ្រើសពពក ព្រោះពពកភ្លឺជាងដី។",
+   "median() + mask ផ្ដល់លទ្ធផលស្អាតបំផុតសម្រាប់តំបន់ត្រូពិច។"
+  ],
+  "where": 0.7
+ },
+ {
+  "lesson": 3,
+  "file": "assets/svg/agv/a03-funnel.svg",
+  "title": "ត្រងពីធំទៅតូច",
+  "bullets": [
+   "filterBounds និង filterDate ធ្វើមុន ព្រោះវាថយចំនួនយ៉ាងលឿន។",
+   "តម្រងពពកប្រើ metadata (CLOUDY_PIXEL_PERCENTAGE) នៃរូបភាពទាំងមូល។",
+   "ពិនិត្យ .size() នៅជំហាននីមួយៗ ដើម្បីដឹងថានៅសល់ប៉ុន្មាន។"
+  ],
+  "where": 0.2
+ },
+ {
+  "lesson": 3,
+  "file": "assets/svg/agv/a03-qa.svg",
+  "title": "ក្រុមរលកគុណភាពប្រាប់ពពក",
+  "bullets": [
+   "Sentinel-2 L2A មានក្រុមរលក SCL ដែលចាត់ថ្នាក់ក្រឡានីមួយៗ។",
+   "Landsat Collection 2 ប្រើប៊ីតក្នុង QA_PIXEL៖ ត្រូវប្រើ bitwiseAnd()។",
+   "updateMask() ធ្វើឲ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។"
+  ],
+  "where": 0.4
+ },
+ {
+  "lesson": 3,
+  "file": "assets/svg/agv/a03-cube.svg",
+  "title": "Reducer ធ្វើការតាមក្រឡានីមួយៗ",
+  "bullets": [
+   "នៅក្រឡានីមួយៗ មានតម្លៃមួយក្នុងរូបភាពនីមួយៗ៖ ស៊េរីពេលវេលា។",
+   "median() យកតម្លៃកណ្ដាលនៃស៊េរីនោះ ដាច់ដោយឡែកក្នុងក្រុមរលកនីមួយៗ។",
+   "ដូច្នេះ composite អាចលាយពណ៌ពីកាលបរិច្ឆេទខុសគ្នា ក្នុងក្រឡាជិតគ្នា។"
+  ],
+  "where": 0.6
+ },
+ {
+  "lesson": 3,
+  "file": "assets/svg/agv/a03-quality.svg",
+  "title": "ក្បួនជ្រើសក្រឡាពីរបែប",
+  "bullets": [
+   "កាលបរិច្ឆេទ ២ និង ៥ មានពពក (ក្រហមខ្ពស់ NDVI ទាប)។",
+   "median តាមក្រុមរលក ជៀសវាងតម្លៃខ្ពស់ទាំងនោះដោយស្វ័យប្រវត្តិ។",
+   "qualityMosaic យកកាលបរិច្ឆេទតែមួយដែលល្អបំផុតតាមលក្ខណៈវិនិច្ឆ័យ (ឧ. NDVI) ដូច្នេះក្រុមរលកស៊ីគ្នា។"
+  ],
+  "where": 0.85
+ },
+ {
+  "lab": 1,
+  "file": "assets/svg/agv/lab01-workflow.svg",
+  "title": "លំដាប់ការងារ លំហាត់ទី១",
+  "bullets": [
+   "ចុះឈ្មោះ និងរៀបចំ",
+   "ស្គ្រីបដំបូង",
+   "ខេត្តរបស់អ្នក",
+   "រាប់រូបភាព",
+   "រក្សាទុក និងចែករំលែក"
+  ]
+ },
+ {
+  "lab": 2,
+  "file": "assets/svg/agv/lab02-workflow.svg",
+  "title": "លំដាប់ការងារ លំហាត់ទី២",
+  "bullets": [
+   "JavaScript មូលដ្ឋាន",
+   "សរសេរមុខងារ",
+   "map() លើមួយឆ្នាំ",
+   "ស្វែងរកកំហុស",
+   "រក្សាទុកមុខងារ"
+  ]
+ },
+ {
+  "lab": 3,
+  "file": "assets/svg/agv/lab03-workflow.svg",
+  "title": "លំដាប់ការងារ លំហាត់ទី៣",
+  "bullets": [
+   "ត្រងជាជំហាន",
+   "លុបពពកពីរវិធី",
+   "median ធៀបនឹង qualityMosaic",
+   "រដូវវស្សា",
+   "នាំចេញ"
+  ]
+ }
+]
