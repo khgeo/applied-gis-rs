@@ -14,7 +14,7 @@ DOCS = os.path.join(ROOT, "docs")
 OUT = os.path.join(DOCS, "slides")
 
 # ---- book settings ---------------------------------------------------------
-BOOK, BOOK_EN, BOOK_NO = "GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍", "Applied GIS and Remote Sensing", "សៀវភៅទី៤"
+BOOK, BOOK_EN, BOOK_NO = "អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ", "Applied GIS and Remote Sensing", "សៀវភៅទី៤"
 AUTHOR = "យាំ សារដ្ឋ · YAM Sarath"
 ONLINE = "https://khgeo.github.io/applied-gis-rs/"
 PAGE_EXT = "/"

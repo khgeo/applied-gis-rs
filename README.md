@@ -1,4 +1,4 @@
-# GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍ · Applied GIS and Remote Sensing
+# អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ · Applied GIS and Remote Sensing
 
 សៀវភៅទី៤ នៃស៊េរីសៀវភៅ GIS និងការយកព័ត៌មានពីចម្ងាយជាភាសាខ្មែរ (ឆ្នាំទី៣ ឆមាសទី២) · Google Earth Engine · ១៥ មេរៀន · ១៥ លំហាត់
 

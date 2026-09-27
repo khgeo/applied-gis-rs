@@ -22,7 +22,7 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 SITE = os.path.join(ROOT, "site")
 OUT = os.path.join(ROOT, "book")
 ONLINE = "https://khgeo.github.io/applied-gis-rs/"
-TITLE = "GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍"
+TITLE = "អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ"
 PORT = 8765
 KM = "០១២៣៤៥៦៧៨៩"
 kh = lambda s: "".join(KM[int(c)] if c.isdigit() else c for c in str(s))
@@ -117,22 +117,22 @@ html, body { background: #fff !important; }
 body { font-size: 10.5pt; }
 .md-typeset { font-size: 10.5pt !important; line-height: 1.75; }
 .book-section { break-before: page; }
-.book-section > article > h1:first-of-type { font-size: 21pt; color: #5d4037; border-bottom: 3px solid #ff7043; padding-bottom: 6pt; margin-top: 0; }
-.md-typeset h2 { font-size: 15pt; color: #5d4037; break-after: avoid; margin-top: 1.4em; }
+.book-section > article > h1:first-of-type { font-size: 21pt; color: #1b5e20; border-bottom: 3px solid #ffb300; padding-bottom: 6pt; margin-top: 0; }
+.md-typeset h2 { font-size: 15pt; color: #1b5e20; break-after: avoid; margin-top: 1.4em; }
 .md-typeset h3 { font-size: 12.5pt; break-after: avoid; }
 .md-typeset h4 { break-after: avoid; }
 .md-typeset figure, .md-typeset table, .admonition, .lab-chart, .sim, .lab-map, .match-quiz, .raster-sim, .print-qr, .self-check, pre { break-inside: avoid; }
 .md-typeset table:not([class]) { font-size: 9pt; display: table; width: 100%; }
 .md-typeset figure { margin: 1em 0; } .md-typeset figcaption { font-size: 9pt; color: #555; }
-.md-typeset a { color: #5d4037; text-decoration: none; }
+.md-typeset a { color: #1b5e20; text-decoration: none; }
 .divider { break-before: page; height: 245mm; display: flex; flex-direction: column; justify-content: center; }
-.divider .kicker { font-family: 'Battambang'; color: #ff7043; font-size: 14pt; letter-spacing: .05em; }
-.divider h1 { font-family: 'Moul', 'Battambang'; font-weight: 400; font-size: 26pt; color: #3e2723; line-height: 1.6; margin: .3em 0; border: 0; }
-.divider .rule { width: 60mm; height: 4px; background: #ff7043; }
+.divider .kicker { font-family: 'Battambang'; color: #ffb300; font-size: 14pt; letter-spacing: .05em; }
+.divider h1 { font-family: 'Moul', 'Battambang'; font-weight: 400; font-size: 26pt; color: #123d27; line-height: 1.6; margin: .3em 0; border: 0; }
+.divider .rule { width: 60mm; height: 4px; background: #ffb300; }
 .divider ul { font-family: 'Battambang'; color: #333; font-size: 12pt; margin-top: 2em; list-style: none; padding: 0; }
 .divider li { margin: .4em 0; }
-.print-qr { display: flex; gap: 10pt; align-items: center; border: 1px dashed #bcaaa4; border-radius: 6px; padding: 6pt 10pt; font-size: 8.5pt; color: #444; margin: -.4em 0 1em; background: #faf6f4; }
-.print-qr .u { font-family: monospace; font-size: 8pt; color: #5d4037; }
+.print-qr { display: flex; gap: 10pt; align-items: center; border: 1px dashed #a5d6a7; border-radius: 6px; padding: 6pt 10pt; font-size: 8.5pt; color: #444; margin: -.4em 0 1em; background: #f3f8f3; }
+.print-qr .u { font-family: monospace; font-size: 8pt; color: #1b5e20; }
 .print-answer { margin-top: .4em; color: #777; }
 .md-typeset .admonition-title, .md-typeset summary { padding-left: 2.6em !important; }
 .md-typeset .admonition-title::before, .md-typeset summary::before { left: .75em !important; top: 50% !important; transform: translateY(-50%); width: 1.15em !important; height: 1.15em !important; }
@@ -159,33 +159,33 @@ def front_matter(toc):
 body {{ font-family: 'Siemreap','Battambang',sans-serif; font-size: 10.5pt; color: #222; }}
 .pg {{ break-after: page; height: 246mm; position: relative; overflow: hidden; }}
 .toc {{ break-before: page; }}
-.title h1 {{ font-family: 'Moul'; font-weight: 400; font-size: 30pt; color: #3e2723; line-height: 1.7; margin: 45mm 0 4mm; }}
-.title .en {{ font-family: Georgia, serif; font-style: italic; font-size: 16pt; color: #5d4037; }}
-.title .rule {{ width: 50mm; height: 4px; background: #ff7043; margin: 8mm 0; }}
+.title h1 {{ font-family: 'Moul'; font-weight: 400; font-size: 30pt; color: #123d27; line-height: 1.7; margin: 45mm 0 4mm; }}
+.title .en {{ font-family: Georgia, serif; font-style: italic; font-size: 16pt; color: #1b5e20; }}
+.title .rule {{ width: 50mm; height: 4px; background: #ffb300; margin: 8mm 0; }}
 .title .au {{ font-family: Georgia, serif; font-size: 16pt; font-weight: 700; margin-top: 30mm; }}
 .title .meta {{ font-family: 'Battambang'; color: #555; margin-top: 3mm; }}
 .copy {{ font-size: 9.5pt; color: #444; position: absolute; bottom: 0; line-height: 1.9; }}
 .copy b {{ font-family: 'Battambang'; }}
-h2 {{ font-family: 'Battambang'; color: #5d4037; font-size: 18pt; border-bottom: 3px solid #ff7043; padding-bottom: 4pt; }}
+h2 {{ font-family: 'Battambang'; color: #1b5e20; font-size: 18pt; border-bottom: 3px solid #ffb300; padding-bottom: 4pt; }}
 .t-part, .t-page {{ display: flex; align-items: baseline; gap: 6pt; }}
-.t-part {{ font-family: 'Battambang'; font-weight: 700; color: #5d4037; margin-top: 9pt; font-size: 11pt; }}
+.t-part {{ font-family: 'Battambang'; font-weight: 700; color: #1b5e20; margin-top: 9pt; font-size: 11pt; }}
 .t-page {{ padding-left: 12pt; font-size: 10pt; line-height: 1.8; }}
 .dots {{ flex: 1; border-bottom: 1px dotted #aaa; transform: translateY(-3pt); }}
 .n {{ font-family: 'Battambang'; min-width: 18pt; text-align: right; }}
 .pref p {{ line-height: 1.9; text-align: justify; }}
 </style></head><body>
-<div class="pg title"><h1>GIS និងការយកព័ត៌មាន<br>ពីចម្ងាយអនុវត្តន៍</h1><div class="en">Applied GIS and Remote Sensing</div><div class="rule"></div>
+<div class="pg title"><h1>អនុវត្តន៍ GIS<br>និងការយកព័ត៌មានពីចម្ងាយ</h1><div class="en">Applied GIS and Remote Sensing</div><div class="rule"></div>
 <div class="meta">សៀវភៅទី៤ នៃស៊េរីសៀវភៅ GIS និងការយកព័ត៌មានពីចម្ងាយ</div><div class="meta">សម្រាប់ថ្នាក់បរិញ្ញាបត្រ ឆ្នាំទី៣ ឆមាសទី២ · ដេប៉ាតឺម៉ង់ភូមិវិទ្យា និងរៀបចំដែនដី</div>
 <div class="au" style="font-family:Battambang">យាំ សារដ្ឋ</div><div class="meta" style="font-family:Georgia">YAM Sarath</div><div class="meta">បោះពុម្ពលើកទី១ · ២០២៦</div></div>
-<div class="pg"><div class="copy"><b>GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍</b><br>Applied GIS and Remote Sensing: A Khmer-language textbook<br>
+<div class="pg"><div class="copy"><b>អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ</b><br>Applied GIS and Remote Sensing: A Khmer-language textbook<br>
 © ២០២៦ យាំ សារដ្ឋ (YAM Sarath) · បោះពុម្ពលើកទី១<br><br>
 ចេញផ្សាយក្រោមអាជ្ញាបណ្ណ <b>Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</b>។ អ្នកអាចចម្លង ចែកចាយ និងកែសម្រួល ដោយត្រូវដកស្រង់អ្នកនិពន្ធ និងចែករំលែកក្រោមអាជ្ញាបណ្ណដដែល។<br><br>
 រូបភាពផ្កាយរណប៖ Landsat 8 ដោយ U.S. Geological Survey · មានទិន្នន័យ Copernicus Sentinel ដែលបានកែសម្រួល (ESA)។ ទិន្នន័យទាំងនេះមិនស្ថិតក្រោមអាជ្ញាបណ្ណសៀវភៅនេះទេ (មើលឧបសម្ព័ន្ធ ខ)។<br><br>
 កំណែអនឡាញអន្តរកម្ម៖ {ONLINE}<br>ប្រភពកូដ និងទិន្នន័យ៖ https://github.com/khgeo/applied-gis-rs<br><br>
 ពុម្ពអក្សរ៖ Siemreap Battambang Moul (Danh Hong · SIL Open Font License)<br>
-ការដកស្រង់៖ YAM Sarath [យាំ សារដ្ឋ] (2026). GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍ [Applied GIS and Remote Sensing: A Khmer-language textbook]. CC BY-SA 4.0.</div></div>
+ការដកស្រង់៖ YAM Sarath [យាំ សារដ្ឋ] (2026). អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ [Applied GIS and Remote Sensing: A Khmer-language textbook]. CC BY-SA 4.0.</div></div>
 <div class="pg pref" style="height:auto;overflow:visible"><h2>អំពីសៀវភៅនេះ</h2>
-<p>សៀវភៅនេះជាឯកសារបង្រៀនសម្រាប់មុខវិជ្ជា GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍ ៣ ក្រេឌីត ៤៥ ម៉ោង។ វាមាន <b>មេរៀន ១៥</b> (៣ ម៉ោងក្នុងមួយមេរៀន) និង <b>សៀវភៅអនុវត្ត ១៥ លំហាត់</b> ក្នុង Google Earth Engine ដែលវិភាគរូបភាពផ្កាយរណបរាប់ពាន់ផ្ទាំងលើកម្ពុជាដោយមិនចាំបាច់ទាញយក។</p>
+<p>សៀវភៅនេះជាឯកសារបង្រៀនសម្រាប់មុខវិជ្ជា អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ ៣ ក្រេឌីត ៤៥ ម៉ោង។ វាមាន <b>មេរៀន ១៥</b> (៣ ម៉ោងក្នុងមួយមេរៀន) និង <b>សៀវភៅអនុវត្ត ១៥ លំហាត់</b> ក្នុង Google Earth Engine ដែលវិភាគរូបភាពផ្កាយរណបរាប់ពាន់ផ្ទាំងលើកម្ពុជាដោយមិនចាំបាច់ទាញយក។</p>
 <p>សៀវភៅនេះចាប់ផ្ដើមពីការគណនាលើពពក និង JavaScript ឆ្លងកាត់ composite ស្ថិតិតាមតំបន់ ស៊េរីពេលវេលា និងការចាត់ថ្នាក់ រហូតដល់ការអនុវត្តលើទឹកជំនន់ គ្រោះរាំងស្ងួត ព្រៃឈើ កសិកម្ម ទីក្រុង និងការចែករំលែកជាកម្មវិធីវេប។ វាប្រើចំណេះដឹងពីសៀវភៅទី២ និងទី៣ ដោយមិនបង្រៀនឡើងវិញ។</p>
 <p><b>ពិសោធន៍អន្តរកម្ម និងកូដ</b>៖ កំណែអនឡាញមានពិសោធន៍ និងប៊ូតុងចម្លងកូដ។ ក្នុងសៀវភៅបោះពុម្ពនេះ ពិសោធន៍បង្ហាញតែស្ថានភាពដំបូង ជាមួយកូដ QR ដែលនាំទៅទំព័រអនឡាញ។</p></div>
 <div class="toc"><h2>មាតិកា</h2>{''.join(rows)}</div>
@@ -238,12 +238,12 @@ async def render(chrome_path=None):
         where = {}
         with pymupdf.open(body_pdf) as d:
             for i, page in enumerate(d):
-                for key in re.findall(r"ZZ\|([a-z0-9-]+)\|ZZ", page.get_text().replace("\n", "")):
-                    where.setdefault(key, i + 1)
+                for key in re.findall(r"ZZ\|([a-z0-9-]+)\|ZZ", page.get_text().replace("\n", "").replace(" ", "")):
+                    where.setdefault(re.sub(r"(.)\1+", r"\1", key), i + 1)   # text extraction may drop doubled letters (ll, ff)
         toc = []
         for idx, (kind, title, md, part) in enumerate(items):
             key = f"div{idx}" if kind == "divider" else slug_of(md)
-            toc.append((kind, title, where.get(key), part))
+            toc.append((kind, title, where.get(re.sub(r"(.)\1+", r"\1", key)), part))
         await pg.set_viewport_size({"width": 794, "height": 1123})
         open(os.path.join(OUT, "front.html"), "w", encoding="utf-8").write(front_matter(toc))
         await pg.goto("file://" + os.path.join(OUT, "front.html")); await pg.wait_for_timeout(1500)
