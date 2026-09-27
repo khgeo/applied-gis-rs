@@ -65,3 +65,17 @@
 | សីតុណ្ហភាពផ្ទៃដី | Land surface temperature (LST) | ៨ ១២ |
 | កោះកំដៅទីក្រុង | Urban heat island (UHI) | ១២ |
 | ពន្លឺពេលយប់ | Night-time lights | ១២ |
+| ការវិភាគពហុលក្ខខណ្ឌ | MCDA | ១៣ |
+| កត្តា · ឧបសគ្គ | Factor · Constraint | ១៣ |
+| ការធ្វើស្តង់ដារ | Standardization | ១៣ |
+| ដំណើរការឋានានុក្រមវិភាគ | AHP | ១៣ |
+| ការបូកលីនេអ៊ែរមានទម្ងន់ | WLC | ១៣ |
+| ការវិភាគភាពរសើប | Sensitivity analysis | ១៣ |
+| ធាតុផ្ទាំង | Widget | ១៤ |
+| មុខងារហៅត្រឡប់ | Callback | ១៤ |
+| ការស្នើមិនរង់ចាំ | Asynchronous (evaluate) | ១៤ |
+| ការបោះពុម្ព | Publish | ១៤ |
+| ភាពអាចធ្វើឡើងវិញ | Reproducibility | ១៥ |
+| ភាពមិនប្រាកដ | Uncertainty | ១៥ |
+| ក្រមសីលធម៌ទិន្នន័យ | Data ethics | ១៥ |
+| អាជ្ញាបណ្ណ | Licence | ១៥ |

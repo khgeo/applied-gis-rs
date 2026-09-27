@@ -1,4 +1,4 @@
-"""Front and back cover for Book 3 (A4, full bleed).
+"""Front and back cover for Book 4 (A4, full bleed).
 
 The design lives in cover_template.html (two A4 pages: .pg.front and .pg.back,
 artwork embedded as data URIs so the file is self-contained). Edit that file to
@@ -28,8 +28,8 @@ def wrap(pages, paper_mm=0.1, bleed=3):
     fs = min(11, spine * 0.9)
     sp = (f'<div style="position:absolute;left:{bleed+210}mm;top:0;width:{spine}mm;height:{hmm}mm;background:#281812;display:flex;align-items:center;justify-content:center">'
           f'<div style="transform:rotate(90deg);white-space:nowrap;color:#fff;font-size:{fs:.1f}pt;display:flex;gap:10mm;align-items:center">'
-          f'<span style="font-family:Moul">មូលដ្ឋានគ្រឹះនៃការយកព័ត៌មានពីចម្ងាយ</span><span style="font-family:Batt;font-weight:bold">យាំ សារដ្ឋ</span>'
-          f'<span style="color:#ff8a65;font-family:Batt">សៀវភៅទី៣</span></div></div>')
+          f'<span style="font-family:Moul">GIS និងការយកព័ត៌មានពីចម្ងាយអនុវត្តន៍</span><span style="font-family:Batt;font-weight:bold">យាំ សារដ្ឋ</span>'
+          f'<span style="color:#ff8a65;font-family:Batt">សៀវភៅទី៤</span></div></div>')
     place = lambda x, inner: f'<div style="position:absolute;left:{x}mm;top:{bleed}mm;width:210mm;height:297mm">{inner}</div>'
     css = (f"@page{{size:{wmm}mm {hmm}mm;margin:0}} html,body{{margin:0}} "
            f"body{{width:{wmm}mm;height:{hmm}mm;position:relative;background:#281812;overflow:hidden}} .pg{{page-break-after:auto}}")

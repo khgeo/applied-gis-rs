@@ -5,6 +5,7 @@
    gee-zonal · gee-harmonic · gee-rf (Chapter 2)
    gee-flood · gee-drought · gee-terrain (Chapter 3)
    gee-forest · gee-rice · gee-urban (Chapter 4)
+   gee-mcda · gee-app · gee-ethics (Chapter 5)
    ============================================================ */
 (function () {
   "use strict";
@@ -571,5 +572,132 @@
         `<br><span class="sim-hint">Sentinel-2 ពិត · ក្រុងព្រះសីហនុ ២០១៥ និង ២០២១ · ក្រឡា ៣០ ម · ពណ៌ពង្រីកពន្លឺសម្រាប់មើល · NDVI ពិតពី GeoTIFF ដើម · NDBI ប្រហាក់ប្រហែលពីក្រុមរលកដែលបានពង្រីកពន្លឺ</span>`;
     };
     const fit = stage(cv, W, H, draw); el.querySelectorAll("input").forEach((i) => i.addEventListener("input", fit)); fit();
+  };
+
+  /* ---------- 14. weighted overlay (Lesson 13) ---------- */
+  window.EXTRA_SIMS["gee-mcda"] = async (el) => {
+    const NAMES = ["ជម្រាល", "ចម្ងាយពីដំណាំ", "ដីឥដ្ឋ", "ទឹកភ្លៀង"], AHP = [47, 16, 28, 9];
+    const { q, out, cv } = shell(el, "ទម្ងន់ និងភាពសមស្រប (WLC)",
+      NAMES.map((nm, i) => `<label>${nm} <b class="gm-v${i}"></b> <input type="range" class="gm-w${i}" min="0" max="100" value="${AHP[i]}"></label>`).join("") +
+      `<button type="button" class="gm-ahp">AHP</button><button type="button" class="gm-eq">ស្មើគ្នា</button>`);
+    const j = await (await fetch(new URL("dem_synthetic.json", AG_DATA))).json(), n = j.n, N = n * n;
+    const bs = atob(j.zr), z = new Float32Array(N); for (let i = 0; i < N; i++) z[i] = (bs.charCodeAt(2 * i) | (bs.charCodeAt(2 * i + 1) << 8)) * j.scale;
+    const sl = new Float32Array(N); for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { const g = (yy, xx) => z[Math.min(n - 1, Math.max(0, yy)) * n + Math.min(n - 1, Math.max(0, xx))];
+      sl[y * n + x] = Math.atan(Math.hypot((g(y, x + 1) - g(y, x - 1)) / 60, (g(y + 1, x) - g(y - 1, x)) / 60)) * 180 / Math.PI; }
+    const zs = Array.from(z).sort((a, b) => a - b), z55 = zs[Math.floor(N * .55)], z85 = zs[Math.floor(N * .85)];
+    const crop = new Uint8Array(N); for (let i = 0; i < N; i++) crop[i] = sl[i] < 3 && z[i] < z55 ? 1 : 0;
+    const dist = new Float32Array(N).fill(1e9);                                     // two-pass chamfer distance (m)
+    for (let i = 0; i < N; i++) if (crop[i]) dist[i] = 0;
+    for (let pass = 0; pass < 2; pass++) for (let k = 0; k < N; k++) { const i = pass ? N - 1 - k : k, y = Math.floor(i / n), x = i % n, s_ = pass ? 1 : -1;
+      for (const [dy, dx, c] of [[0, s_, 30], [s_, 0, 30], [s_, s_, 42], [s_, -s_, 42]]) { const yy = y + dy, xx = x + dx; if (yy >= 0 && yy < n && xx >= 0 && xx < n) dist[i] = Math.min(dist[i], dist[yy * n + xx] + c); } }
+    let sd = 31; const rnd = () => ((sd = (sd * 16807) % 2147483647) / 2147483647); const noise = (sc) => { const g = new Float32Array(N); const m = Math.ceil(n / sc) + 2, c = Array.from({ length: m * m }, rnd);
+      for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { const fy = y / sc, fx = x / sc, y0 = Math.floor(fy), x0 = Math.floor(fx), u = fy - y0, v = fx - x0, at = (a, b) => c[a * m + b];
+        g[y * n + x] = (at(y0, x0) * (1 - v) + at(y0, x0 + 1) * v) * (1 - u) + (at(y0 + 1, x0) * (1 - v) + at(y0 + 1, x0 + 1) * v) * u; } return g; };
+    const nc = noise(20), clay = new Float32Array(N), rain = new Float32Array(N);
+    for (let i = 0; i < N; i++) { const y = Math.floor(i / n) / n; clay[i] = 10 + 45 * nc[i]; rain[i] = 1300 + 500 * y + 60 * (nc[(i * 7) % N] - .5); }
+    const cl = (v) => Math.max(0, Math.min(1, v)); const F = [new Float32Array(N), new Float32Array(N), new Float32Array(N), new Float32Array(N)], cons = new Uint8Array(N);
+    for (let i = 0; i < N; i++) { F[0][i] = 1 - cl((sl[i] - 1) / 5); F[1][i] = 1 - cl(dist[i] / 1500); F[2][i] = cl((clay[i] - 15) / 30); F[3][i] = cl((rain[i] - 1300) / 600); cons[i] = sl[i] > 8 || z[i] > z85 ? 1 : 0; }
+    const top = (w) => { const s_ = w.reduce((a, b) => a + b, 0) || 1, S = new Float32Array(N); for (let i = 0; i < N; i++) S[i] = cons[i] ? -1 : (w[0] * F[0][i] + w[1] * F[1][i] + w[2] * F[2][i] + w[3] * F[3][i]) / s_;
+      const v = Array.from(S).filter((x) => x >= 0).sort((a, b) => a - b); return { S, p90: v[Math.floor(v.length * .9)] }; };
+    const ref = top(AHP), W = 640, H = 330;
+    const draw = (ctx) => {
+      const w = NAMES.map((_, i) => +q(".gm-w" + i).value), s_ = w.reduce((a, b) => a + b, 0) || 1; NAMES.forEach((_, i) => q(".gm-v" + i).textContent = kh(Math.round(w[i] / s_ * 100)) + "%");
+      const { S, p90 } = top(w); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const img = ctx.createImageData(n, n); let both = 0, cnt = 0, rc = 0;
+      const P = [[215, 25, 28], [253, 174, 97], [255, 255, 191], [166, 217, 106], [26, 150, 65]];
+      for (let i = 0; i < N; i++) { let c; if (S[i] < 0) c = [200, 200, 200]; else { const t = cl((S[i] - .2) / .7) * 4, k = Math.min(3, Math.floor(t)), u = t - k; c = P[k].map((a, m) => a + (P[k + 1][m] - a) * u); }
+        const isTop = S[i] >= p90, isRef = ref.S[i] >= ref.p90; if (isTop) { cnt++; c = [106, 27, 154]; } if (isRef) rc++; if (isTop && isRef) both++;
+        img.data.set([c[0], c[1], c[2], 255], i * 4); }
+      const tmp = document.createElement("canvas"); tmp.width = n; tmp.height = n; tmp.getContext("2d").putImageData(img, 0, 0); ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 10, 10, 310, 310);
+      ctx.textAlign = "left"; ctx.font = `bold 15px ${font()}`; ctx.fillStyle = "#263238"; ctx.fillText("ទម្ងន់", 345, 34); ctx.font = `13px ${font()}`;
+      NAMES.forEach((nm, i) => { const y = 50 + i * 30; ctx.fillStyle = "#263238"; ctx.fillText(nm, 345, y + 14); ctx.fillStyle = ["#1565c0", "#43a047", "#8d6e63", "#0288d1"][i]; ctx.fillRect(460, y, 150 * w[i] / s_, 18); });
+      const ov = both / Math.max(1, rc) * 100; ctx.fillStyle = "#263238"; ctx.font = `bold 15px ${font()}`; ctx.fillText(`ត្រួត top ១០% AHP៖ ${kh(Math.round(ov))}%`, 345, 200);
+      ctx.font = `13px ${font()}`; ctx.fillStyle = "#6a1b9a"; ctx.fillText("■ ល្អបំផុត ១០%", 345, 228); ctx.fillStyle = "#9e9e9e"; ctx.fillText("■ ឧបសគ្គ (ជម្រាល > ៨° · ទីខ្ពស់)", 345, 250);
+      out.innerHTML = (ov > 85 ? "ទីតាំងល្អបំផុតស្ទើរមិនប្ដូរ៖ លទ្ធផលរឹងមាំចំពោះទម្ងន់ទាំងនេះ។" : ov > 60 ? "ទីតាំងល្អបំផុតប្ដូរមួយផ្នែក៖ ពិនិត្យថាតំបន់ណានៅល្អក្នុងគ្រប់សេណារីយ៉ូ។" : "ទីតាំងល្អបំផុតប្ដូរច្រើន៖ ការសម្រេចពឹងខ្លាំងលើទម្ងន់ ដូច្នេះត្រូវពិភាក្សាទម្ងន់ជាមួយអ្នកជំនាញ។") +
+        `<br><span class="sim-hint">ស្រទាប់ក្លែងធ្វើលើ DEM គំរូ · ទម្ងន់ AHP ពីម៉ាទ្រីសក្នុងមេរៀន (CR ≈ ០,០១) · ស្វាយ = ក្រឡាល្អបំផុត ១០% ក្រោមទម្ងន់បច្ចុប្បន្ន</span>`;
+    };
+    const fit = stage(cv, W, H, draw); el.querySelectorAll("input").forEach((i) => i.addEventListener("input", fit));
+    const setW = (a) => { a.forEach((v, i) => q(".gm-w" + i).value = v); fit(); };
+    q(".gm-ahp").addEventListener("click", () => setW(AHP)); q(".gm-eq").addEventListener("click", () => setW([25, 25, 25, 25])); fit();
+  };
+
+  /* ---------- 15. app events demo (Lesson 14) ---------- */
+  window.EXTRA_SIMS["gee-app"] = (el) => {
+    const yrs = []; for (let y = 2016; y <= 2021; y++) yrs.push(`<option${y === 2020 ? " selected" : ""}>${y}</option>`);
+    const { q, out, cv } = shell(el, "កម្មវិធីតាមដានទឹក (គំរូ)",
+      `<label>yearSel <select class="ga-y">${yrs.join("")}</select></label>
+       <label>monthSl <b class="ga-mv"></b> <input type="range" class="ga-m" min="1" max="12" value="10"></label>
+       <label><input type="checkbox" class="ga-g"> ប្រើ getInfo() (មិនណែនាំ)</label>`);
+    const W = 640, H = 330, MON = ["មក", "កម", "មន", "មស", "ឧស", "មថ", "កក", "សហ", "កញ", "តល", "វច", "ធន"];
+    const area = (y, m) => 2700 + (7200 + (y % 3) * 500) * Math.pow((1 + Math.cos(2 * Math.PI * (m - 9.5) / 12)) / 2, 1.5);
+    const log = []; let info = "ចុចលើផែនទី…", busy = false, pt = null;
+    const addLog = (t) => { log.unshift(t); log.length = Math.min(log.length, 7); };
+    const draw = (ctx) => {
+      const y = +q(".ga-y").value, m = +q(".ga-m").value; q(".ga-mv").textContent = kh(m); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = "#e8f5e9"; ctx.fillRect(10, 10, 300, 200); const a = area(y, m), r = Math.sqrt(a) * 1.05;
+      ctx.fillStyle = "#1565c0"; ctx.beginPath(); ctx.ellipse(160, 110, r * 1.3, r * .6, -.5, 0, 7); ctx.fill();
+      ctx.fillStyle = "#0d47a1"; ctx.beginPath(); ctx.ellipse(160, 110, 45, 20, -.5, 0, 7); ctx.fill();
+      if (pt) { ctx.fillStyle = "#c62828"; ctx.beginPath(); ctx.arc(pt[0], pt[1], 5, 0, 7); ctx.fill(); }
+      ctx.font = `12px ${font()}`; ctx.fillStyle = "#263238"; ctx.textAlign = "left"; ctx.fillText(`ផែនទី · ទឹក ${kh(y)}-${kh(m)}`, 16, 26);
+      const x0 = 330, y0 = 20, w = 290, h = 110, vals = Array.from({ length: 12 }, (_, k) => area(y, k + 1));
+      ctx.fillText(`ផ្ទៃទឹក ${kh(y)} (គម²)`, x0, y0 + 6);
+      vals.forEach((v, k) => { ctx.fillStyle = k + 1 === m ? "#ef6c00" : "#90caf9"; const hh = v / 11000 * h; ctx.fillRect(x0 + k * w / 12, y0 + 12 + h - hh, w / 12 - 3, hh); ctx.fillStyle = "#607d8b"; ctx.fillText(MON[k], x0 + k * w / 12, y0 + h + 26); });
+      ctx.fillStyle = busy ? "#ef6c00" : "#263238"; ctx.font = `bold 13px ${font()}`; ctx.fillText("info៖ " + info, 10, 232);
+      ctx.fillStyle = "#263238"; ctx.font = `bold 12px ${font()}`; ctx.fillText("កំណត់ហេតុ callback", 330, 186); ctx.font = `11px monospace`;
+      log.forEach((t, k) => { ctx.fillStyle = k === 0 ? "#1565c0" : "#78909c"; ctx.fillText(t, 330, 206 + k * 17); });
+      out.innerHTML = `ផ្ទៃទឹកខែនេះ ≈ ${khn(Math.round(a))} គម² (តម្លៃគំរូ)។ ` + (q(".ga-g").checked ? "ជាមួយ getInfo() ការរំកិល និងការចុចរង់ចាំ ១ វិនាទី ហើយកម្មវិធីទាំងមូលកក។" : "evaluate() បង្ហាញ «កំពុងគណនា…» ហើយកម្មវិធីនៅតែឆ្លើយតប។") +
+        `<br><span class="sim-hint">កម្មវិធីក្លែងធ្វើ ដែលធ្វើតាមរចនាសម្ព័ន្ធក្នុងមេរៀន · ផ្ទៃទឹក និងភាពញឹកញាប់ជាតម្លៃគំរូ</span>`;
+    };
+    const fit = stage(cv, W, H, draw);
+    const block = (ms) => { const t = Date.now(); while (Date.now() - t < ms) {} };
+    q(".ga-y").addEventListener("change", (e) => { addLog(`yearSel.onChange('${e.target.value}') → refresh() · yearChart()`); if (q(".ga-g").checked) block(1000); fit(); });
+    q(".ga-m").addEventListener("input", (e) => { addLog(`monthSl.onChange(${e.target.value}) → layers().set(0)`); if (q(".ga-g").checked) block(1000); fit(); });
+    cv.addEventListener("click", (e) => { const b = cv.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * W, y = (e.clientY - b.top) / b.height * H; if (x > 310 || y > 210) return;
+      pt = [x, y]; const d = Math.hypot((x - 160) / 1.4, (y - 110) / .7), v = Math.max(0, Math.min(100, Math.round(100 - d * 1.2)));
+      addLog(`map.onClick({lon, lat}) → layers().set(1)`);
+      if (q(".ga-g").checked) { block(1000); info = v ? `មានទឹក ${kh(v)}% នៃពេលវេលា` : "មិនដែលមានទឹក"; addLog("getInfo() ← " + v); fit(); return; }
+      info = "កំពុងគណនា…"; busy = true; addLog("evaluate(callback) … ស្នើរួច"); fit();
+      setTimeout(() => { busy = false; info = v ? `មានទឹក ${kh(v)}% នៃពេលវេលា` : "មិនដែលមានទឹក"; addLog("callback(v = " + v + ") → info.setValue()"); fit(); }, 700); });
+    addLog("refresh() · yearChart(2020)  (ពេលចាប់ផ្ដើម)"); fit();
+  };
+
+  /* ---------- 16. data-ethics scenarios (Lesson 15) ---------- */
+  window.EXTRA_SIMS["gee-ethics"] = (el) => {
+    const SC = [
+      { t: "អ្នកធ្វើផែនទីការបាត់បង់ព្រៃជុំវិញភូមិមួយ ហើយក្រឡាបាត់បង់ខ្លះនៅជាប់ដីផ្ទះគ្រួសារ។ អ្នកនឹងចែករំលែកយ៉ាងណា?",
+        o: [["បង្ហោះផែនទីលម្អិតលើបណ្ដាញសង្គម ដាក់ចំណងជើង «កាប់ព្រៃខុសច្បាប់»", 0, "ទិន្នន័យមិនប្រាប់ថាស្របច្បាប់ ឬអត់ទេ ហើយក្រឡាខ្លះអាចជាចម្ការ។ ការចោទប្រកាន់អាចធ្វើឲ្យគ្រួសាររងគ្រោះ។"],
+            ["ពិនិត្យគំរូ ពិភាក្សាជាមួយមន្ត្រី និងសហគមន៍ ហើយរាយការណ៍ជាស្ថិតិតាមឃុំ", 2, "ល្អ៖ ផ្ទៀងផ្ទាត់ ការចូលរួម និងកម្រិតសរុប កាត់បន្ថយគ្រោះថ្នាក់ ដោយនៅតែផ្ដល់ព័ត៌មាន។"],
+            ["មិនចែករំលែកអ្វីទាំងអស់", 1, "ការពារគ្រោះថ្នាក់ ប៉ុន្តែព័ត៌មានដែលមានប្រយោជន៍ក៏បាត់ដែរ។ ជាញឹកញាប់មានវិធីចែករំលែកដោយសុវត្ថិភាព។"]] },
+      { t: "អ្នកប្រើ Open Buildings ដើម្បីរាប់ផ្ទះក្នុងតំបន់លិចទឹក សម្រាប់ផែនការជំនួយ។ តំបន់ភ្នំមួយស្ទើរតែគ្មានអគារក្នុងទិន្នន័យ។",
+        o: [["យកលទ្ធផលដដែល៖ ទិន្នន័យបង្ហាញថាគ្មានមនុស្សនៅទីនោះ", 0, "ទិន្នន័យសកលអាចខកផ្ទះដំបូលស្លឹក ឬក្រោមដើមឈើ។ សហគមន៍នោះអាចត្រូវបានមើលរំលង។"],
+            ["ពិនិត្យរូបភាព និងទិន្នន័យជំរឿន ហើយរាយការណ៍ថាទិន្នន័យអាចខកតំបន់នោះ", 2, "ល្អ៖ ពិនិត្យថាអ្នកណាមិនមាននៅក្នុងទិន្នន័យ គឺជាផ្នែកនៃយុត្តិធម៌។"],
+            ["ដកតំបន់នោះចេញពីការវិភាគ", 1, "ភាពស្មោះត្រង់អំពីការខ្វះទិន្នន័យល្អ ប៉ុន្តែការដកចេញ អាចមានន័យថាគ្មានជំនួយ។"]] },
+      { t: "ក្រុមអភិរក្សសុំឲ្យអ្នកបោះពុម្ពកម្មវិធីវេប ដែលបង្ហាញទីតាំងសំបុកបក្សីកម្រ ពី GPS ដែលពួកគេប្រមូល។",
+        o: [["បោះពុម្ពទីតាំងពិតប្រាកដ ដើម្បីតម្លាភាព", 0, "ទីតាំងពិតអាចជួយអ្នកបរបាញ់។ តម្លាភាពមិនមានន័យថាបង្ហាញគ្រប់យ៉ាងទេ។"],
+            ["បង្ហាញជាក្រឡា ១០ គម ឬកម្រិតស្រុក ហើយរក្សាទីតាំងពិតជាឯកជន", 2, "ល្អ៖ ការបន្ថយភាពលម្អិត (generalization) ការពារធនធាន ដោយនៅតែបង្ហាញលំនាំ។"],
+            ["បង្ហាញទីតាំងពិត តែដាក់ពាក្យសម្ងាត់", 1, "កាត់បន្ថយហានិភ័យ ប៉ុន្តែពាក្យសម្ងាត់អាចលេចធ្លាយ។ ពិចារណាថាតើអ្នកណាពិតជាត្រូវការទីតាំងពិត។"]] },
+      { t: "អ្នកប្រើផែនទីគម្របដី Dynamic World និង Sentinel-2 ក្នុងរបាយការណ៍ដែលអ្នកលក់ឲ្យក្រុមហ៊ុនឯកជន។",
+        o: [["ទិន្នន័យឥតគិតថ្លៃ ដូច្នេះមិនចាំបាច់ដកស្រង់ទេ", 0, "ទិន្នន័យទាំងនេះទាមទារការដកស្រង់ ហើយការប្រើ Earth Engine សម្រាប់ពាណិជ្ជកម្មត្រូវការអាជ្ញាបណ្ណពាណិជ្ជកម្ម។"],
+            ["ដកស្រង់ទិន្នន័យ និងពិនិត្យលក្ខខណ្ឌពាណិជ្ជកម្មរបស់ Earth Engine និងទិន្នន័យនីមួយៗ", 2, "ល្អ៖ អាជ្ញាបណ្ណ CC BY ទាមទារការដកស្រង់ ហើយ Earth Engine មានលក្ខខណ្ឌផ្សេងសម្រាប់ពាណិជ្ជកម្ម។"],
+            ["ប្ដូរពណ៌ផែនទី ដើម្បីកុំឲ្យគេស្គាល់ប្រភព", 0, "នេះជាការលាក់ប្រភព៖ មិនស្មោះត្រង់ និងអាចបំពានអាជ្ញាបណ្ណ។"]] },
+      { t: "ផែនទីភាពសមស្របរបស់អ្នក បង្ហាញថាដីរបស់សហគមន៍មួយ «សមស្របបំផុត» សម្រាប់កសិដ្ឋានសូឡា។ វិនិយោគិនមួយសុំទិន្នន័យ។",
+        o: [["ផ្ដល់ផែនទីភ្លាមៗ៖ វាជាលទ្ធផលវិទ្យាសាស្ត្រ", 0, "ផែនទីមិនដឹងពីកម្មសិទ្ធិដី ឬតម្រូវការសហគមន៍ទេ ហើយអាចត្រូវប្រើដើម្បីដណ្ដើមដី។"],
+            ["ពន្យល់ដែនកំណត់ ហើយណែនាំឲ្យពិគ្រោះសហគមន៍ និងអាជ្ញាធរ មុនការសម្រេច", 2, "ល្អ៖ ផែនទីភាពសមស្របជាឧបករណ៍ពិភាក្សា មិនមែនការសម្រេចទេ។"],
+            ["កែទម្ងន់ ដើម្បីកុំឲ្យដីសហគមន៍លេចជាសមស្រប", 0, "ការកែលទ្ធផលតាមចិត្ត បំពានតម្លាភាព។ ដាក់ដីសហគមន៍ជាឧបសគ្គដោយបើកចំហ ប្រសិនបើនោះជាការសម្រេចរបស់អ្នកពាក់ព័ន្ធ។"]] }];
+    const { q, out, cv } = shell(el, "សេណារីយ៉ូក្រមសីលធម៌", `<span class="sim-seg ge-s">${SC.map((_, i) => `<button type="button" data-s="${i}"${i ? "" : ' class="on"'}>${kh(i + 1)}</button>`).join("")}</span>`);
+    const W = 640, H = 330, ans = new Array(SC.length).fill(null); let boxes = [];
+    const wrap = (ctx, t, x, y, w, lh) => { const words = t.split(/(?<=[ ៖។,])/); let line = "", yy = y; for (const wd of words) { if (ctx.measureText(line + wd).width > w && line) { ctx.fillText(line, x, yy); line = wd; yy += lh; } else line += wd; } ctx.fillText(line, x, yy); return yy; };
+    const draw = (ctx) => {
+      const s_ = +q(".ge-s .on").dataset.s, S = SC[s_]; ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); ctx.textAlign = "left"; ctx.fillStyle = "#263238"; ctx.font = `bold 14px ${font()}`;
+      let y = wrap(ctx, S.t, 16, 28, 600, 22) + 16; boxes = []; ctx.font = `13px ${font()}`;
+      S.o.forEach(([t], k) => { const h = 50, sel = ans[s_] === k, sc = S.o[k][1]; ctx.fillStyle = sel ? (sc === 2 ? "#e8f5e9" : sc === 1 ? "#fff8e1" : "#ffebee") : "#fafafa"; ctx.strokeStyle = sel ? "#607d8b" : "#cfd8dc";
+        ctx.fillRect(16, y, 608, h); ctx.strokeRect(16, y, 608, h); ctx.fillStyle = "#263238"; wrap(ctx, `${["ក", "ខ", "គ"][k]}. ${t}`, 26, y + 20, 588, 18); boxes.push([y, y + h, k]); y += h + 8; });
+      const done = ans.filter((a) => a !== null).length, score = ans.reduce((a, v, i) => a + (v === null ? 0 : SC[i].o[v][1]), 0);
+      if (ans[s_] !== null) { const [, sc, fb] = S.o[ans[s_]]; out.innerHTML = `<b>${sc === 2 ? "ល្អ" : sc === 1 ? "អាចទទួលយកបាន" : "មានហានិភ័យ"}</b>៖ ${fb}`; }
+      else out.innerHTML = "ចុចលើចម្លើយដែលអ្នកគិតថាសមបំផុត។";
+      out.innerHTML += `<br><span class="sim-hint">បានឆ្លើយ ${kh(done)}/${kh(SC.length)} · ពិន្ទុ ${kh(score)}/${kh(SC.length * 2)} · មិនមានចម្លើយតែមួយដែលត្រូវរាល់ពេលទេ៖ ពិភាក្សាជាមួយក្រុម</span>`;
+    };
+    const fit = stage(cv, W, H, draw);
+    cv.addEventListener("click", (e) => { const b = cv.getBoundingClientRect(), y = (e.clientY - b.top) / b.height * H; const hit = boxes.find(([a, c]) => y >= a && y <= c); if (hit) { ans[+q(".ge-s .on").dataset.s] = hit[2]; fit(); } });
+    el.addEventListener("seg", fit); seg(el, "ge-s"); fit();
   };
 })();
