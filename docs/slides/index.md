@@ -10,3 +10,6 @@
 | ១ | <a href="lesson-01.html" target="_blank">ការគណនាលើពពក និង Google Earth Engine</a> | ៦៣ | ១ |
 | ២ | <a href="lesson-02.html" target="_blank">JavaScript សម្រាប់ Earth Engine</a> | ៦២ | ១ |
 | ៣ | <a href="lesson-03.html" target="_blank">Image Collection ការត្រង ការលុបពពក និង Composite</a> | ៦២ | ២ |
+| ៤ | <a href="lesson-04.html" target="_blank">Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ</a> | ៦២ | ១ |
+| ៥ | <a href="lesson-05.html" target="_blank">ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ</a> | ៦៤ | ១ |
+| ៦ | <a href="lesson-06.html" target="_blank">ការចាត់ថ្នាក់គម្របដីដោយ Random Forest</a> | ៦៧ | ១ |

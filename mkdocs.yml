@@ -92,11 +92,18 @@ nav:
       - មេរៀនទី១៖ ការគណនាលើពពក និង Google Earth Engine: lessons/lesson-01.md
       - មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine: lessons/lesson-02.md
       - មេរៀនទី៣៖ Image Collection ការត្រង ការលុបពពក និង Composite: lessons/lesson-03.md
+  - ជំពូកទី២៖ ការវិភាគទ្រង់ទ្រាយធំ:
+      - មេរៀនទី៤៖ Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ: lessons/lesson-04.md
+      - មេរៀនទី៥៖ ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ: lessons/lesson-05.md
+      - មេរៀនទី៦៖ ការចាត់ថ្នាក់គម្របដីដោយ Random Forest: lessons/lesson-06.md
   - ស្លាយបង្រៀន: slides/index.md
   - សៀវភៅអនុវត្ត (លំហាត់ Earth Engine):
       - លំហាត់ទី១៖ ចាប់ផ្ដើមជាមួយ Code Editor: workbook/lab-01.md
       - លំហាត់ទី២៖ វត្ថុ មុខងារ និង map(): workbook/lab-02.md
       - លំហាត់ទី៣៖ Composite ឥតពពកនៃកម្ពុជា: workbook/lab-03.md
+      - លំហាត់ទី៤៖ NDVI មធ្យមតាមខេត្ត: workbook/lab-04.md
+      - លំហាត់ទី៥៖ ក្រាប NDVI និង harmonic: workbook/lab-05.md
+      - លំហាត់ទី៦៖ ផែនទីគម្របដីខេត្តមួយ: workbook/lab-06.md
   - ឧបសម្ព័ន្ធ:
       - ក៖ ចុះឈ្មោះ និងរៀបចំ Earth Engine: appendix/a-gee-setup.md
       - ខ៖ ទិន្នន័យ Earth Engine សម្រាប់កម្ពុជា: appendix/b-datasets.md

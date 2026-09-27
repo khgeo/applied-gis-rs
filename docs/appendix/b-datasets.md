@@ -16,6 +16,10 @@
 | គម្របដី | ESA WorldCover | `ESA/WorldCover/v200` | ១០ ម | ៦ ១៣ |
 | សីតុណ្ហភាព | Landsat C2 ST (ST_B10) · MODIS LST | `LANDSAT/LC08/C02/T1_L2` · `MODIS/061/MOD11A2` | ៣០ ម · ១ គម | ១២ |
 | ព្រំរដ្ឋបាល | FAO GAUL | `FAO/GAUL/2015/level1` · `level2` | វ៉ិចទ័រ | ១–១៥ |
+| ទីសណ្ឋាន | ALOS AW3D30 | `JAXA/ALOS/AW3D30/V3_2` | ៣០ ម | ៦ |
+| គម្របដី | Dynamic World | `GOOGLE/DYNAMICWORLD/V1` | ១០ ម | ៦ |
+| រដូវកាល | MODIS Land Cover Dynamics | `MODIS/061/MCD12Q2` | ៥០០ ម | ៥ |
+| ព្រំខេត្ត និង GCP ខេត្តកែប | Asset វគ្គសិក្សា | `users/yamsarath168/rupp_wfp_applied_gisrs4drm/kh_province_boundary` · `kep_gcps` | វ៉ិចទ័រ | ៦ |
 
 !!! note "អាជ្ញាបណ្ណទិន្នន័យ"
     ទិន្នន័យនីមួយៗមានអាជ្ញាបណ្ណ និងការដកស្រង់ផ្ទាល់ខ្លួន (ឧ. Copernicus Sentinel · USGS · UCSB CHG)។ សូមដកស្រង់តាមការណែនាំក្នុងកាតាឡុក ក្នុងរបាយការណ៍ និងលើផែនទីរបស់អ្នក។

@@ -25,13 +25,13 @@
 | សប្ដាហ៍ | មេរៀន | លំហាត់ Earth Engine |
 |---|---|---|
 | **ជំពូកទី១៖ មូលដ្ឋាន Google Earth Engine** | | |
-| ១ | [ការគណនាលើពពក និង Google Earth Engine](lessons/lesson-01.md) | ចាប់ផ្ដើមជាមួយ Code Editor |
-| ២ | [JavaScript សម្រាប់ Earth Engine](lessons/lesson-02.md) | វត្ថុ មុខងារ និង map() |
-| ៣ | [Image Collection ការត្រង ការលុបពពក និង Composite](lessons/lesson-03.md) | Composite ឥតពពកនៃកម្ពុជា |
+| ១ | [ការគណនាលើពពក និង Google Earth Engine](lessons/lesson-01.md) | [ចាប់ផ្ដើមជាមួយ Code Editor](workbook/lab-01.md) |
+| ២ | [JavaScript សម្រាប់ Earth Engine](lessons/lesson-02.md) | [វត្ថុ មុខងារ និង map()](workbook/lab-02.md) |
+| ៣ | [Image Collection ការត្រង ការលុបពពក និង Composite](lessons/lesson-03.md) | [Composite ឥតពពកនៃកម្ពុជា](workbook/lab-03.md) |
 | **ជំពូកទី២៖ ការវិភាគទ្រង់ទ្រាយធំ** | | |
-| ៤ | Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ | NDVI មធ្យមតាមខេត្ត |
-| ៥ | ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ | ក្រាប NDVI និង harmonic |
-| ៦ | ការចាត់ថ្នាក់គម្របដីដោយ Random Forest | ផែនទីគម្របដីខេត្តមួយ |
+| ៤ | [Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ](lessons/lesson-04.md) | [NDVI មធ្យមតាមខេត្ត](workbook/lab-04.md) |
+| ៥ | [ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ](lessons/lesson-05.md) | [ក្រាប NDVI និង harmonic](workbook/lab-05.md) |
+| ៦ | [ការចាត់ថ្នាក់គម្របដីដោយ Random Forest](lessons/lesson-06.md) | [ផែនទីគម្របដីខេត្តមួយ](workbook/lab-06.md) |
 | **ជំពូកទី៣៖ ទឹក និងគ្រោះមហន្តរាយ** | | |
 | ៧ | ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1 | ផែនទីទឹកជំនន់ទន្លេសាប |
 | ៨ | គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ | CHIRPS និង VCI |
