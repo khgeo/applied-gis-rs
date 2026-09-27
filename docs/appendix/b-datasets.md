@@ -22,6 +22,8 @@
 | ទឹកជំនន់ · ជលសាស្ត្រ | MERIT Hydro | `MERIT/Hydro/v1_0_1` | ៩០ ម | ៧ ៩ |
 | អាងរងទឹក | HydroBASINS · HydroRIVERS | `WWF/HydroSHEDS/v1/Basins/hybas_1…12` · `WWF/HydroSHEDS/v1/FreeFlowingRivers` | វ៉ិចទ័រ | ៩ |
 | ប្រជាជន | WorldPop | `WorldPop/GP/100m/pop` | ១០០ ម | ៧ |
+| តំបន់ការពារ | WDPA | `WCMC/WDPA/current/polygons` | វ៉ិចទ័រ | ១០ |
+| ទីក្រុង | GHSL · Dynamic World · VIIRS | `JRC/GHSL/P2023A/GHS_BUILT_S` · `GOOGLE/DYNAMICWORLD/V1` · `NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG` | ១០០ ម · ១០ ម · ~៥០០ ម | ១២ |
 | ព្រំខេត្ត និង GCP ខេត្តកែប | Asset វគ្គសិក្សា | `users/yamsarath168/rupp_wfp_applied_gisrs4drm/kh_province_boundary` · `kep_gcps` | វ៉ិចទ័រ | ៦ |
 
 !!! note "អាជ្ញាបណ្ណទិន្នន័យ"

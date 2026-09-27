@@ -100,6 +100,10 @@ nav:
       - មេរៀនទី៧៖ ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1: lessons/lesson-07.md
       - មេរៀនទី៨៖ គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ: lessons/lesson-08.md
       - មេរៀនទី៩៖ ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ: lessons/lesson-09.md
+  - ជំពូកទី៤៖ ដី និងមនុស្ស:
+      - មេរៀនទី១០៖ ព្រៃឈើ និងការបាត់បង់ព្រៃ: lessons/lesson-10.md
+      - មេរៀនទី១១៖ កសិកម្ម និងការធ្វើផែនទីស្រែ: lessons/lesson-11.md
+      - មេរៀនទី១២៖ ទីក្រុង ការពង្រីក និងសីតុណ្ហភាពផ្ទៃដី: lessons/lesson-12.md
   - ស្លាយបង្រៀន: slides/index.md
   - សៀវភៅអនុវត្ត (លំហាត់ Earth Engine):
       - លំហាត់ទី១៖ ចាប់ផ្ដើមជាមួយ Code Editor: workbook/lab-01.md
@@ -111,6 +115,9 @@ nav:
       - លំហាត់ទី៧៖ ផែនទីទឹកជំនន់ទន្លេសាប: workbook/lab-07.md
       - លំហាត់ទី៨៖ CHIRPS និង VCI: workbook/lab-08.md
       - លំហាត់ទី៩៖ អាងរងពី DEM: workbook/lab-09.md
+      - លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ: workbook/lab-10.md
+      - លំហាត់ទី១១៖ ស្រែពី Sentinel-1: workbook/lab-11.md
+      - លំហាត់ទី១២៖ LST ភ្នំពេញ: workbook/lab-12.md
   - ឧបសម្ព័ន្ធ:
       - ក៖ ចុះឈ្មោះ និងរៀបចំ Earth Engine: appendix/a-gee-setup.md
       - ខ៖ ទិន្នន័យ Earth Engine សម្រាប់កម្ពុជា: appendix/b-datasets.md

@@ -52,3 +52,16 @@
 | ស្រុតទឹក | Flow accumulation | ៩ |
 | អាងរងទឹក | Watershed / Catchment | ៩ |
 | កម្ពស់ពីលើប្រឡាយជិតបំផុត | HAND | ៧ ៩ |
+| គម្របដើមឈើ | Tree cover | ១០ |
+| ការបាត់បង់គម្របដើមឈើ | Tree cover loss | ១០ |
+| កម្រិតគម្រប | Canopy threshold | ១០ |
+| តំបន់ការពារ | Protected area | ១០ |
+| ចម្ការ | Plantation | ១០ |
+| ស្រូវទឹកស្រក | Recession rice | ១១ |
+| រយៈពេលស្ទូង | Transplanting window | ១១ |
+| ជីវម៉ាស | Biomass | ១១ |
+| ក្បួនកម្រិត | Rule-based classification | ១១ |
+| ការពង្រីកទីក្រុង | Urban expansion | ១២ |
+| សីតុណ្ហភាពផ្ទៃដី | Land surface temperature (LST) | ៨ ១២ |
+| កោះកំដៅទីក្រុង | Urban heat island (UHI) | ១២ |
+| ពន្លឺពេលយប់ | Night-time lights | ១២ |

@@ -4,6 +4,7 @@
    gee-scale · gee-map · gee-filter · gee-composite
    gee-zonal · gee-harmonic · gee-rf (Chapter 2)
    gee-flood · gee-drought · gee-terrain (Chapter 3)
+   gee-forest · gee-rice · gee-urban (Chapter 4)
    ============================================================ */
 (function () {
   "use strict";
@@ -455,5 +456,120 @@
       let bi = y * n + x; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { const yy = y + dy, xx = x + dx; if (yy >= 0 && yy < n && xx >= 0 && xx < n && acc[yy * n + xx] > acc[bi]) bi = yy * n + xx; }
       outlet = bi; ws = new Uint8Array(N); const st = [bi]; ws[bi] = 1; while (st.length) { const i = st.pop(); for (const u of up[i]) if (!ws[u]) { ws[u] = 1; st.push(u); } } fit(); });
     el.addEventListener("seg", fit); seg(el, "gt-p"); el.querySelectorAll("input").forEach((i) => i.addEventListener("input", fit)); fit();
+  };
+
+  /* ---------- 11. forest loss and protected areas (Lesson 10) ---------- */
+  window.EXTRA_SIMS["gee-forest"] = async (el) => {
+    const yopt = (sel) => Array.from({ length: 23 }, (_, i) => 2001 + i).map((y) => `<option value="${y}"${y === sel ? " selected" : ""}>${kh(y)}</option>`).join("");
+    const { q, out, cv } = shell(el, "ការបាត់បង់ព្រៃ និងតំបន់ការពារ",
+      `<label>កម្រិតគម្រប <b class="gfo-tv"></b> <input type="range" class="gfo-t" min="10" max="70" step="5" value="30"></label>
+       <label>ពី <select class="gfo-a">${yopt(2001)}</select></label><label>ដល់ <select class="gfo-b">${yopt(2023)}</select></label>`);
+    const D = await loadL8(), n = D.n, N = n * n, W = 640, H = 330;
+    let sd = 12; const rnd = () => ((sd = (sd * 16807) % 2147483647) / 2147483647);
+    const raw = new Float32Array(N); for (let i = 0; i < N; i++) raw[i] = rnd();
+    const tc = new Float32Array(N), ly = new Uint8Array(N), BASE = [5, 85, 25, 5, 5];
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { let s_ = 0, c = 0; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const yy = y + dy, xx = x + dx; if (yy >= 0 && yy < n && xx >= 0 && xx < n) { s_ += raw[yy * n + xx]; c++; } }
+      tc[y * n + x] = Math.max(0, Math.min(100, BASE[D.cls[y * n + x]] + (s_ / c - .5) * 90)); }
+    for (let by = 0; by < n; by += 3) for (let bx = 0; bx < n; bx += 3) {
+      const d = Math.min(Math.abs(bx - 110), by < 170 ? Math.abs(by - 150) + (bx > 170 ? bx - 170 : 0) : 999, by > 150 ? Math.abs(bx - 40) : 999);
+      if (rnd() < Math.exp(-d / 18) * .45) { let yr = Math.round(12 + 4.5 * Math.sqrt(-2 * Math.log(rnd() + 1e-9)) * Math.cos(2 * Math.PI * rnd())); yr = Math.max(1, Math.min(23, yr));
+        for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 3; dx++) { const i = (by + dy) * n + bx + dx; if (by + dy < n && bx + dx < n && tc[i] > 25) ly[i] = yr; } } }
+    const PA = [175, 290, 185, 295], zone = new Uint8Array(N);   // 1 in · 2 buffer · 0 out
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { const inPA = y >= PA[0] && y < PA[1] && x >= PA[2] && x < PA[3];
+      const dy = Math.max(PA[0] - y, 0, y - PA[1] + 1), dx = Math.max(PA[2] - x, 0, x - PA[3] + 1); zone[y * n + x] = inPA ? 1 : Math.hypot(dx, dy) <= 30 ? 2 : 0; }
+    const draw = (ctx) => {
+      const t = +q(".gfo-t").value; let a = +q(".gfo-a").value, b = +q(".gfo-b").value; if (b < a) [a, b] = [b, a]; q(".gfo-tv").textContent = kh(t) + "%";
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const img = ctx.createImageData(n, n);
+      const byY = new Array(23).fill(0), f = [0, 0, 0], l = [0, 0, 0];
+      for (let i = 0; i < N; i++) { const isF = tc[i] >= t, lost = isF && ly[i] >= a - 2000 && ly[i] <= b - 2000 && ly[i] > 0; let c = [240, 240, 240];
+        if (isF) { c = [116, 196, 118]; f[zone[i]]++; }
+        if (isF && ly[i] > 0) byY[ly[i] - 1]++;
+        if (lost) { const u = (ly[i] - 1) / 22; c = [255, Math.round(237 - u * 200), Math.round(160 - u * 160)]; l[zone[i]]++; }
+        img.data.set([c[0], c[1], c[2], 255], i * 4); }
+      const tmp = document.createElement("canvas"); tmp.width = n; tmp.height = n; tmp.getContext("2d").putImageData(img, 0, 0); ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 10, 10, 300, 300);
+      const s_ = 300 / n; ctx.strokeStyle = "#1565c0"; ctx.lineWidth = 2.5; ctx.strokeRect(10 + PA[2] * s_, 10 + PA[0] * s_, (PA[3] - PA[2]) * s_, (PA[1] - PA[0]) * s_);
+      ctx.setLineDash([4, 3]); ctx.strokeStyle = "#607d8b"; ctx.lineWidth = 1.2; ctx.strokeRect(10 + (PA[2] - 30) * s_, 10 + (PA[0] - 30) * s_, (PA[3] - PA[2] + 60) * s_, (PA[1] - PA[0] + 60) * s_); ctx.setLineDash([]);
+      const x0 = 340, y0 = 30, w = 280, hh = 120, mx = Math.max(1, ...byY); ctx.font = `12px ${font()}`; ctx.fillStyle = "#263238"; ctx.textAlign = "left"; ctx.fillText("ការបាត់បង់តាមឆ្នាំ (ក្នុងព្រៃ ២០០០)", x0, y0 - 8);
+      byY.forEach((v, i) => { const on = 2001 + i >= a && 2001 + i <= b; ctx.fillStyle = on ? "#c62828" : "#e0e0e0"; ctx.fillRect(x0 + i * w / 23, y0 + hh - hh * v / mx, w / 23 - 2, hh * v / mx); });
+      ctx.fillStyle = "#607d8b"; ctx.fillText("២០០១", x0, y0 + hh + 14); ctx.textAlign = "right"; ctx.fillText("២០២៣", x0 + w, y0 + hh + 14);
+      const rate = (k) => f[k] ? l[k] / f[k] * 100 : 0, R = [["ក្នុងតំបន់ការពារ", rate(1), "#1565c0"], ["ទ្រនាប់", rate(2), "#78909c"], ["ក្រៅ", rate(0), "#c62828"]], rm = Math.max(1, ...R.map((r) => r[1]));
+      ctx.textAlign = "left"; ctx.fillStyle = "#263238"; ctx.fillText(`% នៃព្រៃ ២០០០ ដែលបាត់បង់ ${kh(a)}–${kh(b)}`, x0, 196);
+      R.forEach(([lab, v, col], k) => { const y = 210 + k * 32; ctx.fillStyle = "#263238"; ctx.fillText(lab, x0, y + 14); ctx.fillStyle = col; ctx.fillRect(x0 + 100, y, 120 * v / rm, 20); ctx.fillStyle = "#263238"; ctx.fillText(khn(v, 1) + "%", x0 + 106 + 120 * v / rm, y + 14); });
+      const fa = (f[0] + f[1] + f[2]) * 900 / 1e6;
+      out.innerHTML = `ព្រៃ ២០០០ (≥ ${kh(t)}%)៖ ${khn(fa, 1)} គម² · បាត់បង់ ${kh(a)}–${kh(b)}៖ ${khn((l[0] + l[1] + l[2]) * 900 / 1e6, 2)} គម²។ ` +
+        (rate(1) < rate(0) ? "អត្រាក្នុងតំបន់ការពារទាបជាងក្រៅ ប៉ុន្តែតំបន់នេះនៅឆ្ងាយពីផ្លូវ៖ ការប្រៀបធៀបនេះមិនបញ្ជាក់ប្រសិទ្ធភាពទេ។" : "") +
+        `<br><span class="sim-hint">ស្រទាប់ក្លែងធ្វើតាមទម្រង់ Hansen GFC លើគម្របដីពិតនៃ Landsat 8 ភ្នំពេញ · ការបាត់បង់ប្រមូលផ្ដុំជិតផ្លូវក្លែងធ្វើ · ប្រអប់ខៀវ = តំបន់ការពារ · ដាច់ៗ = ទ្រនាប់</span>`;
+    };
+    const fit = stage(cv, W, H, draw); el.querySelectorAll("input,select").forEach((i) => i.addEventListener("input", fit)); fit();
+  };
+
+  /* ---------- 12. rice rules from VH (Lesson 11) ---------- */
+  window.EXTRA_SIMS["gee-rice"] = (el) => {
+    const { q, out, cv } = shell(el, "ក្បួនស្រែពី Sentinel-1 VH",
+      `<label>VH អប្បបរមា < <b class="gr2-mv"></b> <input type="range" class="gr2-m" min="-26" max="-14" step="0.5" value="-19"></label>
+       <label>ការកើនឡើង > <b class="gr2-rv"></b> <input type="range" class="gr2-r" min="0" max="10" step="0.5" value="5"></label>
+       <label>ភាពខុសគ្នា <b class="gr2-sv"></b> <input type="range" class="gr2-s" min="0.5" max="2" step="0.25" value="1"></label>`);
+    const W = 640, H = 330, T = Array.from({ length: 365 }, (_, i) => i + 1);
+    const K = [["wet", "ស្រែ", "#2e7d32"], ["crop", "ដំណាំដទៃ", "#ff9800"], ["forest", "ព្រៃ", "#1b5e20"], ["urban", "ទីក្រុង", "#e53935"], ["water", "ទឹក", "#1e88e5"]];
+    const curve = (k, t) => k === "wet" ? -16.5 - 7 * Math.exp(-(((t - 205) / 14) ** 2)) + 3.5 * Math.exp(-(((t - 265) / 30) ** 2)) / (1 + Math.exp(-(t - 200) / 4)) - 1.5 / (1 + Math.exp(-(t - 320) / 5))
+      : k === "crop" ? -17 + 2 * Math.exp(-(((t - 250) / 45) ** 2)) : k === "forest" ? -13 + .4 * Math.sin(t / 50) : k === "urban" ? -9 + .3 * Math.sin(t / 40) : -25 + .8 * Math.sin(t / 30);
+    const gen = (spread) => { let sd = 5; const rnd = () => ((sd = (sd * 16807) % 2147483647) / 2147483647); const g = () => Math.sqrt(-2 * Math.log(rnd() + 1e-9)) * Math.cos(2 * Math.PI * rnd()); const pts = [];
+      K.forEach(([k], ki) => { for (let p = 0; p < 50; p++) { const amp = Math.max(.2, 1 + (rnd() - .5) * .9 * spread), off = g() * 1.8 * spread; const base = T.map((t) => curve(k, t)), m = base.reduce((a, b) => a + b, 0) / 365;
+        const s = base.map((v) => m + (v - m) * amp + off + g() * 1.5 * spread), sm = s.map((_, i) => { let a = 0, c = 0; for (let j = i - 6; j <= i + 5; j++) if (j >= 0 && j < 365) { a += s[j]; c++; } return a / c; });
+        let mn = 99; for (let i = 150; i < 260; i++) mn = Math.min(mn, sm[i]); let mx = -99; for (let i = 180; i < 330; i++) mx = Math.max(mx, sm[i]); pts.push({ ki, mn, rise: mx - mn }); } });
+      return pts; };
+    let cacheS = null, cacheP = null;
+    const draw = (ctx) => {
+      const tm = +q(".gr2-m").value, tr = +q(".gr2-r").value, sp = +q(".gr2-s").value; q(".gr2-mv").textContent = khn(tm, 1) + " dB"; q(".gr2-rv").textContent = khn(tr, 1) + " dB"; q(".gr2-sv").textContent = "×" + khn(sp, 2);
+      if (cacheS !== sp) { cacheP = gen(sp); cacheS = sp; }
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const x0 = 60, y0 = 20, w = 380, h = 270, X = (v) => x0 + (v + 30) / 22 * w, Y = (v) => y0 + h - Math.max(0, Math.min(14, v)) / 14 * h;
+      ctx.fillStyle = "rgba(46,125,50,.08)"; ctx.fillRect(x0, y0, X(tm) - x0, Y(tr) - y0); ctx.strokeStyle = "#cfd8dc"; ctx.strokeRect(x0, y0, w, h);
+      ctx.strokeStyle = "#2e7d32"; ctx.setLineDash([6, 4]); ctx.beginPath(); ctx.moveTo(X(tm), y0); ctx.lineTo(X(tm), y0 + h); ctx.moveTo(x0, Y(tr)); ctx.lineTo(x0 + w, Y(tr)); ctx.stroke(); ctx.setLineDash([]);
+      let tp = 0, fp = 0, fn = 0, tn = 0;
+      cacheP.forEach((p) => { const isR = p.mn < tm && p.rise > tr, truth = p.ki === 0; if (isR && truth) tp++; else if (isR) fp++; else if (truth) fn++; else tn++;
+        ctx.beginPath(); ctx.arc(X(Math.max(-30, Math.min(-8.5, p.mn))), Y(p.rise), 3.5, 0, 7); ctx.fillStyle = K[p.ki][2]; ctx.globalAlpha = .8; ctx.fill(); ctx.globalAlpha = 1;
+        if (isR !== truth) { ctx.strokeStyle = "#000"; ctx.lineWidth = 1.2; ctx.stroke(); } });
+      ctx.font = `12px ${font()}`; ctx.fillStyle = "#607d8b"; ctx.textAlign = "center"; [-30, -25, -20, -15, -10].forEach((v) => ctx.fillText(kh(v), X(v), y0 + h + 14)); ctx.fillText("VH អប្បបរមា (dB)", x0 + w / 2, y0 + h + 30);
+      ctx.textAlign = "right"; [0, 4, 8, 12].forEach((v) => ctx.fillText(kh(v), x0 - 6, Y(v) + 4));
+      ctx.textAlign = "left"; K.forEach(([, lab, col], k) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(470, 40 + k * 24, 5, 0, 7); ctx.fill(); ctx.fillStyle = "#263238"; ctx.fillText(lab, 482, 44 + k * 24); });
+      const oa = (tp + tn) / (tp + tn + fp + fn), pa = tp / Math.max(1, tp + fn), ua = tp / Math.max(1, tp + fp);
+      ctx.font = `bold 15px ${font()}`; ctx.fillText(`OA ${kh(Math.round(oa * 100))}%`, 470, 190); ctx.font = `13px ${font()}`;
+      ctx.fillText(`PA ស្រែ ${kh(Math.round(pa * 100))}%`, 470, 214); ctx.fillText(`UA ស្រែ ${kh(Math.round(ua * 100))}%`, 470, 236); ctx.fillStyle = "#607d8b"; ctx.fillText("គូសខ្មៅ = ចាត់ខុស", 470, 262);
+      out.innerHTML = (oa >= .97 ? "កម្រិតទាំងពីរបំបែកស្រែបានល្អ។ សាកបង្កើន «ភាពខុសគ្នា»។ " : fp > fn ? "ក្រឡាមិនមែនស្រែច្រើនត្រូវបានរាប់ជាស្រែ (UA ទាប)៖ តឹងកម្រិត។ " : fn > fp ? "ស្រែច្រើនត្រូវបានខក (PA ទាប)៖ បន្ធូរកម្រិត។ " : "កម្រិតសមតុល្យ។ ") +
+        (sp > 1.4 ? "ពេលភាពខុសគ្នាក្នុងថ្នាក់ធំ គ្មានកម្រិតណាដែលល្អឥតខ្ចោះទេ៖ នេះជាពេលដែល Random Forest ជួយបាន។" : "") +
+        `<br><span class="sim-hint">ក្រឡាក្លែងធ្វើ ២៥០ (៥០ ក្នុងមួយថ្នាក់) តាមលំនាំ VH នៃស្រែអាស៊ីអាគ្នេយ៍ · មធ្យមរំកិល ១២ ថ្ងៃ</span>`;
+    };
+    const fit = stage(cv, W, H, draw); el.querySelectorAll("input").forEach((i) => i.addEventListener("input", fit)); fit();
+  };
+
+  /* ---------- 13. urban change, Sihanoukville 2015-2021 (Lesson 12) ---------- */
+  window.EXTRA_SIMS["gee-urban"] = async (el) => {
+    const { q, out, cv } = shell(el, "ការពង្រីកក្រុងព្រះសីហនុ ២០១៥–២០២១",
+      `<label>ប្រៀបធៀប <input type="range" class="gu-x" min="0" max="100" value="50"></label>
+       <label>ΔNDVI < <b class="gu-dv"></b> <input type="range" class="gu-d" min="-0.6" max="-0.05" step="0.05" value="-0.2"></label>
+       <label>ΔNDBI > <b class="gu-bv"></b> <input type="range" class="gu-b" min="0" max="0.3" step="0.025" value="0.05"></label>
+       <label><input type="checkbox" class="gu-m" checked> បង្ហាញសំណង់ថ្មី</label>`);
+    const j = await (await fetch(new URL("shv_change.json", AG_DATA))).json(), bin = (s_) => Uint8Array.from(atob(s_), (c) => c.charCodeAt(0));
+    const w = j.w, h = j.h, N = w * h, r15 = bin(j.y2015), r21 = bin(j.y2021), n15 = bin(j.ndvi2015), n21 = bin(j.ndvi2021);
+    const band = (r, k, i) => r[k * N + i], ndbi = (r, i) => (band(r, 4, i) - band(r, 3, i)) / (band(r, 4, i) + band(r, 3, i) + 1e-9);
+    const W = 640, H = 330, S = Math.min(300 / h, 420 / w), dw = w * S, dh = h * S;
+    const draw = (ctx) => {
+      const sx = +q(".gu-x").value / 100, td = +q(".gu-d").value, tb = +q(".gu-b").value, show = q(".gu-m").checked; q(".gu-dv").textContent = khn(td, 2); q(".gu-bv").textContent = khn(tb, 3);
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const img = ctx.createImageData(w, h); let cnt = 0;
+      for (let i = 0; i < N; i++) { const x = i % w, r = x < sx * w ? r15 : r21;
+        const d = n21[i] / 127.5 - n15[i] / 127.5, nb = ndbi(r21, i) - ndbi(r15, i), isNew = d < td && n21[i] / 127.5 - 1 < .3 && nb > tb; if (isNew) cnt++;
+        let c = [band(r, 2, i), band(r, 1, i), band(r, 0, i)]; if (show && isNew && r === r21) c = [229, 57, 53];
+        img.data.set([c[0], c[1], c[2], 255], i * 4); }
+      const tmp = document.createElement("canvas"); tmp.width = w; tmp.height = h; tmp.getContext("2d").putImageData(img, 0, 0); ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 10, 10, dw, dh);
+      ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(10 + sx * dw, 10); ctx.lineTo(10 + sx * dw, 10 + dh); ctx.stroke();
+      ctx.font = `bold 13px ${font()}`; ctx.fillStyle = "#fff"; ctx.textAlign = "left"; ctx.fillText("២០១៥", 16, 28); ctx.textAlign = "right"; ctx.fillText("២០២១", 4 + dw, 28);
+      ctx.textAlign = "left"; ctx.fillStyle = "#263238"; ctx.font = `bold 15px ${font()}`; ctx.fillText("សំណង់/ដីទទេថ្មី", 450, 50);
+      ctx.font = `bold 22px ${font()}`; ctx.fillStyle = "#c62828"; ctx.fillText(`${khn(cnt * 900 / 1e6, 2)} គម²`, 450, 84);
+      ctx.font = `13px ${font()}`; ctx.fillStyle = "#263238"; ctx.fillText(`${khn(cnt / N * 100, 1)}% នៃ ${khn(N * 900 / 1e6, 1)} គម²`, 450, 108);
+      ctx.fillStyle = "#607d8b"; ["ΔNDVI < កម្រិត", "NDVI ២០២១ < ០,៣", "ΔNDBI > កម្រិត"].forEach((t_, k) => ctx.fillText("• " + t_, 450, 150 + k * 22));
+      out.innerHTML = `អូសរបារ «ប្រៀបធៀប» ដើម្បីមើលរូបភាពពីរឆ្នាំ។ ក្រហម = ក្រឡាដែលបំពេញលក្ខខណ្ឌទាំងបី (បង្ហាញតែលើផ្នែក ២០២១)។ ` + (td > -.15 ? "កម្រិត ΔNDVI តូចពេក៖ ដំណាំ និងរុក្ខជាតិប្ដូរតាមរដូវ ត្រូវបានរាប់។" : "") +
+        `<br><span class="sim-hint">Sentinel-2 ពិត · ក្រុងព្រះសីហនុ ២០១៥ និង ២០២១ · ក្រឡា ៣០ ម · ពណ៌ពង្រីកពន្លឺសម្រាប់មើល · NDVI ពិតពី GeoTIFF ដើម · NDBI ប្រហាក់ប្រហែលពីក្រុមរលកដែលបានពង្រីកពន្លឺ</span>`;
+    };
+    const fit = stage(cv, W, H, draw); el.querySelectorAll("input").forEach((i) => i.addEventListener("input", fit)); fit();
   };
 })();

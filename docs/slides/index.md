@@ -16,3 +16,6 @@
 | ៧ | <a href="lesson-07.html" target="_blank">ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1</a> | ៥៩ | ១ |
 | ៨ | <a href="lesson-08.html" target="_blank">គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ</a> | ៦០ | ១ |
 | ៩ | <a href="lesson-09.html" target="_blank">ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ</a> | ៥៣ | ១ |
+| ១០ | <a href="lesson-10.html" target="_blank">ព្រៃឈើ និងការបាត់បង់ព្រៃ</a> | ៦០ | ១ |
+| ១១ | <a href="lesson-11.html" target="_blank">កសិកម្ម និងការធ្វើផែនទីស្រែ</a> | ៥៦ | ១ |
+| ១២ | <a href="lesson-12.html" target="_blank">ទីក្រុង ការពង្រីក និងសីតុណ្ហភាពផ្ទៃដី</a> | ៥៣ | ១ |

@@ -12,7 +12,7 @@ import json, os, sys, importlib
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import vis_core
 GROUPS = {"L01": ("vis_ag1", 1), "L02": ("vis_ag1", 2), "L03": ("vis_ag1", 3),
-          "L04": ("vis_ag2", 4), "L05": ("vis_ag2", 5), "L06": ("vis_ag2", 6), "L07": ("vis_ag3", 7), "L08": ("vis_ag3", 8), "L09": ("vis_ag3", 9), "LABS": ("vis_ag_labs", None)}
+          "L04": ("vis_ag2", 4), "L05": ("vis_ag2", 5), "L06": ("vis_ag2", 6), "L07": ("vis_ag3", 7), "L08": ("vis_ag3", 8), "L09": ("vis_ag3", 9), "L10": ("vis_ag4", 10), "L11": ("vis_ag4", 11), "L12": ("vis_ag4", 12), "LABS": ("vis_ag_labs", None)}
 MAN = os.path.join(HERE, "visuals.json")
 old = json.load(open(MAN, encoding="utf-8")) if os.path.exists(MAN) else []
 want = sys.argv[1:] or list(GROUPS)
