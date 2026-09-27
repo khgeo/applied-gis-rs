@@ -447,4 +447,4 @@ print('ភាពសំខាន់', ee.Dictionary(classifier.explain().get('imp
 
 សំណួរនេះនាំទៅ **មេរៀនទី៧៖ ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1**។
 
-⬅️ [មេរៀនទី៥](lesson-05.md)
+⬅️ [មេរៀនទី៥](lesson-05.md) · ➡️ [មេរៀនទី៧](lesson-07.md)

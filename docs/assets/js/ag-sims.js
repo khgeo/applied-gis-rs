@@ -3,6 +3,7 @@
    Registered into window.EXTRA_SIMS; rendered by lesson-sims.js.
    gee-scale · gee-map · gee-filter · gee-composite
    gee-zonal · gee-harmonic · gee-rf (Chapter 2)
+   gee-flood · gee-drought · gee-terrain (Chapter 3)
    ============================================================ */
 (function () {
   "use strict";
@@ -326,5 +327,133 @@
     const go = () => { out.textContent = "កំពុងបណ្ដុះបណ្ដាល…"; setTimeout(() => { run(); describe(); }, 30); };
     q(".gr-go").addEventListener("click", go); el.querySelectorAll("select").forEach((s_) => s_.addEventListener("change", go));
     el.addEventListener("seg", (e) => { if (e.target.closest(".gr-f")) go(); else fit(); }); seg(el, "gr-f"); seg(el, "gr-v"); go();
+  };
+
+  /* ---------- 8. SAR water threshold (Lesson 7) ---------- */
+  window.EXTRA_SIMS["gee-flood"] = async (el) => {
+    const { q, out, cv } = shell(el, "កម្រិតទឹកលើរូបភាព SAR (VV)",
+      `<label>កម្រិត <b class="gf-tv"></b> <input type="range" class="gf-t" min="-25" max="-5" step="0.5" value="-12"></label>
+       <label>តម្រង <select class="gf-k"><option value="1">គ្មាន</option><option value="3">៣ × ៣</option><option value="5" selected>៥ × ៥</option><option value="7">៧ × ៧</option></select></label>
+       <button type="button" class="gf-o">Otsu</button>
+       <span class="sim-seg gf-v"><button type="button" data-v="img" class="on">រូបភាព</button><button type="button" data-v="map">ផែនទីទឹក</button><button type="button" data-v="err">កំហុស</button></span>`);
+    const D = await loadL8(), n = D.n, N = n * n, W = 640, H = 330, MEAN = [-21, -7.5, -12, -5, -14];
+    let sd = 99; const rnd = () => ((sd = (sd * 16807) % 2147483647) / 2147483647);
+    const raw = new Float32Array(N), truth = new Uint8Array(N);
+    for (let i = 0; i < N; i++) { const c = D.cls[i]; truth[i] = c === 0 ? 1 : 0; let g = 0; for (let k = 0; k < 4; k++) g -= Math.log(rnd() + 1e-9); raw[i] = MEAN[c] + 10 * Math.log10(g / 4); }
+    const cache = {};
+    const filt = (k) => { if (cache[k]) return cache[k]; if (k === 1) return (cache[1] = raw); const o = new Float32Array(N), r = (k - 1) / 2, buf = [];
+      for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { buf.length = 0;
+        for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) { const yy = Math.min(n - 1, Math.max(0, y + dy)), xx = Math.min(n - 1, Math.max(0, x + dx)); buf.push(raw[yy * n + xx]); }
+        buf.sort((a, b) => a - b); o[y * n + x] = buf[buf.length >> 1]; }
+      return (cache[k] = o); };
+    const hist = (a) => { const h = new Array(60).fill(0); for (let i = 0; i < N; i++) { const b = Math.floor((a[i] + 30) / 30 * 60); if (b >= 0 && b < 60) h[b]++; } return h; };
+    const otsu = (a) => { const h = hist(a), tot = h.reduce((x, y) => x + y, 0); let sum = 0; h.forEach((c, i) => sum += c * i); let wB = 0, sB = 0, best = 0, bi = 0;
+      for (let i = 0; i < 60; i++) { wB += h[i]; if (!wB || wB === tot) continue; sB += i * h[i]; const mB = sB / wB, mF = (sum - sB) / (tot - wB), v = wB * (tot - wB) * (mB - mF) ** 2; if (v > best) { best = v; bi = i; } }
+      return -30 + (bi + 1) * .5; };
+    const draw = (ctx) => {
+      const k = +q(".gf-k").value, t = +q(".gf-t").value, v = q(".gf-v .on").dataset.v, a = filt(k); q(".gf-tv").textContent = khn(t, 1) + " dB";
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const img = ctx.createImageData(n, n); let tp = 0, fp = 0, fn = 0, wat = 0;
+      for (let i = 0; i < N; i++) { const w = a[i] < t, tr = truth[i]; if (w) wat++; if (w && tr) tp++; else if (w) fp++; else if (tr) fn++;
+        let c; if (v === "img") { const g = Math.max(0, Math.min(255, (a[i] + 25) / 25 * 255)); c = [g, g, g]; }
+        else if (v === "map") c = w ? [30, 136, 229] : [235, 235, 235]; else c = w && tr ? [30, 136, 229] : w ? [229, 57, 53] : tr ? [255, 152, 0] : [245, 245, 245];
+        img.data.set([c[0], c[1], c[2], 255], i * 4); }
+      const tmp = document.createElement("canvas"); tmp.width = n; tmp.height = n; tmp.getContext("2d").putImageData(img, 0, 0); ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 10, 15, 300, 300);
+      const h = hist(a), mx = Math.max(...h), x0 = 340, y0 = 30, w = 280, hh = 200;
+      h.forEach((c, i) => { const val = -30 + i * .5; ctx.fillStyle = val < t ? "#64b5f6" : "#bcaaa4"; ctx.fillRect(x0 + i * w / 60, y0 + hh - hh * c / mx, w / 60 - 1, hh * c / mx); });
+      const xt = x0 + (t + 30) / 30 * w; ctx.strokeStyle = "#c62828"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xt, y0 - 5); ctx.lineTo(xt, y0 + hh); ctx.stroke();
+      ctx.font = `12px ${font()}`; ctx.fillStyle = "#607d8b"; ctx.textAlign = "center"; [-30, -20, -10, 0].forEach((d) => ctx.fillText(kh(d), x0 + (d + 30) / 30 * w, y0 + hh + 16)); ctx.fillText("VV (dB)", x0 + w / 2, y0 + hh + 32);
+      const acc = (N - fp - fn) / N, prec = tp / Math.max(1, tp + fp), rec = tp / Math.max(1, tp + fn);
+      ctx.textAlign = "left"; ctx.fillStyle = "#263238"; ctx.font = `bold 15px ${font()}`; ctx.fillText(`ភាពត្រឹមត្រូវ ${khn(acc * 100, 1)}%`, x0, 285);
+      ctx.font = `13px ${font()}`; ctx.fillText(`ទឹកដែលរកឃើញ ${kh(Math.round(rec * 100))}% · ទឹកក្លែងក្លាយ ${kh(Math.round((1 - prec) * 100))}%`, x0, 308);
+      if (v === "err") { ctx.fillStyle = "#e53935"; ctx.fillText("■ ទឹកក្លែងក្លាយ", 10, 328); ctx.fillStyle = "#ff9800"; ctx.fillText("■ ទឹកដែលខក", 120, 328); }
+      out.innerHTML = (k === 1 ? "គ្មានតម្រង៖ speckle ធ្វើឲ្យកំពូលពីរត្រួតគ្នា ហើយក្រឡាដីជាច្រើនធ្លាក់ក្រោមកម្រិត។ " : `តម្រង median ${kh(k)} × ${kh(k)} ធ្វើឲ្យកំពូលទឹក (ខៀវ) និងដី (ត្នោត) ច្បាស់។ `) +
+        `<br><span class="sim-hint">SAR ក្លែងធ្វើ៖ តម្លៃ VV ធម្មតាតាមគម្របដីពិតនៃ Landsat 8 ភ្នំពេញ + speckle (៤ look) · ការពិត = ថ្នាក់ទឹកក្នុងផែនទីយោង</span>`;
+    };
+    const fit = stage(cv, W, H, draw);
+    q(".gf-o").addEventListener("click", () => { q(".gf-t").value = otsu(filt(+q(".gf-k").value)); fit(); });
+    el.addEventListener("seg", fit); seg(el, "gf-v"); el.querySelectorAll("input,select").forEach((i) => i.addEventListener("input", fit)); fit();
+  };
+
+  /* ---------- 9. SPI accumulation windows (Lesson 8) ---------- */
+  window.EXTRA_SIMS["gee-drought"] = (el) => {
+    const Y0 = 1995, Y1 = 2024, CLIM = [8, 10, 35, 80, 150, 155, 160, 165, 230, 255, 130, 40], ENSO = { 1997: .7, 2004: .85, 2015: .6, 2019: .7, 2023: .8 };
+    const opts = []; for (let y = Y1; y >= 2000; y--) opts.push(`<option value="${y}"${y === 2019 ? " selected" : ""}>${kh(y)}${ENSO[y] ? " · El Niño" : ""}</option>`);
+    const { q, out, cv } = shell(el, "SPI តាមរយៈពេលបូក",
+      `<label>ឆ្នាំ <select class="gd-y">${opts.join("")}</select></label>
+       <span class="sim-seg gd-k"><button type="button" data-k="1">SPI-១</button><button type="button" data-k="3" class="on">SPI-៣</button><button type="button" data-k="6">SPI-៦</button></span>`);
+    let sd = 21; const rnd = () => ((sd = (sd * 16807) % 2147483647) / 2147483647);
+    const gam = (k) => { let s = 0; for (let i = 0; i < k; i++) s -= Math.log(rnd() + 1e-9); return s / k; };
+    const series = []; for (let y = Y0; y <= Y1; y++) for (let m = 0; m < 12; m++) series.push(Math.max(0, CLIM[m] * (ENSO[y] || 1) * gam(6)));
+    const W = 640, H = 330, MON = ["មក", "កម", "មន", "មស", "ឧស", "មថ", "កក", "សហ", "កញ", "តល", "វច", "ធន"];
+    const draw = (ctx) => {
+      const Y = +q(".gd-y").value, k = +q(".gd-k .on").dataset.k;
+      const acc = series.map((_, i) => i >= k - 1 ? series.slice(i - k + 1, i + 1).reduce((a, b) => a + b, 0) : null);
+      const spi = []; for (let m = 0; m < 12; m++) { const vals = []; for (let y = Y0; y <= Y1; y++) { const v = acc[(y - Y0) * 12 + m]; if (v != null) vals.push(v); }
+        const mu = vals.reduce((a, b) => a + b, 0) / vals.length, s = Math.sqrt(vals.reduce((a, b) => a + (b - mu) ** 2, 0) / vals.length); const v = acc[(Y - Y0) * 12 + m]; spi.push(v == null ? 0 : (v - mu) / s); }
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const x0 = 60, y0 = 30, w = 560, h = 220, Yp = (v) => y0 + h / 2 - v / 3 * (h / 2);
+      [-2, -1, 0, 1, 2].forEach((v) => { ctx.strokeStyle = v === 0 ? "#263238" : v === -1 ? "#ef6c00" : "#eceff1"; ctx.setLineDash(v === -1 ? [5, 4] : []); ctx.beginPath(); ctx.moveTo(x0, Yp(v)); ctx.lineTo(x0 + w, Yp(v)); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = "#607d8b"; ctx.font = `12px ${font()}`; ctx.textAlign = "right"; ctx.fillText(khn(v, 0), x0 - 6, Yp(v) + 4); });
+      spi.forEach((v, m) => { const bx = x0 + m * w / 12 + 6, bw = w / 12 - 12; ctx.fillStyle = v < -2 ? "#7f0000" : v < -1.5 ? "#c62828" : v < -1 ? "#ef6c00" : v < 1 ? "#b0bec5" : "#1e88e5";
+        ctx.fillRect(bx, Math.min(Yp(0), Yp(v)), bw, Math.abs(Yp(v) - Yp(0))); ctx.fillStyle = "#263238"; ctx.textAlign = "center"; ctx.fillText(MON[m], bx + bw / 2, y0 + h + 16);
+        ctx.fillText(khn(v, 1), bx + bw / 2, v < 0 ? Yp(v) + 14 : Yp(v) - 4); });
+      const rain = series.slice((Y - Y0) * 12, (Y - Y0) * 12 + 12), tot = rain.reduce((a, b) => a + b, 0), norm = CLIM.reduce((a, b) => a + b, 0);
+      ctx.textAlign = "left"; ctx.font = `13px ${font()}`; ctx.fillStyle = "#263238"; ctx.fillText(`ទឹកភ្លៀងឆ្នាំ ${kh(Y)}៖ ${khn(tot)} mm (${kh(Math.round(tot / norm * 100))}% នៃមធ្យមប្រចាំខែ)`, x0, y0 + h + 44);
+      const dry = spi.filter((v) => v < -1).length, wetMon = [4, 5, 6, 7, 8, 9].filter((m) => spi[m] < -1).length;
+      out.innerHTML = `SPI-${kh(k)}៖ ${kh(dry)} ខែក្រោម −១ (${kh(wetMon)} ក្នុងរដូវវស្សា ឧសភា–តុលា)។ ` + (k === 1 ? "SPI-១ លោតឡើងចុះរាល់ខែ៖ ខែស្ងួតមួយអាចមិនប៉ះពាល់ដំណាំទេ។" : k === 3 ? "SPI-៣ ទាក់ទងនឹងសំណើមដី និងដំណាំ៖ ខែស្ងួតជាប់ៗគ្នាបង្ហាញខ្លាំង។" : "SPI-៦ រលោង និងយឺត៖ ទាក់ទងនឹងទន្លេ និងអាងស្តុកទឹក។") +
+        `<br><span class="sim-hint">ទឹកភ្លៀងក្លែងធ្វើ ${kh(Y0)}–${kh(Y1)} ពីមធ្យមប្រចាំខែប្រហាក់ប្រហែលនៃភ្នំពេញ · ឆ្នាំ El Niño ត្រូវបានកាត់បន្ថយ · SPI សាមញ្ញ (z-score គ្មានការបម្លែង gamma)</span>`;
+    };
+    const fit = stage(cv, W, H, draw); el.addEventListener("seg", fit); seg(el, "gd-k"); q(".gd-y").addEventListener("change", fit); fit();
+  };
+
+  /* ---------- 10. terrain products and watersheds (Lesson 9) ---------- */
+  window.EXTRA_SIMS["gee-terrain"] = async (el) => {
+    const { q, out, cv } = shell(el, "ទីសណ្ឋាន និងអាងរងទឹក",
+      `<span class="sim-seg gt-p"><button type="button" data-p="elev">កម្ពស់</button><button type="button" data-p="slope">ជម្រាល</button><button type="button" data-p="aspect">ទិស</button><button type="button" data-p="hs" class="on">ស្រមោល</button></span>
+       <label>ទិសពន្លឺ <b class="gt-av"></b> <input type="range" class="gt-a" min="0" max="360" step="15" value="315"></label>
+       <label>ប្រឡាយ > <b class="gt-sv"></b> <input type="range" class="gt-s" min="1" max="3.5" step="0.25" value="2.5"></label>`);
+    const j = await (await fetch(new URL("dem_synthetic.json", AG_DATA))).json(), n = j.n, N = n * n, res = j.res;
+    const dec16 = (b64) => { const bs = atob(b64), a = new Float32Array(N); for (let i = 0; i < N; i++) a[i] = (bs.charCodeAt(2 * i) | (bs.charCodeAt(2 * i + 1) << 8)) * j.scale; return a; };
+    const z = dec16(j.z), zr = dec16(j.zr);
+    const zmin = Math.min(...zr), zmax = Math.max(...zr), DY = [-1, -1, -1, 0, 0, 1, 1, 1], DX = [-1, 0, 1, -1, 1, -1, 0, 1];
+    const fd = new Int8Array(N).fill(-1);
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { let best = 0, bk = -1; const i = y * n + x;
+      for (let k = 0; k < 8; k++) { const yy = y + DY[k], xx = x + DX[k]; if (yy < 0 || yy >= n || xx < 0 || xx >= n) continue; const d = (z[i] - z[yy * n + xx]) / Math.hypot(DY[k], DX[k]); if (d > best) { best = d; bk = k; } }
+      fd[i] = bk; }
+    const acc = new Float32Array(N).fill(1), order = Array.from({ length: N }, (_, i) => i).sort((a, b) => z[b] - z[a]);
+    for (const i of order) { const k = fd[i]; if (k < 0) continue; const y = Math.floor(i / n) + DY[k], x = (i % n) + DX[k]; if (y >= 0 && y < n && x >= 0 && x < n) acc[y * n + x] += acc[i]; }
+    const up = Array.from({ length: N }, () => []); for (let i = 0; i < N; i++) { const k = fd[i]; if (k < 0) continue; const y = Math.floor(i / n) + DY[k], x = (i % n) + DX[k]; if (y >= 0 && y < n && x >= 0 && x < n) up[y * n + x].push(i); }
+    const sl = new Float32Array(N), as = new Float32Array(N);
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { const g = (yy, xx) => zr[Math.min(n - 1, Math.max(0, yy)) * n + Math.min(n - 1, Math.max(0, xx))];
+      const gx = (g(y, x + 1) - g(y, x - 1)) / (2 * res), gy = (g(y + 1, x) - g(y - 1, x)) / (2 * res); sl[y * n + x] = Math.atan(Math.hypot(gx, gy)); as[y * n + x] = Math.atan2(-gx, gy); }
+    let ws = null, outlet = null;
+    const ramp = (t, P) => { t = Math.max(0, Math.min(1, t)) * (P.length - 1); const i = Math.min(P.length - 2, Math.floor(t)), u = t - i; return P[i].map((c, k) => c + (P[i + 1][k] - c) * u); };
+    const TER = [[26, 152, 80], [145, 207, 96], [217, 239, 139], [254, 224, 139], [252, 141, 89], [166, 97, 26], [245, 245, 245]];
+    const W = 640, H = 330;
+    const draw = (ctx) => {
+      const p = q(".gt-p .on").dataset.p, az = +q(".gt-a").value, thr = 10 ** +q(".gt-s").value; q(".gt-av").textContent = kh(az) + "°"; q(".gt-sv").textContent = khn(thr * res * res / 1e6, 1) + " គម²";
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H); const img = ctx.createImageData(n, n), A = (360 - az + 90) * Math.PI / 180, E = 45 * Math.PI / 180;
+      for (let i = 0; i < N; i++) { let c;
+        if (p === "elev") c = ramp((zr[i] - zmin) / (zmax - zmin), TER);
+        else if (p === "slope") c = ramp(sl[i] * 180 / Math.PI / 25, [[255, 255, 204], [253, 141, 60], [189, 0, 38]]);
+        else if (p === "aspect") { const d = ((as[i] * 180 / Math.PI) + 360) % 360 / 360; c = ramp(d, [[228, 26, 28], [255, 255, 51], [77, 175, 74], [55, 126, 184], [228, 26, 28]]); }
+        else { const v = Math.sin(E) * Math.cos(sl[i]) + Math.cos(E) * Math.sin(sl[i]) * Math.cos(A - as[i]); const g = Math.max(0, Math.min(1, (v - .55) / .45)) * 215 + 40; c = [g, g, g]; }
+        if (ws && ws[i]) c = c.map((v, k) => v * .55 + [255, 152, 0][k] * .45);
+        if (acc[i] > thr) c = [21, 101, 192];
+        img.data.set([c[0], c[1], c[2], 255], i * 4); }
+      const tmp = document.createElement("canvas"); tmp.width = n; tmp.height = n; tmp.getContext("2d").putImageData(img, 0, 0); ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 10, 10, 310, 310);
+      if (outlet != null) { ctx.beginPath(); ctx.arc(10 + (outlet % n + .5) * 310 / n, 10 + (Math.floor(outlet / n) + .5) * 310 / n, 6, 0, 7); ctx.fillStyle = "#c62828"; ctx.fill(); ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke(); }
+      ctx.textAlign = "left"; ctx.fillStyle = "#263238"; ctx.font = `bold 15px ${font()}`; ctx.fillText("ព័ត៌មាន", 345, 34); ctx.font = `13px ${font()}`;
+      const lines = [["កម្ពស់", `${khn(zmin)}–${khn(zmax)} ម`], ["ក្រឡា", `${kh(n)} × ${kh(n)} · ${kh(res)} ម`], ["ក្រឡាប្រឡាយ", khn([...acc].filter((v) => v > thr).length)]];
+      if (ws) { const cnt = ws.reduce((a, b) => a + b, 0); lines.push(["ផ្ទៃអាងរង", `${khn(cnt * res * res / 1e6, 2)} គម²`], ["ស្រុតទឹកនៅចំណុចចេញ", khn(acc[outlet])]); }
+      lines.forEach(([a, b], k) => { ctx.fillStyle = "#607d8b"; ctx.fillText(a, 345, 64 + k * 44); ctx.fillStyle = "#263238"; ctx.font = `bold 15px ${font()}`; ctx.fillText(b, 345, 84 + k * 44); ctx.font = `13px ${font()}`; });
+      out.innerHTML = (ws ? "អាងរង (ពណ៌ទឹកក្រូច) = គ្រប់ក្រឡាដែលទឹកហូរចេញតាមចំណុចក្រហម។ ចុចកន្លែងខាងក្រោមនៃប្រឡាយដដែល ដើម្បីមើលអាងរីកធំ។" : "ចុចលើប្រឡាយ (ខៀវ) ដើម្បីកំណត់អាងរងទឹកនៃចំណុចនោះ។") +
+        `<br><span class="sim-hint">DEM ក្លែងធ្វើ (មិនមែនទីកន្លែងពិត) · ទិសលំហូរ D8 និងស្រុតទឹកគណនាក្នុងកម្មវិធីរុករក</span>`;
+    };
+    const fit = stage(cv, W, H, draw);
+    cv.addEventListener("click", (e) => { const b = cv.getBoundingClientRect(), px = (e.clientX - b.left) / b.width * W, py = (e.clientY - b.top) / b.height * H;
+      const x = Math.floor((px - 10) / 310 * n), y = Math.floor((py - 10) / 310 * n); if (x < 0 || y < 0 || x >= n || y >= n) return;
+      let bi = y * n + x; for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { const yy = y + dy, xx = x + dx; if (yy >= 0 && yy < n && xx >= 0 && xx < n && acc[yy * n + xx] > acc[bi]) bi = yy * n + xx; }
+      outlet = bi; ws = new Uint8Array(N); const st = [bi]; ws[bi] = 1; while (st.length) { const i = st.pop(); for (const u of up[i]) if (!ws[u]) { ws[u] = 1; st.push(u); } } fit(); });
+    el.addEventListener("seg", fit); seg(el, "gt-p"); el.querySelectorAll("input").forEach((i) => i.addEventListener("input", fit)); fit();
   };
 })();

@@ -35,3 +35,20 @@
 | ភាពត្រឹមត្រូវសរុប | Overall accuracy (OA) | ៦ |
 | ភាពត្រឹមត្រូវអ្នកផលិត/អ្នកប្រើ | Producer's / User's accuracy | ៦ |
 | ទំនាក់ទំនងលំហ | Spatial autocorrelation | ៦ |
+| រ៉ាដាអាប៉ឺទួរសំយោគ | SAR | ៧ |
+| ការចាំងត្រឡប់ | Backscatter | ៧ |
+| ការចាំងពីរដង | Double bounce | ៧ |
+| Speckle | Speckle | ៧ |
+| កម្រិត Otsu | Otsu threshold | ៧ |
+| ការរកការផ្លាស់ប្ដូរ | Change detection | ៧ |
+| គ្រោះរាំងស្ងួត | Drought | ៨ |
+| ទឹកភ្លៀងធម្មតា | Climatology | ៨ |
+| ភាពមិនប្រក្រតី | Anomaly | ៨ |
+| សន្ទស្សន៍ទឹកភ្លៀងស្តង់ដារ | SPI | ៨ |
+| សន្ទស្សន៍ស្ថានភាពរុក្ខជាតិ | VCI | ៨ |
+| សន្ទស្សន៍សុខភាពរុក្ខជាតិ | VHI | ៨ |
+| គំរូផ្ទៃ/គំរូដី | DSM / DTM | ៩ |
+| ទិសលំហូរ | Flow direction (D8) | ៩ |
+| ស្រុតទឹក | Flow accumulation | ៩ |
+| អាងរងទឹក | Watershed / Catchment | ៩ |
+| កម្ពស់ពីលើប្រឡាយជិតបំផុត | HAND | ៧ ៩ |

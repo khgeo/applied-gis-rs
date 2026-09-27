@@ -13,3 +13,6 @@
 | ៤ | <a href="lesson-04.html" target="_blank">Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ</a> | ៦២ | ១ |
 | ៥ | <a href="lesson-05.html" target="_blank">ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ</a> | ៦៤ | ១ |
 | ៦ | <a href="lesson-06.html" target="_blank">ការចាត់ថ្នាក់គម្របដីដោយ Random Forest</a> | ៦៧ | ១ |
+| ៧ | <a href="lesson-07.html" target="_blank">ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1</a> | ៥៩ | ១ |
+| ៨ | <a href="lesson-08.html" target="_blank">គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ</a> | ៦០ | ១ |
+| ៩ | <a href="lesson-09.html" target="_blank">ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ</a> | ៥៣ | ១ |

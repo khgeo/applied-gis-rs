@@ -96,6 +96,10 @@ nav:
       - មេរៀនទី៤៖ Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ: lessons/lesson-04.md
       - មេរៀនទី៥៖ ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ: lessons/lesson-05.md
       - មេរៀនទី៦៖ ការចាត់ថ្នាក់គម្របដីដោយ Random Forest: lessons/lesson-06.md
+  - ជំពូកទី៣៖ ទឹក និងគ្រោះមហន្តរាយ:
+      - មេរៀនទី៧៖ ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1: lessons/lesson-07.md
+      - មេរៀនទី៨៖ គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ: lessons/lesson-08.md
+      - មេរៀនទី៩៖ ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ: lessons/lesson-09.md
   - ស្លាយបង្រៀន: slides/index.md
   - សៀវភៅអនុវត្ត (លំហាត់ Earth Engine):
       - លំហាត់ទី១៖ ចាប់ផ្ដើមជាមួយ Code Editor: workbook/lab-01.md
@@ -104,6 +108,9 @@ nav:
       - លំហាត់ទី៤៖ NDVI មធ្យមតាមខេត្ត: workbook/lab-04.md
       - លំហាត់ទី៥៖ ក្រាប NDVI និង harmonic: workbook/lab-05.md
       - លំហាត់ទី៦៖ ផែនទីគម្របដីខេត្តមួយ: workbook/lab-06.md
+      - លំហាត់ទី៧៖ ផែនទីទឹកជំនន់ទន្លេសាប: workbook/lab-07.md
+      - លំហាត់ទី៨៖ CHIRPS និង VCI: workbook/lab-08.md
+      - លំហាត់ទី៩៖ អាងរងពី DEM: workbook/lab-09.md
   - ឧបសម្ព័ន្ធ:
       - ក៖ ចុះឈ្មោះ និងរៀបចំ Earth Engine: appendix/a-gee-setup.md
       - ខ៖ ទិន្នន័យ Earth Engine សម្រាប់កម្ពុជា: appendix/b-datasets.md

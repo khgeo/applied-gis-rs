@@ -19,6 +19,9 @@
 | ទីសណ្ឋាន | ALOS AW3D30 | `JAXA/ALOS/AW3D30/V3_2` | ៣០ ម | ៦ |
 | គម្របដី | Dynamic World | `GOOGLE/DYNAMICWORLD/V1` | ១០ ម | ៦ |
 | រដូវកាល | MODIS Land Cover Dynamics | `MODIS/061/MCD12Q2` | ៥០០ ម | ៥ |
+| ទឹកជំនន់ · ជលសាស្ត្រ | MERIT Hydro | `MERIT/Hydro/v1_0_1` | ៩០ ម | ៧ ៩ |
+| អាងរងទឹក | HydroBASINS · HydroRIVERS | `WWF/HydroSHEDS/v1/Basins/hybas_1…12` · `WWF/HydroSHEDS/v1/FreeFlowingRivers` | វ៉ិចទ័រ | ៩ |
+| ប្រជាជន | WorldPop | `WorldPop/GP/100m/pop` | ១០០ ម | ៧ |
 | ព្រំខេត្ត និង GCP ខេត្តកែប | Asset វគ្គសិក្សា | `users/yamsarath168/rupp_wfp_applied_gisrs4drm/kh_province_boundary` · `kep_gcps` | វ៉ិចទ័រ | ៦ |
 
 !!! note "អាជ្ញាបណ្ណទិន្នន័យ"
