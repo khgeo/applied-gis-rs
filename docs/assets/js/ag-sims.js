@@ -26,7 +26,7 @@
   /* ---------- 1. download vs cloud ---------- */
   window.EXTRA_SIMS["gee-scale"] = (el) => {
     const { q, out, cv } = shell(el, "ទាញយក ឬគណនាលើពពក?",
-      `<label>តំបន់ <select class="gs-a"><option value="1">ខេត្តមួយ (~៧ ០០០ គម²)</option><option value="3">ខេត្តបី</option><option value="26" selected>កម្ពុជាទាំងមូល (១៨១ ០០០ គម²)</option></select></label>
+      `<label>តំបន់ <select class="gs-a"><option value="1">ខេត្តមួយ (~៧ ០០០ គម²)</option><option value="3">ខេត្តបី</option><option value="26" selected>កម្ពុជាទាំងមូល (១៨១ ០៣៥ គម²)</option></select></label>
        <label>ឆ្នាំ <b class="gs-yv"></b> <input type="range" class="gs-y" min="1" max="10" value="5"></label>
        <label>អ៊ីនធឺណិត <select class="gs-n"><option value="5">៥ Mbps</option><option value="20" selected>២០ Mbps</option><option value="100">១០០ Mbps</option></select></label>`);
     const W = 640, H = 300;

@@ -29,7 +29,7 @@ def _mask(key, n=N):
         for ring in poly:
             dr.polygon([(u * n, (1 - v) * n) for u, v in ring], fill=255)
     return np.array(im) > 0
-LAKE = _mask("lake"); LAND = _mask("prov") | LAKE
+LAKE = _mask("lake"); LAND = ndi.binary_fill_holes(_mask("prov") | LAKE)
 rng = np.random.default_rng(4)
 yy, xx = np.mgrid[0:N, 0:N] / N
 field = ndi.gaussian_filter(rng.normal(size=(N, N)), 3) * 4
@@ -43,7 +43,10 @@ def layer(season):
     """0 dry · 1 wet · 2 flood — returns (value 0–1, kind) arrays; kind 0 land · 1 water · 2 city."""
     v = forest * (.55 if season == 0 else 1.0) + (1 - forest) * lowland * (0 if season == 0 else .55)
     water = LAKE.copy()
-    if season >= 1: water = ndi.binary_dilation(LAKE, iterations=1 + season * 2) & LAND & (lowland > .35)
+    if season >= 1:
+        # Tonle Sap and the lower Mekong floodplain expand; the upper Mekong (north-east) stays a river
+        grow = ndi.binary_dilation(LAKE, iterations=1 + season * 2) & LAND & ~((xx > .55) & (yy < .45))
+        water = LAKE | grow
     kind = np.where(water, 1, 0); kind[city & LAND] = 2
     return np.clip(v + .06 * field, 0, 1), kind
 
