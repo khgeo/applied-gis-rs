@@ -37,9 +37,9 @@
   "file": "assets/svg/agv/a01-code-editor.svg",
   "title": "ស្គាល់ Code Editor",
   "bullets": [
-   "ខាងឆ្វេង៖ ស្គ្រីបរបស់អ្នក ឯកសារ API និង Assets។",
-   "កណ្ដាល៖ សរសេរកូដ ហើយចុច Run។ ខាងស្ដាំ៖ Console (print) Inspector (ចុចលើផែនទី) និង Tasks (នាំចេញ)។",
-   "ខាងក្រោម៖ ផែនទីសម្រាប់ Map.addLayer()។"
+   "ខាងឆ្វេង (១)៖ ស្គ្រីបរបស់អ្នក ឯកសារ API និង Assets។ កណ្ដាល (២)៖ សរសេរកូដ ហើយចុច Run។",
+   "ខាងស្ដាំ (៣)៖ Inspector (ចុចលើផែនទី) Console (លទ្ធផល print) និង Tasks (នាំចេញ)។",
+   "ខាងក្រោម (៤–៦)៖ ផែនទីសម្រាប់ Map.addLayer() ឧបករណ៍គូរ ស្រទាប់ និង legend។"
   ],
   "where": 0.5
  },

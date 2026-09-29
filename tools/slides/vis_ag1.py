@@ -37,18 +37,8 @@ def L01():
     for x in (180, 500, 820): f.line(x, 212, x, 286, "#90a4ae", 2, arrow=True)
     entry(1, f.save("a01-architecture"), "Earth Engine មានអ្វីខ្លះ",
           ["កាតាឡុក៖ ទិន្នន័យដែលរៀបចំរួច (រួមទាំង L2A Landsat C2 CHIRPS SRTM)។", "Code Editor៖ កន្លែងសរសេរ JavaScript ក្នុងកម្មវិធីរុករក។", "Apps និងការនាំចេញ៖ ផ្លូវចែករំលែកលទ្ធផលទៅអ្នកដទៃ។"], .35)
-    # 4 Code Editor layout mockup
-    f = Fig(1000, 520).title("ផ្ទៃ Code Editor")
-    f.rect(40, 80, 920, 420, "#fafafa", "#b0bec5", 1.5, 8)
-    f.rect(50, 90, 230, 190, "#e8f5e9", "#a5d6a7"); f.text(165, 190, "Scripts · Docs · Assets", 15, IND, "middle", "bold")
-    f.rect(290, 90, 380, 190, "#263238"); f.text(480, 190, "កន្លែងសរសេរកូដ", 16, "#80cbc4", "middle", "bold")
-    f.rect(680, 90, 270, 190, "#fff3e0", "#ffcc80"); f.text(815, 190, "Inspector · Console · Tasks", 15, AMB, "middle", "bold")
-    try:
-        f.img(R.rgb(R.shv(2021)[3], R.shv(2021)[2], R.shv(2021)[1]), 50, 290, 900, 200)
-    except Exception: f.rect(50, 290, 900, 200, "#c8e6c9")
-    f.text(500, 400, "ផែនទី (Map)", 22, "#fff", "middle", "bold", 'stroke="#000" stroke-width="3" paint-order="stroke"')
-    entry(1, f.save("a01-code-editor"), "ស្គាល់ Code Editor",
-          ["ខាងឆ្វេង៖ ស្គ្រីបរបស់អ្នក ឯកសារ API និង Assets។", "កណ្ដាល៖ សរសេរកូដ ហើយចុច Run។ ខាងស្ដាំ៖ Console (print) Inspector (ចុចលើផែនទី) និង Tasks (នាំចេញ)។", "ខាងក្រោម៖ ផែនទីសម្រាប់ Map.addLayer()។"], .5)
+    # 4 Code Editor: real screenshot with numbered call-outs
+    code_editor_fig()
     # 5 scenes over Cambodia per year (computation)
     f = Fig(1000, 420).title("រូបភាព Sentinel-2 ប៉ុន្មានផ្ទាំងលើកម្ពុជា?", "ប្រហាក់ប្រហែល · ~៣០ tile × ~៧៣ ថ្ងៃ/ឆ្នាំ")
     vals = [30 * 73 * y for y in (1, 2, 5, 10)]; bars(f, 80, 100, 820, 240, ["១ ឆ្នាំ", "២ ឆ្នាំ", "៥ ឆ្នាំ", "១០ ឆ្នាំ"], vals, ["#a5d6a7", "#66bb6a", "#43a047", "#1b5e20"], fmt=lambda v: khn(v) + " ផ្ទាំង", lw=120)
@@ -183,3 +173,30 @@ def L03():
     f.circle(X(8), Y(.7), 9, "none", "#2e7d32", 2.5); f.text(760, 220, "qualityMosaic ជ្រើស", 14); f.text(760, 244, "កាលបរិច្ឆេទ ៨ (NDVI ខ្ពស់បំផុត)", 14)
     entry(3, f.save("a03-quality"), "ក្បួនជ្រើសក្រឡាពីរបែប",
           ["កាលបរិច្ឆេទ ២ និង ៥ មានពពក (ក្រហមខ្ពស់ NDVI ទាប)។", "median តាមក្រុមរលក ជៀសវាងតម្លៃខ្ពស់ទាំងនោះដោយស្វ័យប្រវត្តិ។", "qualityMosaic យកកាលបរិច្ឆេទតែមួយដែលល្អបំផុតតាមលក្ខណៈវិនិច្ឆ័យ (ឧ. NDVI) ដូច្នេះក្រុមរលកស៊ីគ្នា។"], .85)
+
+
+def code_editor_fig():
+    """Real Code Editor screenshot (author's account, 2026) with numbered call-outs."""
+    import os
+    from PIL import Image
+    shot = Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "code_editor.jpg"))
+    W0, H0 = shot.size; w = 700; k = w / W0; h = H0 * k; x0, y0 = 30, 75
+    f = Fig(1000, int(y0 + h + 25)).title("ផ្ទៃ Code Editor", "រូបថតអេក្រង់ពិត · code.earthengine.google.com")
+    f.img(shot, x0, y0, w, h, q=88)
+    f.rect(x0, y0, w, h, "none", "#90a4ae", 1)
+    marks = [(270, 390, "Scripts · Docs · Assets", "ស្គ្រីប ឯកសារ API ទិន្នន័យរបស់អ្នក"),
+             (1010, 420, "កន្លែងសរសេរកូដ", "Run · Save · Get Link · Apps"),
+             (1750, 330, "Inspector · Console · Tasks", "តម្លៃក្រឡា · print() · នាំចេញ"),
+             (330, 576, "ឧបករណ៍គូរ", "ចំណុច · បន្ទាត់ · ពហុកោណ · ចតុកោណ"),
+             (1640, 640, "Layers · Map/Satellite", "បើក/បិទស្រទាប់ · ផែនទីមូលដ្ឋាន"),
+             (1000, 1150, "ផែនទី", "Map.addLayer() · legend (ui.Panel)")]
+    for i, (sx, sy, t1, t2) in enumerate(marks):
+        cx, cy = x0 + sx * k, y0 + sy * k
+        f.circle(cx, cy, 15, AMB, "#fff", 2.5); f.text(cx, cy + 6, kh(i + 1), 16, "#fff", "middle", "bold")
+        ly = y0 + 20 + i * (h - 30) / 6
+        f.circle(760, ly + 8, 12, AMB); f.text(760, ly + 13, kh(i + 1), 13, "#fff", "middle", "bold")
+        f.text(780, ly + 12, t1, 14, INK, weight="bold"); f.text(780, ly + 34, t2, 12, "#607d8b")
+    entry(1, f.save("a01-code-editor"), "ស្គាល់ Code Editor",
+          ["ខាងឆ្វេង (១)៖ ស្គ្រីបរបស់អ្នក ឯកសារ API និង Assets។ កណ្ដាល (២)៖ សរសេរកូដ ហើយចុច Run។",
+           "ខាងស្ដាំ (៣)៖ Inspector (ចុចលើផែនទី) Console (លទ្ធផល print) និង Tasks (នាំចេញ)។",
+           "ខាងក្រោម (៤–៦)៖ ផែនទីសម្រាប់ Map.addLayer() ឧបករណ៍គូរ ស្រទាប់ និង legend។"], .5)

@@ -2,8 +2,10 @@
 
 Same layout and typography as Books 1–2 (vector SVG). The artwork is Cambodia drawn as
 a stack of three raster "images" in time (an Earth Engine ImageCollection): dry season,
-wet season and flood peak. Outline, lake and roads come from the simplified real layers
-in coverdata.json; the cell values are an illustrative vegetation / water field.
+rising water and the 2011 flood peak. Outline, lake and roads come from the simplified real
+layers in coverdata.json. The top layer's water is the real 2011 flood extent (author's
+data, UTM 48N, rasterized to the 64 × 64 grid in coverdata.json["flood2011"]); the middle
+layer is that extent shrunk inward; vegetation colours are an illustrative field.
 """
 import json, os, html
 import numpy as np
@@ -30,6 +32,7 @@ def _mask(key, n=N):
             dr.polygon([(u * n, (1 - v) * n) for u, v in ring], fill=255)
     return np.array(im) > 0
 LAKE = _mask("lake"); LAND = ndi.binary_fill_holes(ndi.binary_closing(_mask("prov") | LAKE, iterations=1))
+FLOOD = np.array([[c == "1" for c in row] for row in D["flood2011"]]) & LAND   # real 2011 flood extent
 rng = np.random.default_rng(4)
 yy, xx = np.mgrid[0:N, 0:N] / N
 field = ndi.gaussian_filter(rng.normal(size=(N, N)), 3) * 4
@@ -48,10 +51,8 @@ def layer(season):
     """0 dry · 1 wet · 2 flood — returns (value 0–1, kind) arrays; kind 0 land · 1 water · 2 city."""
     v = forest * (.55 if season == 0 else 1.0) + (1 - forest) * lowland * (0 if season == 0 else .55)
     water = LAKE.copy()
-    if season >= 1:
-        # Tonle Sap and the lower Mekong floodplain expand; the upper Mekong (north-east) stays a river
-        grow = ndi.binary_dilation(LAKE, iterations=1 + season * 2) & LAND & ~((xx > .55) & (yy < .45))
-        water = LAKE | grow
+    if season == 2: water = LAKE | FLOOD
+    elif season == 1: water = LAKE | ndi.binary_erosion(FLOOD, iterations=2)
     kind = np.where(water, 1, 0); kind[city & LAND] = 2
     return np.clip(v + .06 * field, 0, 1), kind
 
@@ -86,7 +87,7 @@ def plate(ox, oy, w, h, sk):
 
 def art(ox, oy, w, h, sk, gap):
     L = []
-    labels = [("មករា · រដូវប្រាំង", 0), ("សីហា · រដូវវស្សា", 1), ("តុលា · ទឹកឡើងខ្ពស់", 2)]
+    labels = [("មករា · រដូវប្រាំង", 0), ("សីហា · ទឹកកំពុងឡើង", 1), ("តុលា ២០១១ · ទឹកជំនន់", 2)]
     for i, (lab, season) in enumerate(labels):
         y = oy - i * gap
         L.append(plate(ox, y, w, h, sk))
