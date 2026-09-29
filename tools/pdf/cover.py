@@ -29,15 +29,20 @@ def _mask(key, n=N):
         for ring in poly:
             dr.polygon([(u * n, (1 - v) * n) for u, v in ring], fill=255)
     return np.array(im) > 0
-LAKE = _mask("lake"); LAND = ndi.binary_fill_holes(_mask("prov") | LAKE)
+LAKE = _mask("lake"); LAND = ndi.binary_fill_holes(ndi.binary_closing(_mask("prov") | LAKE, iterations=1))
 rng = np.random.default_rng(4)
 yy, xx = np.mgrid[0:N, 0:N] / N
 field = ndi.gaussian_filter(rng.normal(size=(N, N)), 3) * 4
 forest = np.clip(.35 + .45 * np.exp(-((xx - .9) ** 2 + (yy - .15) ** 2) / .08) + .45 * np.exp(-((xx - .12) ** 2 + (yy - .7) ** 2) / .06)
                  + .3 * np.exp(-((xx - .55) ** 2 + (yy - .12) ** 2) / .05) + .08 * field, 0, 1)
 lowland = np.exp(-((xx - .45) ** 2 / .05 + (yy - .55) ** 2 / .09))           # around Tonle Sap / Mekong
-PP = (int(.555 * N), int(.715 * N))                                           # Phnom Penh cell (col, row)
-city = np.zeros((N, N), bool); city[PP[1] - 1:PP[1] + 2, PP[0] - 1:PP[0] + 2] = True
+def _poly_mask(poly, n=N):
+    im = Image.new("L", (n, n), 0); dr = ImageDraw.Draw(im)
+    for ring in poly: dr.polygon([(u * n, (1 - v) * n) for u, v in ring], fill=255)
+    return np.array(im) > 0
+# Phnom Penh = the province polygon centred near (0.478, 0.278) in coverdata.json
+_pp = min(D["prov"], key=lambda poly: sum((u - .478) ** 2 + (v - .278) ** 2 for u, v in poly[0]) / len(poly[0]))
+city = _poly_mask(_pp)
 
 def layer(season):
     """0 dry · 1 wet · 2 flood — returns (value 0–1, kind) arrays; kind 0 land · 1 water · 2 city."""
