@@ -20,7 +20,7 @@ ONLINE = "https://khgeo.github.io/applied-gis-rs/"
 PAGE_EXT = "/"
 C1, C2, C3, BG = "#2e7d32", "#ef6c00", "#1b5e20", "#f4f9f4"
 CSS_FILES = ["assets/css/lesson-sims.css"]
-JS_FILES = ["assets/js/ag-sims.js", "assets/js/lesson-sims.js"]
+JS_FILES = ["assets/js/ag-sims.js", "assets/js/flood-risk-sim.js", "assets/js/lesson-sims.js"]
 VISUALS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "visuals.json")
 # -----------------------------------------------------------------------------
 
