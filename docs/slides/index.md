@@ -13,12 +13,12 @@
 | ៤ | <a href="lesson-04.html" target="_blank">Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ</a> | ៦២ | ១ |
 | ៥ | <a href="lesson-05.html" target="_blank">ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ</a> | ៦៤ | ១ |
 | ៦ | <a href="lesson-06.html" target="_blank">ការចាត់ថ្នាក់គម្របដីដោយ Random Forest</a> | ៦៧ | ១ |
-| ៧ | <a href="lesson-07.html" target="_blank">ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1</a> | ៥៩ | ១ |
+| ៧ | <a href="lesson-07.html" target="_blank">ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1</a> | ៧០ | ២ |
 | ៨ | <a href="lesson-08.html" target="_blank">គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ</a> | ៦០ | ១ |
 | ៩ | <a href="lesson-09.html" target="_blank">ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ</a> | ៥៣ | ១ |
 | ១០ | <a href="lesson-10.html" target="_blank">ព្រៃឈើ និងការបាត់បង់ព្រៃ</a> | ៦០ | ១ |
 | ១១ | <a href="lesson-11.html" target="_blank">កសិកម្ម និងការធ្វើផែនទីស្រែ</a> | ៥៦ | ១ |
 | ១២ | <a href="lesson-12.html" target="_blank">ទីក្រុង ការពង្រីក និងសីតុណ្ហភាពផ្ទៃដី</a> | ៥៣ | ១ |
-| ១៣ | <a href="lesson-13.html" target="_blank">ការវិភាគពហុលក្ខខណ្ឌជាមួយទិន្នន័យ RS</a> | ៥៨ | ១ |
+| ១៣ | <a href="lesson-13.html" target="_blank">ការវិភាគពហុលក្ខខណ្ឌជាមួយទិន្នន័យ RS</a> | ៦៨ | ២ |
 | ១៤ | <a href="lesson-14.html" target="_blank">កម្មវិធី Earth Engine និងផែនទីវេប</a> | ៥៥ | ១ |
 | ១៥ | <a href="lesson-15.html" target="_blank">គម្រោងអនុវត្តបញ្ចប់វគ្គ និងក្រមសីលធម៌ទិន្នន័យ</a> | ៦២ | ១ |
