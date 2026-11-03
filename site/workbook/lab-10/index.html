@@ -1,0 +1,2391 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="សៀវភៅសិក្សា អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ (Google Earth Engine) ជាភាសាខ្មែរ សម្រាប់វគ្គសិក្សា ១ ឆមាស">
+      
+      
+        <meta name="author" content="YAM Sarath (យាំ សារដ្ឋ)">
+      
+      
+        <link rel="canonical" href="https://khgeo.github.io/applied-gis-rs/workbook/lab-10/">
+      
+      
+        <link rel="prev" href="../lab-09/">
+      
+      
+        <link rel="next" href="../lab-11/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ - អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/local-fonts.css">
+    
+      <link rel="stylesheet" href="../../assets/css/khmer.css">
+    
+      <link rel="stylesheet" href="../../assets/vendor/leaflet/leaflet.css">
+    
+      <link rel="stylesheet" href="../../assets/css/workbook.css">
+    
+      <link rel="stylesheet" href="../../assets/css/lesson-sims.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hansen-gfc" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://khgeo.github.io/" title="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" class="md-header__button md-logo" aria-label="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange"  aria-label="ប្ដូរទៅរបៀបងងឹត"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ប្ដូរទៅរបៀបងងឹត" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="orange"  aria-label="ប្ដូរទៅរបៀបភ្លឺ"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ប្ដូរទៅរបៀបភ្លឺ" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/khgeo/applied-gis-rs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    applied-gis-rs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://khgeo.github.io/" title="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" class="md-nav__button md-logo" aria-label="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/khgeo/applied-gis-rs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    applied-gis-rs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ទំព័រដើម
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    កម្មវិធីសិក្សា
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី១៖ មូលដ្ឋាន Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី១៖ មូលដ្ឋាន Google Earth Engine
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៖ ការគណនាលើពពក និង Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៣៖ Image Collection ការត្រង ការលុបពពក និង Composite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី២៖ ការវិភាគទ្រង់ទ្រាយធំ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី២៖ ការវិភាគទ្រង់ទ្រាយធំ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៤៖ Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៥៖ ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៦៖ ការចាត់ថ្នាក់គម្របដីដោយ Random Forest
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី៣៖ ទឹក និងគ្រោះមហន្តរាយ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី៣៖ ទឹក និងគ្រោះមហន្តរាយ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៧៖ ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៨៖ គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៩៖ ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី៤៖ ដី និងមនុស្ស
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី៤៖ ដី និងមនុស្ស
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១០៖ ព្រៃឈើ និងការបាត់បង់ព្រៃ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១១៖ កសិកម្ម និងការធ្វើផែនទីស្រែ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១២៖ ទីក្រុង ការពង្រីក និងសីតុណ្ហភាពផ្ទៃដី
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី៥៖ ការរួមបញ្ចូល និងការចែករំលែក
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី៥៖ ការរួមបញ្ចូល និងការចែករំលែក
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៣៖ ការវិភាគពហុលក្ខខណ្ឌជាមួយទិន្នន័យ RS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៤៖ កម្មវិធី Earth Engine និងផែនទីវេប
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lessons/lesson-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៥៖ គម្រោងអនុវត្តបញ្ចប់វគ្គ និងក្រមសីលធម៌ទិន្នន័យ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ស្លាយបង្រៀន
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    សៀវភៅអនុវត្ត (លំហាត់ Earth Engine)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    សៀវភៅអនុវត្ត (លំហាត់ Earth Engine)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៖ ចាប់ផ្ដើមជាមួយ Code Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី២៖ វត្ថុ មុខងារ និង map()
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៣៖ Composite ឥតពពកនៃកម្ពុជា
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៤៖ NDVI មធ្យមតាមខេត្ត
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៥៖ ក្រាប NDVI និង harmonic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៦៖ ផែនទីគម្របដីខេត្តមួយ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៧៖ ផែនទីទឹកជំនន់ទន្លេសាប
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៨៖ CHIRPS និង VCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៩៖ អាងរងពី DEM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ស្ថានភាព
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        គោលបំណង
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ឯកសារដែលប្រើ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ពិសោធន៍មុនចាប់ផ្ដើម · ១០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី១៖ ព្រៃ ២០០០ តាមកម្រិតពីរ · ២០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី២៖ តារាងខេត្ត · ២៥ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី៣៖ តំបន់ការពារ និងទ្រនាប់ · ៣០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី៤៖ ពិនិត្យគំរូ · ៣០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី៥៖ ផែនទី និងសេចក្ដីសន្និដ្ឋាន · ២៥ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        លទ្ធផលដែលរំពឹងទុក
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        កំហុសទូទៅ និងដំណោះស្រាយ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        លទ្ធផលត្រូវប្រគល់
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ពិនិត្យលទ្ធផលដោយខ្លួនឯង
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១១៖ ស្រែពី Sentinel-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១២៖ LST ភ្នំពេញ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៣៖ សមស្របភាពទីតាំង
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៤៖ កម្មវិធីតាមដានទឹក
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៥៖ គម្រោងបញ្ចប់វគ្គ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ឧបសម្ព័ន្ធ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ឧបសម្ព័ន្ធ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/a-gee-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ក៖ ចុះឈ្មោះ និងរៀបចំ Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/b-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ខ៖ ទិន្នន័យ Earth Engine សម្រាប់កម្ពុជា
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/c-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    គ៖ ឯកសារយោង
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    វាក្យសព្ទបច្ចេកទេស
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ស្ថានភាព
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        គោលបំណង
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ឯកសារដែលប្រើ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ពិសោធន៍មុនចាប់ផ្ដើម · ១០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី១៖ ព្រៃ ២០០០ តាមកម្រិតពីរ · ២០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី២៖ តារាងខេត្ត · ២៥ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី៣៖ តំបន់ការពារ និងទ្រនាប់ · ៣០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី៤៖ ពិនិត្យគំរូ · ៣០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        សកម្មភាពទី៥៖ ផែនទី និងសេចក្ដីសន្និដ្ឋាន · ២៥ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        លទ្ធផលដែលរំពឹងទុក
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        កំហុសទូទៅ និងដំណោះស្រាយ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        លទ្ធផលត្រូវប្រគល់
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ពិនិត្យលទ្ធផលដោយខ្លួនឯង
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/khgeo/applied-gis-rs/edit/main/docs/workbook/lab-10.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="hansen-gfc">លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ<a class="headerlink" href="#hansen-gfc" title="Permanent link">¶</a></h1>
+<div class="admonition info">
+<p class="admonition-title">ព័ត៌មានលំហាត់</p>
+<p><strong>មេរៀនពាក់ព័ន្ធ៖</strong> <a href="../../lessons/lesson-10/">មេរៀនទី១០៖ ព្រៃឈើ និងការបាត់បង់ព្រៃ</a>
+<strong>ការអនុវត្តដោយខ្លួនឯង</strong> · Earth Engine Code Editor · QGIS · ប្រហែល ១៣០ នាទី</p>
+</div>
+<h2 id="_1">ស្ថានភាព<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>អ្នកនឹងរៀបចំទិន្នន័យសម្រាប់របាយការណ៍ការបាត់បង់ព្រៃថ្នាក់ជាតិ៖ ព្រៃឆ្នាំ ២០០០ និងការបាត់បង់តាមខេត្ត តាមឆ្នាំ និងតាមកម្រិតពីរ ហើយវិភាគតំបន់ការពារមួយ ជាមួយតំបន់ទ្រនាប់ និងការពិនិត្យគំរូ។</p>
+<h2 id="_2">គោលបំណង<a class="headerlink" href="#_2" title="Permanent link">¶</a></h2>
+<ul>
+<li>កំណត់ព្រៃឆ្នាំ ២០០០ ដោយកម្រិត ១០% និង ៣០% ហើយប្រៀបធៀបផ្ទៃ។</li>
+<li>គណនាផ្ទៃ និងអត្រាបាត់បង់តាមខេត្តទាំង ២៥។</li>
+<li>គណនាការបាត់បង់តាមឆ្នាំក្នុងតំបន់ការពារមួយ និងតំបន់ទ្រនាប់។</li>
+<li>ពិនិត្យក្រឡាបាត់បង់គំរូ ២០ ដោយភ្នែក ហើយកត់ត្រាប្រភេទ។</li>
+</ul>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 330" font-family="Battambang, Siemreap, sans-serif"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs><rect width="1000" height="330" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">លំដាប់ការងារ លំហាត់ទី១០</text><text x="24.0" y="64.0" font-size="15" fill="#607d8b" text-anchor="start" font-weight="normal" class="fsub">Hansen GFC និងតំបន់ការពារ</text><rect x="30.0" y="110.0" width="173.6" height="120.0" rx="12" fill="#a5d6a7" stroke="none" stroke-width="1" /><text x="116.8" y="164.0" font-size="15" fill="#263238" text-anchor="middle" font-weight="bold" >ព្រៃ ២០០០ តាមកម្រិតពីរ</text><text x="116.8" y="192.0" font-size="13" fill="#263238" text-anchor="middle" font-weight="normal" >២០ នាទី</text><line x1="204.6" y1="170.0" x2="219.6" y2="170.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="221.6" y="110.0" width="173.6" height="120.0" rx="12" fill="#81c784" stroke="none" stroke-width="1" /><text x="308.4" y="164.0" font-size="15" fill="#263238" text-anchor="middle" font-weight="bold" >តារាងខេត្ត</text><text x="308.4" y="192.0" font-size="13" fill="#263238" text-anchor="middle" font-weight="normal" >២៥ នាទី</text><line x1="396.2" y1="170.0" x2="411.2" y2="170.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="413.2" y="110.0" width="173.6" height="120.0" rx="12" fill="#66bb6a" stroke="none" stroke-width="1" /><text x="500.0" y="164.0" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold" >តំបន់ការពារ និងទ្រនាប់</text><text x="500.0" y="192.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >៣០ នាទី</text><line x1="587.8" y1="170.0" x2="602.8" y2="170.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="604.8" y="110.0" width="173.6" height="120.0" rx="12" fill="#43a047" stroke="none" stroke-width="1" /><text x="691.6" y="164.0" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold" >ពិនិត្យគំរូ</text><text x="691.6" y="192.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >៣០ នាទី</text><line x1="779.4" y1="170.0" x2="794.4" y2="170.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="796.4" y="110.0" width="173.6" height="120.0" rx="12" fill="#2e7d32" stroke="none" stroke-width="1" /><text x="883.2" y="164.0" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold" >ផែនទី និងសេចក្ដីសន្និដ្ឋ…</text><text x="883.2" y="192.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >២៥ នាទី</text><text x="500.0" y="290.0" font-size="15" fill="#607d8b" text-anchor="middle" font-weight="normal" >សរុបប្រហែល ១៣០ នាទី</text></svg></p>
+<figcaption>លំដាប់ការងារនៃលំហាត់ទី១០ និងពេលវេលាប្រហាក់ប្រហែល។</figcaption>
+</figure>
+<h2 id="_3">ឯកសារដែលប្រើ<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<ul>
+<li><code>UMD/hansen/global_forest_change_2023_v1_11</code> (ឬកំណែថ្មីជាងក្នុងកាតាឡុក) · <code>WCMC/WDPA/current/polygons</code> · <code>FAO/GAUL/2015/level1</code>។</li>
+</ul>
+<h2 id="_4">ពិសោធន៍មុនចាប់ផ្ដើម · ១០ នាទី<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<div class="sim" data-sim="gee-forest"></div>
+
+<p>ប្ដូរកម្រិតពី ១០% ទៅ ៥០%។ ផ្ទៃព្រៃប្ដូរប៉ុន្មាន? អត្រាបាត់បង់ក្នុងតំបន់ការពារប្ដូរដែរទេ?</p>
+<h2 id="_5">សកម្មភាពទី១៖ ព្រៃ ២០០០ តាមកម្រិតពីរ · ២០ នាទី<a class="headerlink" href="#_5" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">gfc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">(</span><span class="s1">'UMD/hansen/global_forest_change_2023_v1_11'</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">provs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'FAO/GAUL/2015/level1'</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'ADM0_NAME'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Cambodia'</span><span class="p">));</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Image</span><span class="p">.</span><span class="nx">pixelArea</span><span class="p">().</span><span class="nx">divide</span><span class="p">(</span><span class="mf">1e4</span><span class="p">);</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">tc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'treecover2000'</span><span class="p">);</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kd">var</span><span class="w"> </span><span class="nx">img</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ha</span><span class="p">.</span><span class="nx">updateMask</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">gte</span><span class="p">(</span><span class="mf">10</span><span class="p">)).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'f10'</span><span class="p">).</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">ha</span><span class="p">.</span><span class="nx">updateMask</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">gte</span><span class="p">(</span><span class="mf">30</span><span class="p">)).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'f30'</span><span class="p">))</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">ha</span><span class="p">.</span><span class="nx">updateMask</span><span class="p">(</span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'loss'</span><span class="p">).</span><span class="nx">and</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">gte</span><span class="p">(</span><span class="mf">10</span><span class="p">))).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'l10'</span><span class="p">))</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">ha</span><span class="p">.</span><span class="nx">updateMask</span><span class="p">(</span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'loss'</span><span class="p">).</span><span class="nx">and</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">gte</span><span class="p">(</span><span class="mf">30</span><span class="p">))).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'l30'</span><span class="p">));</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">centerObject</span><span class="p">(</span><span class="nx">provs</span><span class="p">,</span><span class="w"> </span><span class="mf">7</span><span class="p">);</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">clip</span><span class="p">(</span><span class="nx">provs</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'treecover2000'</span><span class="p">);</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'lossyear'</span><span class="p">).</span><span class="nx">selfMask</span><span class="p">().</span><span class="nx">clip</span><span class="p">(</span><span class="nx">provs</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">23</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'yellow'</span><span class="p">,</span><span class="w"> </span><span class="s1">'red'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'lossyear'</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="_6">សកម្មភាពទី២៖ តារាងខេត្ត · ២៥ នាទី<a class="headerlink" href="#_6" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">img</span><span class="p">.</span><span class="nx">reduceRegions</span><span class="p">({</span><span class="nx">collection</span><span class="o">:</span><span class="w"> </span><span class="nx">provs</span><span class="p">,</span><span class="w"> </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">sum</span><span class="p">(),</span><span class="w"> </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span><span class="w"> </span><span class="nx">tileScale</span><span class="o">:</span><span class="w"> </span><span class="mf">16</span><span class="p">})</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'rate30'</span><span class="p">,</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Number</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'l30'</span><span class="p">)).</span><span class="nx">divide</span><span class="p">(</span><span class="nx">f</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'f30'</span><span class="p">)).</span><span class="nx">multiply</span><span class="p">(</span><span class="mf">100</span><span class="p">));</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nx">Export</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">toDrive</span><span class="p">({</span><span class="nx">collection</span><span class="o">:</span><span class="w"> </span><span class="nx">table</span><span class="p">,</span><span class="w"> </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s1">'KH_forest_loss_by_province'</span><span class="p">,</span><span class="w"> </span><span class="nx">folder</span><span class="o">:</span><span class="w"> </span><span class="s1">'applied_gis'</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nx">fileFormat</span><span class="o">:</span><span class="w"> </span><span class="s1">'CSV'</span><span class="p">,</span><span class="w"> </span><span class="nx">selectors</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'ADM1_CODE'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ADM1_NAME'</span><span class="p">,</span><span class="w"> </span><span class="s1">'f10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'f30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'l10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'l30'</span><span class="p">,</span><span class="w"> </span><span class="s1">'rate30'</span><span class="p">]});</span>
+</code></pre></div>
+<p>ការគណនានេះធំ (ប្រទេសទាំងមូល នៅ ៣០ ម)៖ ត្រូវតែ Export។ ខណៈរង់ចាំ សូមធ្វើសកម្មភាពទី៣។ ពេល CSV មកដល់ សូមតម្រៀបខេត្តតាម <code>l30</code> និងតាម <code>rate30</code>។ តើលំដាប់ខុសគ្នាទេ?</p>
+<h2 id="_7">សកម្មភាពទី៣៖ តំបន់ការពារ និងទ្រនាប់ · ៣០ នាទី<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">wdpa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="s1">'WCMC/WDPA/current/polygons'</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'ISO3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'KHM'</span><span class="p">));</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nx">print</span><span class="p">(</span><span class="nx">wdpa</span><span class="p">.</span><span class="nx">aggregate_array</span><span class="p">(</span><span class="s1">'NAME'</span><span class="p">).</span><span class="nx">sort</span><span class="p">());</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">pa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">wdpa</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="s1">'NAME'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Prey Lang'</span><span class="p">));</span><span class="w">                </span><span class="c1">// ប្ដូរតាមការជ្រើស</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pa</span><span class="p">.</span><span class="nx">geometry</span><span class="p">().</span><span class="nx">buffer</span><span class="p">(</span><span class="mf">10000</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">).</span><span class="nx">difference</span><span class="p">(</span><span class="nx">pa</span><span class="p">.</span><span class="nx">geometry</span><span class="p">(),</span><span class="w"> </span><span class="mf">100</span><span class="p">);</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">pa</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'blue'</span><span class="p">},</span><span class="w"> </span><span class="s1">'តំបន់ការពារ'</span><span class="p">);</span><span class="w"> </span><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ee</span><span class="p">.</span><span class="nx">Feature</span><span class="p">(</span><span class="nx">buffer</span><span class="p">),</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'grey'</span><span class="p">},</span><span class="w"> </span><span class="s1">'ទ្រនាប់ ១០ គម'</span><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">forest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tc</span><span class="p">.</span><span class="nx">gte</span><span class="p">(</span><span class="mf">30</span><span class="p">),</span><span class="w"> </span><span class="nx">loss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'loss'</span><span class="p">).</span><span class="nx">and</span><span class="p">(</span><span class="nx">forest</span><span class="p">);</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="kd">function</span><span class="w"> </span><span class="nx">byYear</span><span class="p">(</span><span class="nx">geom</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ha</span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'lossyear'</span><span class="p">)).</span><span class="nx">updateMask</span><span class="p">(</span><span class="nx">loss</span><span class="p">).</span><span class="nx">reduceRegion</span><span class="p">({</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nx">reducer</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Reducer</span><span class="p">.</span><span class="nx">sum</span><span class="p">().</span><span class="nx">group</span><span class="p">({</span><span class="nx">groupField</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">groupName</span><span class="o">:</span><span class="w"> </span><span class="s1">'y'</span><span class="p">}),</span><span class="w"> </span><span class="nx">geometry</span><span class="o">:</span><span class="w"> </span><span class="nx">geom</span><span class="p">,</span><span class="w"> </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span><span class="w"> </span><span class="nx">maxPixels</span><span class="o">:</span><span class="w"> </span><span class="mf">1e13</span><span class="p">,</span><span class="w"> </span><span class="nx">tileScale</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="p">});</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">List</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'groups'</span><span class="p">)).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Dictionary</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Feature</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">year</span><span class="o">:</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nb">Number</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'y'</span><span class="p">)).</span><span class="nx">add</span><span class="p">(</span><span class="mf">2000</span><span class="p">),</span><span class="w"> </span><span class="nx">ha</span><span class="o">:</span><span class="w"> </span><span class="nx">d</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'sum'</span><span class="p">)});</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fcIn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="nx">byYear</span><span class="p">(</span><span class="nx">pa</span><span class="p">.</span><span class="nx">geometry</span><span class="p">())).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'zone'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ក្នុង'</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="kd">var</span><span class="w"> </span><span class="nx">fcBuf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">FeatureCollection</span><span class="p">(</span><span class="nx">byYear</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'zone'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ទ្រនាប់'</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="nx">print</span><span class="p">(</span><span class="nx">ui</span><span class="p">.</span><span class="nx">Chart</span><span class="p">.</span><span class="nx">feature</span><span class="p">.</span><span class="nx">groups</span><span class="p">(</span><span class="nx">fcIn</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">fcBuf</span><span class="p">),</span><span class="w"> </span><span class="s1">'year'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ha'</span><span class="p">,</span><span class="w"> </span><span class="s1">'zone'</span><span class="p">).</span><span class="nx">setChartType</span><span class="p">(</span><span class="s1">'ColumnChart'</span><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="p">.</span><span class="nx">setOptions</span><span class="p">({</span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">'ការបាត់បង់តាមឆ្នាំ (ហិកតា)'</span><span class="p">}));</span>
+</code></pre></div>
+<p>គណនាផ្ទៃព្រៃ ២០០០ ក្នុងតំបន់ទាំងពីរ ហើយបម្លែងក្រាបជាអត្រា (% នៃព្រៃ ២០០០) ក្នុង Excel ឬ QGIS។</p>
+<h2 id="_8">សកម្មភាពទី៤៖ ពិនិត្យគំរូ · ៣០ នាទី<a class="headerlink" href="#_8" title="Permanent link">¶</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">pts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">loss</span><span class="p">.</span><span class="nx">selfMask</span><span class="p">().</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'loss'</span><span class="p">).</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">gfc</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'lossyear'</span><span class="p">))</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p">.</span><span class="nx">sample</span><span class="p">({</span><span class="nx">region</span><span class="o">:</span><span class="w"> </span><span class="nx">pa</span><span class="p">.</span><span class="nx">geometry</span><span class="p">(),</span><span class="w"> </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span><span class="w"> </span><span class="nx">numPixels</span><span class="o">:</span><span class="w"> </span><span class="mf">20</span><span class="p">,</span><span class="w"> </span><span class="nx">seed</span><span class="o">:</span><span class="w"> </span><span class="mf">7</span><span class="p">,</span><span class="w"> </span><span class="nx">geometries</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">});</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">pts</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">'yellow'</span><span class="p">},</span><span class="w"> </span><span class="s1">'គំរូ ២០'</span><span class="p">);</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nx">Export</span><span class="p">.</span><span class="nx">table</span><span class="p">.</span><span class="nx">toDrive</span><span class="p">({</span><span class="nx">collection</span><span class="o">:</span><span class="w"> </span><span class="nx">pts</span><span class="p">,</span><span class="w"> </span><span class="nx">description</span><span class="o">:</span><span class="w"> </span><span class="s1">'loss_samples'</span><span class="p">,</span><span class="w"> </span><span class="nx">folder</span><span class="o">:</span><span class="w"> </span><span class="s1">'applied_gis'</span><span class="p">,</span><span class="w"> </span><span class="nx">fileFormat</span><span class="o">:</span><span class="w"> </span><span class="s1">'KML'</span><span class="p">});</span>
+</code></pre></div>
+<p>បើក KML ក្នុង Google Earth Pro ហើយប្រើប្រវត្តិរូបភាព (historical imagery)។ សម្រាប់ចំណុចនីមួយៗ កត់ត្រា៖ ព្រៃធម្មជាតិ → ដំណាំ · ព្រៃ → ចម្ការ · ចម្ការច្រូត · ភ្លើង · មិនច្បាស់ · កំហុស។</p>
+<h2 id="_9">សកម្មភាពទី៥៖ ផែនទី និងសេចក្ដីសន្និដ្ឋាន · ២៥ នាទី<a class="headerlink" href="#_9" title="Permanent link">¶</a></h2>
+<p>ក្នុង QGIS ធ្វើផែនទី choropleth ពីរ៖ <code>l30</code> (ហិកតា) និង <code>rate30</code> (%)។ ប្រៀបធៀបផែនទីទាំងពីរ ហើយសរសេរកថាខណ្ឌមួយពីមូលហេតុដែលខេត្តខុសគ្នាលេចឡើងជា «អាក្រក់បំផុត»។</p>
+<h2 id="_10">លទ្ធផលដែលរំពឹងទុក<a class="headerlink" href="#_10" title="Permanent link">¶</a></h2>
+<p>ប្រៀបធៀបលទ្ធផលរបស់អ្នកជាមួយរូបខាងក្រោម។ លេខ និងពណ៌មិនចាំបាច់ដូចបេះបិទទេ ប៉ុន្តែលំនាំគួរតែស្រដៀងគ្នា។</p>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 440" font-family="Battambang, Siemreap, sans-serif"><rect width="1000" height="440" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">ការបាត់បង់ព្រៃតាមឆ្នាំ៖ reducer ជាក្រុម</text><text x="24.0" y="64.0" font-size="15" fill="#607d8b" text-anchor="start" font-weight="normal" class="fsub">ស្រទាប់ក្លែងធ្វើតាមទម្រង់ Hansen GFC លើគម្របដីពិតនៃភ្នំពេញ (សម្រាប់បង្រៀន)</text><rect x="70.0" y="305.8" width="20.0" height="44.2" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="80.0" y="372.0" font-size="11" fill="#546e7a" text-anchor="middle" font-weight="normal" >២០០១</text><rect x="96.0" y="310.9" width="20.0" height="39.1" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="122.0" y="263.6" width="20.0" height="86.4" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="148.0" y="303.7" width="20.0" height="46.3" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="174.0" y="292.4" width="20.0" height="57.6" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="184.0" y="372.0" font-size="11" fill="#546e7a" text-anchor="middle" font-weight="normal" >២០០៥</text><rect x="200.0" y="260.5" width="20.0" height="89.5" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="226.0" y="269.8" width="20.0" height="80.2" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="252.0" y="194.7" width="20.0" height="155.3" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="278.0" y="226.5" width="20.0" height="123.5" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="288.0" y="372.0" font-size="11" fill="#546e7a" text-anchor="middle" font-weight="normal" >២០០៩</text><rect x="304.0" y="182.3" width="20.0" height="167.7" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="330.0" y="100.0" width="20.0" height="250.0" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="356.0" y="143.2" width="20.0" height="206.8" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="382.0" y="159.7" width="20.0" height="190.3" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="392.0" y="372.0" font-size="11" fill="#546e7a" text-anchor="middle" font-weight="normal" >២០១៣</text><rect x="408.0" y="178.2" width="20.0" height="171.8" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="434.0" y="177.2" width="20.0" height="172.8" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="460.0" y="257.4" width="20.0" height="92.6" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="486.0" y="270.8" width="20.0" height="79.2" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="496.0" y="372.0" font-size="11" fill="#546e7a" text-anchor="middle" font-weight="normal" >២០១៧</text><rect x="512.0" y="305.8" width="20.0" height="44.2" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="538.0" y="301.6" width="20.0" height="48.4" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="564.0" y="310.9" width="20.0" height="39.1" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="590.0" y="322.2" width="20.0" height="27.8" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="600.0" y="372.0" font-size="11" fill="#546e7a" text-anchor="middle" font-weight="normal" >២០២១</text><rect x="616.0" y="318.1" width="20.0" height="31.9" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="642.0" y="324.3" width="20.0" height="25.7" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><rect x="680.0" y="90.0" width="300.0" height="178.0" rx="8" fill="#263238" stroke="none" stroke-width="1" /><text x="696.0" y="118.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">var a = ee.Image.pixelArea()</text><text x="696.0" y="140.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  .divide(1e6).addBands(</text><text x="696.0" y="162.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">   gfc.select(&#x27;lossyear&#x27;))</text><text x="696.0" y="184.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  .updateMask(loss30)</text><text x="696.0" y="206.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  .reduceRegion({reducer:</text><text x="696.0" y="228.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">   ee.Reducer.sum().group(</text><text x="696.0" y="250.0" font-size="13" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">    {groupField: 1}), ...});</text></svg></p>
+<figcaption>លទ្ធផលគំរូ ១៖ ពេលវេលានៃការបាត់បង់។</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">អ្វីដែលត្រូវពិនិត្យ</p>
+<ul>
+<li>pixelArea + lossyear + group() ផ្ដល់ផ្ទៃបាត់បង់ក្នុងឆ្នាំនីមួយៗ ក្នុងការហៅតែមួយ (មេរៀនទី៤)។</li>
+<li>ក្រាបលំនាំនេះជាស៊េរីក្លែងធ្វើ៖ លំហាត់ទី១០ គណនាតួលេខពិតសម្រាប់ខេត្តរបស់អ្នក។</li>
+<li>Hansen ប្ដូរវិធីសាស្ត្របន្តិចតាមកំណែ៖ ការប្រៀបធៀបឆ្នាំដំបូង និងចុងក្រោយ ត្រូវធ្វើដោយប្រុងប្រយ័ត្ន។</li>
+</ul>
+</div>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 450" font-family="Battambang, Siemreap, sans-serif"><rect width="1000" height="450" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">ក្នុង ជិត និងក្រៅតំបន់ការពារ</text><text x="24.0" y="64.0" font-size="15" fill="#607d8b" text-anchor="start" font-weight="normal" class="fsub">ស្រទាប់ក្លែងធ្វើតាមទម្រង់ Hansen GFC លើគម្របដីពិតនៃភ្នំពេញ (សម្រាប់បង្រៀន)</text><image xlink:href="data:image/png;base64,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" x="30.0" y="85.0" width="330.0" height="330.0" preserveAspectRatio="none" /><rect x="233.5" y="277.5" width="121.0" height="126.5" rx="0" fill="none" stroke="#1565c0" stroke-width="3" /><text x="239.5" y="297.5" font-size="14" fill="#1565c0" text-anchor="start" font-weight="bold" stroke="#fff" stroke-width="3" paint-order="stroke">តំបន់ការពារ</text><text x="560.0" y="138.3" font-size="14" fill="#263238" text-anchor="end" font-weight="normal" >ក្នុងតំបន់ការពារ</text><rect x="570.0" y="110.0" width="38.9" height="46.7" rx="0" fill="#1565c0" stroke="none" stroke-width="1" /><text x="614.9" y="138.3" font-size="13" fill="#263238" text-anchor="start" font-weight="normal" >១,៧%</text><text x="560.0" y="205.0" font-size="14" fill="#263238" text-anchor="end" font-weight="normal" >តំបន់ទ្រនាប់ ១ គម</text><rect x="570.0" y="176.7" width="118.0" height="46.7" rx="0" fill="#78909c" stroke="none" stroke-width="1" /><text x="694.0" y="205.0" font-size="13" fill="#263238" text-anchor="start" font-weight="normal" >៥,១%</text><text x="560.0" y="271.7" font-size="14" fill="#263238" text-anchor="end" font-weight="normal" >ក្រៅ</text><rect x="570.0" y="243.3" width="310.0" height="46.7" rx="0" fill="#c62828" stroke="none" stroke-width="1" /><text x="886.0" y="271.7" font-size="13" fill="#263238" text-anchor="start" font-weight="normal" >១៣,៣%</text><text x="680.0" y="350.0" font-size="14" fill="#263238" text-anchor="middle" font-weight="normal" >% នៃព្រៃ ២០០០ ដែលបាត់បង់ ២០០១–២០២៣</text></svg></p>
+<figcaption>លទ្ធផលគំរូ ២៖ ប្រៀបធៀបអត្រា មិនមែនផ្ទៃ។</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">អ្វីដែលត្រូវពិនិត្យ</p>
+<ul>
+<li>ប្រៀបធៀប % នៃព្រៃឆ្នាំ ២០០០ ដែលបាត់បង់ ព្រោះតំបន់មានទំហំខុសគ្នា។</li>
+<li>តំបន់ទ្រនាប់ (buffer) ជុំវិញតំបន់ការពារ បង្ហាញថាសម្ពាធនៅជិតព្រំដែនខ្ពស់ប៉ុណ្ណា។</li>
+<li>អត្រាទាបក្នុងតំបន់ការពារ មិនមែនភស្តុតាងថាវាមានប្រសិទ្ធភាពទេ៖ តំបន់ទាំងនោះច្រើនតែឆ្ងាយពីផ្លូវ និងភ្នំ (ការលំអៀងទីតាំង)។</li>
+</ul>
+</div>
+<h2 id="_11">កំហុសទូទៅ និងដំណោះស្រាយ<a class="headerlink" href="#_11" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>បញ្ហាដែលឃើញ</th>
+<th>មូលហេតុទូទៅ</th>
+<th>ដំណោះស្រាយ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Too many pixels · timed out</td>
+<td>ប្រទេសទាំងមូលនៅ ៣០ ម</td>
+<td>Export · maxPixels: 1e13 · tileScale: 16</td>
+</tr>
+<tr>
+<td>rate30 ធំជាង ១០០</td>
+<td>loss មិនត្រូវបាន mask ដោយព្រៃ ២០០០</td>
+<td>loss.and(treecover2000.gte(30))</td>
+</tr>
+<tr>
+<td>WDPA ត្រងមិនឃើញឈ្មោះ</td>
+<td>អក្ខរាវិរុទ្ធ NAME ខុស</td>
+<td>print(aggregate_array('NAME'))</td>
+</tr>
+<tr>
+<td>buffer យឺតខ្លាំង</td>
+<td>ធរណីមាត្រស្មុគស្មាញ</td>
+<td>buffer(10000, 100) · maxError</td>
+</tr>
+<tr>
+<td>ក្រាបតាមឆ្នាំទទេ</td>
+<td>groups មិនបានបម្លែងជា Feature</td>
+<td>ee.List(g.get('groups')).map(...)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_12">លទ្ធផលត្រូវប្រគល់<a class="headerlink" href="#_12" title="Permanent link">¶</a></h2>
+<ul>
+<li>តំណស្គ្រីប។</li>
+<li>CSV តារាងខេត្ត និងផែនទីពីរពី QGIS។</li>
+<li>ក្រាបការបាត់បង់តាមឆ្នាំ (ក្នុង និងទ្រនាប់) ជាអត្រា។</li>
+<li>តារាងពិនិត្យគំរូ ២០ ចំណុច ជាមួយភាគរយតាមប្រភេទ។</li>
+<li>កថាខណ្ឌមួយ៖ សេចក្ដីសន្និដ្ឋាន និងដែនកំណត់ (កម្រិត ចម្ការ ការលំអៀងទីតាំង)។</li>
+</ul>
+<h2 id="_13">ពិនិត្យលទ្ធផលដោយខ្លួនឯង<a class="headerlink" href="#_13" title="Permanent link">¶</a></h2>
+<div class="self-check" data-answer="treecover2000">
+<p><strong>១.</strong> ក្រុមរលកណាដែលប្រើកំណត់ព្រៃឆ្នាំ ២០០០?</p>
+</div>
+<div class="self-check" data-answer="23|២៣">
+<p><strong>២.</strong> ក្នុង lossyear តើតម្លៃប៉ុន្មានតំណាងឆ្នាំ ២០២៣?</p>
+</div>
+<div class="self-check" data-answer="2012|២០១២">
+<p><strong>៣.</strong> ក្រុមរលក gain គ្របរហូតដល់ឆ្នាំណា?</p>
+</div>
+<div class="self-check" data-answer="ISO3">
+<p><strong>៤.</strong> លក្ខណៈណានៃ WDPA ដែលប្រើត្រងប្រទេស (KHM)?</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      CC BY-SA 4.0 · អាចប្រើ និងកែសម្រួលបាន ដោយដកស្រង់ប្រភព
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://khgeo.github.io/" target="_blank" rel="noopener" title="ស៊េរីសៀវភៅទាំង ៤" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/vendor/leaflet/leaflet.js"></script>
+      
+        <script src="../../assets/js/ag-sims.js"></script>
+      
+        <script src="../../assets/js/flood-risk-sim.js"></script>
+      
+        <script src="../../assets/js/s1s2-sim.js"></script>
+      
+        <script src="../../assets/js/lesson-sims.js"></script>
+      
+        <script src="../../assets/js/workbook.js"></script>
+      
+        <script src="../../assets/js/offline-pwa.js"></script>
+      
+    
+  </body>
+</html>

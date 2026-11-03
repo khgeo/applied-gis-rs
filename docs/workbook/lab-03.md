@@ -119,7 +119,7 @@ Export.image.toDrive({
 !!! tip "អ្វីដែលត្រូវពិនិត្យ"
     - Sentinel-2 L2A មានក្រុមរលក SCL ដែលចាត់ថ្នាក់ក្រឡានីមួយៗ។
     - Landsat Collection 2 ប្រើប៊ីតក្នុង QA_PIXEL៖ ត្រូវប្រើ bitwiseAnd()។
-    - updateMask() ធ្វើឲ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។
+    - updateMask() ធ្វើឱ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។
 
 ## កំហុសទូទៅ និងដំណោះស្រាយ
 

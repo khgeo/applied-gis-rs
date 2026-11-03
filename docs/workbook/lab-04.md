@@ -79,7 +79,7 @@ var ndviKH = s2.filterBounds(provinces).median()
 var byProv = ndviKH.reduceRegions({
   collection: provinces,
   reducer: ee.Reducer.mean().combine({reducer2: ee.Reducer.stdDev(), sharedInputs: true}),
-  scale: 100,           // ថ្នាក់ជាតិ៖ ១០០ ម ដើម្បីកុំឲ្យយូរពេក
+  scale: 100,           // ថ្នាក់ជាតិ៖ ១០០ ម ដើម្បីកុំឱ្យយូរពេក
   tileScale: 4
 });
 Export.table.toDrive({collection: byProv, description: 'KH_province_NDVI_dry_2024',

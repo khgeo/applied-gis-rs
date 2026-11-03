@@ -70,7 +70,7 @@ def L02():
     f.line(625, 280, 375, 280, "#607d8b", 3, arrow=True); f.text(500, 305, "លទ្ធផល (ក្រឡាផែនទី · print)", 14, INK, "middle")
     f.text(500, 400, "វត្ថុ ee.* គ្រាន់តែជា «ការពិពណ៌នា» នៅក្នុងកម្មវិធីរុករក រហូតដល់ត្រូវការលទ្ធផល", 15, "#607d8b", "middle")
     entry(2, f.save("a02-client-server"), "ហេតុអ្វី if និង for ធម្មតាមិនដំណើរការលើ ee.Number",
-          ["ee.Number(5) មិនមែនលេខ ៥ ក្នុងកម្មវិធីរុករកទេ៖ វាជាការណែនាំឲ្យម៉ាស៊ីនមេគណនា។", "ប្រើ .add() .gt() ee.Algorithms.If() ជំនួស + > និង if។", "print() និង Map.addLayer() ស្នើលទ្ធផលពីម៉ាស៊ីនមេ។"], .15)
+          ["ee.Number(5) មិនមែនលេខ ៥ ក្នុងកម្មវិធីរុករកទេ៖ វាជាការណែនាំឱ្យម៉ាស៊ីនមេគណនា។", "ប្រើ .add() .gt() ee.Algorithms.If() ជំនួស + > និង if។", "print() និង Map.addLayer() ស្នើលទ្ធផលពីម៉ាស៊ីនមេ។"], .15)
     # object hierarchy
     f = Fig(1000, 440).title("ប្រភេទវត្ថុ Earth Engine")
     items = [("ee.Image", "រ៉ាស្ទ័រ · ក្រុមរលកច្រើន", "#2e7d32"), ("ee.ImageCollection", "បណ្ដុំរូបភាព", "#388e3c"), ("ee.Geometry", "ចំណុច បន្ទាត់ ពហុកោណ", "#ef6c00"), ("ee.Feature", "ធរណីមាត្រ + គុណលក្ខណៈ", "#f57c00"), ("ee.FeatureCollection", "ស្រទាប់វ៉ិចទ័រ", "#fb8c00"), ("ee.Reducer", "ស្ថិតិ", "#6d4c41"), ("ee.Number · ee.String · ee.List · ee.Date · ee.Dictionary", "ទិន្នន័យសាមញ្ញលើម៉ាស៊ីនមេ", "#546e7a")]
@@ -84,7 +84,7 @@ def L02():
     for i, (a, b) in enumerate(steps): box(f, 30 + i * 192, 130, 175, 110, a, b, ["#a5d6a7", "#81c784", "#66bb6a", "#43a047", "#2e7d32"][i], 14); i < 4 and f.line(206 + i * 192, 185, 220 + i * 192, 185, "#607d8b", 2, arrow=True)
     f.text(500, 300, "មុខងារនីមួយៗ ត្រឡប់វត្ថុថ្មី ដែលមុខងារបន្ទាប់ប្រើបន្ត · លេខរូបភាពជាប្រហាក់ប្រហែល", 14, "#607d8b", "middle")
     entry(2, f.save("a02-chaining"), "អានកូដពីឆ្វេងទៅស្ដាំ",
-          ["មុខងារនីមួយៗមិនប្ដូរវត្ថុដើមទេ៖ វាត្រឡប់វត្ថុថ្មី។", "ត្រងឲ្យបានច្រើនមុន (filterBounds filterDate) ទើបការគណនាលឿន។", "ចុងក្រោយ reducer (median) បម្លែងបណ្ដុំទៅជារូបភាពមួយ។"], .5)
+          ["មុខងារនីមួយៗមិនប្ដូរវត្ថុដើមទេ៖ វាត្រឡប់វត្ថុថ្មី។", "ត្រងឱ្យបានច្រើនមុន (filterBounds filterDate) ទើបការគណនាលឿន។", "ចុងក្រោយ reducer (median) បម្លែងបណ្ដុំទៅជារូបភាពមួយ។"], .5)
     # map vs loop
     f = Fig(1000, 420).title("map() ជំនួស for loop")
     code(f, 40, 90, 440, ["// ✗ មិនដំណើរការលើម៉ាស៊ីនមេ", "for (var i = 0; i < col.size(); i++) {", "  var img = col.get(i);", "  ...", "}"], 14)
@@ -135,7 +135,7 @@ def L03():
     marr = np.where(np.array(masks)[:, None], np.nan, arr); mmed = np.nanmedian(marr, 0); mmed = np.where(np.isnan(mmed), med, mmed)
     f = Fig(1000, 440).title("Composite បួនបែប")
     for i, (a, t) in enumerate([(first, "first()"), (mx, "max()"), (med, "median()"), (mmed, "mask + median()")]): f.img(toim(list(a)), 20 + i * 245, 90, 225, 225); f.text(132 + i * 245, 345, t, 16, IND, "middle", "bold")
-    f.text(500, 400, "median() ជៀសវាងពពកភាគច្រើន · mask មុនធ្វើឲ្យស្អាតជាង", 15, "#607d8b", "middle")
+    f.text(500, 400, "median() ជៀសវាងពពកភាគច្រើន · mask មុនធ្វើឱ្យស្អាតជាង", 15, "#607d8b", "middle")
     entry(3, f.save("a03-reducers"), "ជ្រើស reducer សម្រាប់ composite",
           ["first() យករូបភាពមួយ ដូច្នេះពពករបស់វានៅដដែល។", "max() ជ្រើសពពក ព្រោះពពកភ្លឺជាងដី។", "median() + mask ផ្ដល់លទ្ធផលស្អាតបំផុតសម្រាប់តំបន់ត្រូពិច។"], .7)
     # 3 filter funnel
@@ -155,7 +155,7 @@ def L03():
     for i, b in enumerate(bits): x = 560 + (i % 4) * 100; y = 120 + (i // 4) * 60; f.rect(x, y, 92, 48, "#ffcdd2" if b.split()[0] in ("3", "4", "1", "2") else "#e8f5e9", "#9e9e9e", 1, 6); f.text(x + 46, y + 30, b, 13, INK, "middle")
     f.text(560, 290, "mask = bit 3 (cloud) ឬ bit 4 (shadow) = 1", 14, "#c62828")
     entry(3, f.save("a03-qa"), "ក្រុមរលកគុណភាពប្រាប់ពពក",
-          ["Sentinel-2 L2A មានក្រុមរលក SCL ដែលចាត់ថ្នាក់ក្រឡានីមួយៗ។", "Landsat Collection 2 ប្រើប៊ីតក្នុង QA_PIXEL៖ ត្រូវប្រើ bitwiseAnd()។", "updateMask() ធ្វើឲ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។"], .4)
+          ["Sentinel-2 L2A មានក្រុមរលក SCL ដែលចាត់ថ្នាក់ក្រឡានីមួយៗ។", "Landsat Collection 2 ប្រើប៊ីតក្នុង QA_PIXEL៖ ត្រូវប្រើ bitwiseAnd()។", "updateMask() ធ្វើឱ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។"], .4)
     # 5 time cube
     f = Fig(1000, 440).title("ImageCollection ជាគូបពេលវេលា")
     for t in range(6)[::-1]:

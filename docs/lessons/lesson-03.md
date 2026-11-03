@@ -100,7 +100,7 @@ print('ចំនួនរូបភាព', s2.size());
 !!! note "អានរូបនេះ"
     - Sentinel-2 L2A មានក្រុមរលក SCL ដែលចាត់ថ្នាក់ក្រឡានីមួយៗ។
     - Landsat Collection 2 ប្រើប៊ីតក្នុង QA_PIXEL៖ ត្រូវប្រើ bitwiseAnd()។
-    - updateMask() ធ្វើឲ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។
+    - updateMask() ធ្វើឱ្យក្រឡាពពកក្លាយជា «គ្មានទិន្នន័យ» មុនធ្វើ composite។
 
 
 ផលិតផល Level-2 មានក្រុមរលកគុណភាព ដែលប្រាប់ថាក្រឡានីមួយៗជាពពក ស្រមោល ឬផ្ទៃស្អាត។ **Sentinel-2 L2A** មានក្រុមរលក `SCL` (Scene Classification Layer)៖

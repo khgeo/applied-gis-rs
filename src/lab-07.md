@@ -139,5 +139,5 @@ Export.image.toDrive({image: wDry.add(wWet.multiply(2)).toByte(), description: '
 </div>
 
 <div class="self-check" data-answer="double bounce|ចាំងពីរដង" markdown>
-**៤.** យន្តការណាធ្វើឲ្យព្រៃលិចទឹកភ្លឺ ជាជាងងងឹត?
+**៤.** យន្តការណាធ្វើឱ្យព្រៃលិចទឹកភ្លឺ ជាជាងងងឹត?
 </div>

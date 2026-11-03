@@ -75,7 +75,7 @@ print(ui.Chart.feature.byFeature(sample, 'NDVI', 'LST').setChartType('ScatterCha
   .setOptions({pointSize: 2, hAxis: {title: 'NDVI'}, vAxis: {title: 'LST (°C)'}}));
 ```
 
-`wc.neq(80)` ដកទឹកអចិន្ត្រៃយ៍ចេញ ព្រោះវាមាន NDVI ទាប និង LST ទាប ហើយធ្វើឲ្យជម្រាលខុស។
+`wc.neq(80)` ដកទឹកអចិន្ត្រៃយ៍ចេញ ព្រោះវាមាន NDVI ទាប និង LST ទាប ហើយធ្វើឱ្យជម្រាលខុស។
 
 ## សកម្មភាពទី៤៖ តារាងខណ្ឌ · ២៥ នាទី
 

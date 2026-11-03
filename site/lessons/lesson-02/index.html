@@ -1,0 +1,3027 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="សៀវភៅសិក្សា អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ (Google Earth Engine) ជាភាសាខ្មែរ សម្រាប់វគ្គសិក្សា ១ ឆមាស">
+      
+      
+        <meta name="author" content="YAM Sarath (យាំ សារដ្ឋ)">
+      
+      
+        <link rel="canonical" href="https://khgeo.github.io/applied-gis-rs/lessons/lesson-02/">
+      
+      
+        <link rel="prev" href="../lesson-01/">
+      
+      
+        <link rel="next" href="../lesson-03/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine - អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/local-fonts.css">
+    
+      <link rel="stylesheet" href="../../assets/css/khmer.css">
+    
+      <link rel="stylesheet" href="../../assets/vendor/leaflet/leaflet.css">
+    
+      <link rel="stylesheet" href="../../assets/css/workbook.css">
+    
+      <link rel="stylesheet" href="../../assets/css/lesson-sims.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#javascript-earth-engine" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://khgeo.github.io/" title="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" class="md-header__button md-logo" aria-label="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange"  aria-label="ប្ដូរទៅរបៀបងងឹត"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ប្ដូរទៅរបៀបងងឹត" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="orange"  aria-label="ប្ដូរទៅរបៀបភ្លឺ"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ប្ដូរទៅរបៀបភ្លឺ" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/khgeo/applied-gis-rs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    applied-gis-rs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://khgeo.github.io/" title="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" class="md-nav__button md-logo" aria-label="អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    អនុវត្តន៍ GIS និងការយកព័ត៌មានពីចម្ងាយ
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/khgeo/applied-gis-rs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    applied-gis-rs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ទំព័រដើម
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    កម្មវិធីសិក្សា
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី១៖ មូលដ្ឋាន Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី១៖ មូលដ្ឋាន Google Earth Engine
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៖ ការគណនាលើពពក និង Google Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.១. គោលបំណងសិក្សា
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.១. គោលបំណងសិក្សា">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ចំណេះដឹងមុនត្រូវមាន
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.២. ស្ថានភាពបើកមេរៀន៖ កូដដែលមើលទៅត្រឹមត្រូវ ប៉ុន្តែមិនដំណើរការ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣. ទ្រឹស្ដីស្នូល
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.៣. ទ្រឹស្ដីស្នូល">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-earth-engine_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.១. JavaScript គ្រប់គ្រាន់សម្រាប់ Earth Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.២. Client និង Server៖ កូដដំណើរការនៅពីរកន្លែង
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៣. វត្ថុ Earth Engine សំខាន់ៗ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៤. ការភ្ជាប់មុខងារ និងការគណនាពន្យារពេល
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៥. map()៖ អនុវត្តមុខងារលើគ្រប់ធាតុ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-map-reduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៦. លំនាំ filter → map → reduce
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៧. កំហុសទូទៅ និងការកែ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៤. ឧទាហរណ៍ដែលបានដោះស្រាយ៖ កែកូដក្នុងស្ថានភាពបើកមេរៀន
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.៤. ឧទាហរណ៍ដែលបានដោះស្រាយ៖ កែកូដក្នុងស្ថានភាពបើកមេរៀន">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី១៖ រកមូលហេតុ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី២៖ សរសេរលក្ខខណ្ឌលើ server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី៣៖ ជម្រើសល្អជាង
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី៤៖ សេចក្ដីសន្និដ្ឋាន
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៥. សកម្មភាពអនុវត្ត
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៦. ការយល់ច្រឡំដែលត្រូវប្រុងប្រយ័ត្ន
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៧. សេចក្ដីសង្ខេបមេរៀន
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៨. ពាក្យគន្លឹះខ្មែរ–អង់គ្លេស
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៩. សំណួររំលឹក និងវាយតម្លៃ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.៩. សំណួររំលឹក និងវាយតម្លៃ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ក. សំណួរយល់ដឹង
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ខ. សំណួរអនុវត្តគោលគំនិត
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        គ. កិច្ចការខ្លី
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        កំណត់សម្គាល់សម្រាប់គ្រូបង្រៀន
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="កំណត់សម្គាល់សម្រាប់គ្រូបង្រៀន">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ក. ការបែងចែកពេលវេលា ១៨០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ខ. ការភ្ជាប់ទៅមេរៀនបន្ទាប់
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៣៖ Image Collection ការត្រង ការលុបពពក និង Composite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី២៖ ការវិភាគទ្រង់ទ្រាយធំ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី២៖ ការវិភាគទ្រង់ទ្រាយធំ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៤៖ Reducer ស្ថិតិតាមតំបន់ និងការនាំចេញ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៥៖ ស៊េរីពេលវេលា និងរដូវកាលរុក្ខជាតិ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៦៖ ការចាត់ថ្នាក់គម្របដីដោយ Random Forest
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី៣៖ ទឹក និងគ្រោះមហន្តរាយ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី៣៖ ទឹក និងគ្រោះមហន្តរាយ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៧៖ ទឹកលើផ្ទៃដី និងទឹកជំនន់ដោយ Sentinel-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៨៖ គ្រោះរាំងស្ងួត ទឹកភ្លៀង និងសុខភាពរុក្ខជាតិ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី៩៖ ទីសណ្ឋាន ជម្រាល និងអាងទន្លេ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី៤៖ ដី និងមនុស្ស
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី៤៖ ដី និងមនុស្ស
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១០៖ ព្រៃឈើ និងការបាត់បង់ព្រៃ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១១៖ កសិកម្ម និងការធ្វើផែនទីស្រែ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១២៖ ទីក្រុង ការពង្រីក និងសីតុណ្ហភាពផ្ទៃដី
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ជំពូកទី៥៖ ការរួមបញ្ចូល និងការចែករំលែក
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ជំពូកទី៥៖ ការរួមបញ្ចូល និងការចែករំលែក
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៣៖ ការវិភាគពហុលក្ខខណ្ឌជាមួយទិន្នន័យ RS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៤៖ កម្មវិធី Earth Engine និងផែនទីវេប
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lesson-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    មេរៀនទី១៥៖ គម្រោងអនុវត្តបញ្ចប់វគ្គ និងក្រមសីលធម៌ទិន្នន័យ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ស្លាយបង្រៀន
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    សៀវភៅអនុវត្ត (លំហាត់ Earth Engine)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    សៀវភៅអនុវត្ត (លំហាត់ Earth Engine)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៖ ចាប់ផ្ដើមជាមួយ Code Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី២៖ វត្ថុ មុខងារ និង map()
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៣៖ Composite ឥតពពកនៃកម្ពុជា
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៤៖ NDVI មធ្យមតាមខេត្ត
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៥៖ ក្រាប NDVI និង harmonic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៦៖ ផែនទីគម្របដីខេត្តមួយ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៧៖ ផែនទីទឹកជំនន់ទន្លេសាប
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៨៖ CHIRPS និង VCI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី៩៖ អាងរងពី DEM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១០៖ Hansen GFC និងតំបន់ការពារ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១១៖ ស្រែពី Sentinel-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១២៖ LST ភ្នំពេញ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៣៖ សមស្របភាពទីតាំង
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៤៖ កម្មវិធីតាមដានទឹក
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workbook/lab-15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    លំហាត់ទី១៥៖ គម្រោងបញ្ចប់វគ្គ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ឧបសម្ព័ន្ធ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ឧបសម្ព័ន្ធ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/a-gee-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ក៖ ចុះឈ្មោះ និងរៀបចំ Earth Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/b-datasets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ខ៖ ទិន្នន័យ Earth Engine សម្រាប់កម្ពុជា
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/c-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    គ៖ ឯកសារយោង
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    វាក្យសព្ទបច្ចេកទេស
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.១. គោលបំណងសិក្សា
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.១. គោលបំណងសិក្សា">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ចំណេះដឹងមុនត្រូវមាន
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.២. ស្ថានភាពបើកមេរៀន៖ កូដដែលមើលទៅត្រឹមត្រូវ ប៉ុន្តែមិនដំណើរការ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣. ទ្រឹស្ដីស្នូល
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.៣. ទ្រឹស្ដីស្នូល">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-earth-engine_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.១. JavaScript គ្រប់គ្រាន់សម្រាប់ Earth Engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.២. Client និង Server៖ កូដដំណើរការនៅពីរកន្លែង
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#earth-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៣. វត្ថុ Earth Engine សំខាន់ៗ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៤. ការភ្ជាប់មុខងារ និងការគណនាពន្យារពេល
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៥. map()៖ អនុវត្តមុខងារលើគ្រប់ធាតុ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-map-reduce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៦. លំនាំ filter → map → reduce
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៣.៧. កំហុសទូទៅ និងការកែ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៤. ឧទាហរណ៍ដែលបានដោះស្រាយ៖ កែកូដក្នុងស្ថានភាពបើកមេរៀន
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.៤. ឧទាហរណ៍ដែលបានដោះស្រាយ៖ កែកូដក្នុងស្ថានភាពបើកមេរៀន">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី១៖ រកមូលហេតុ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី២៖ សរសេរលក្ខខណ្ឌលើ server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី៣៖ ជម្រើសល្អជាង
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ជំហានទី៤៖ សេចក្ដីសន្និដ្ឋាន
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៥. សកម្មភាពអនុវត្ត
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៦. ការយល់ច្រឡំដែលត្រូវប្រុងប្រយ័ត្ន
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៧. សេចក្ដីសង្ខេបមេរៀន
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៨. ពាក្យគន្លឹះខ្មែរ–អង់គ្លេស
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ២.៩. សំណួររំលឹក និងវាយតម្លៃ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="២.៩. សំណួររំលឹក និងវាយតម្លៃ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ក. សំណួរយល់ដឹង
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ខ. សំណួរអនុវត្តគោលគំនិត
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        គ. កិច្ចការខ្លី
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        កំណត់សម្គាល់សម្រាប់គ្រូបង្រៀន
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="កំណត់សម្គាល់សម្រាប់គ្រូបង្រៀន">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ក. ការបែងចែកពេលវេលា ១៨០ នាទី
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ខ. ការភ្ជាប់ទៅមេរៀនបន្ទាប់
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/khgeo/applied-gis-rs/edit/main/docs/lessons/lesson-02.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="javascript-earth-engine">មេរៀនទី២៖ JavaScript សម្រាប់ Earth Engine<a class="headerlink" href="#javascript-earth-engine" title="Permanent link">¶</a></h1>
+<div class="admonition info">
+<p class="admonition-title">ព័ត៌មានមេរៀន</p>
+<p><strong>រយៈពេលបង្រៀនដែលស្នើ៖ ៣ ម៉ោង</strong> · មេរៀនទី ២ ក្នុងចំណោម ១៥</p>
+</div>
+<p><a class="md-button" href="../../slides/lesson-02.html" target="_blank"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 3h8a2 2 0 0 1 2-2 2 2 0 0 1 2 2h8v2h-1v11h-5.75L17 22h-2l-1.75-6h-2.5L9 22H7l1.75-6H3V5H2zm3 2v9h14V5zm6.85 6.85a.5.5 0 0 1-.35.15.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5c.14 0 .26.06.35.15l1.4 1.39c.32.32.64.64.64.96s-.32.64-.64.96z"/></svg></span> ស្លាយបង្រៀនមេរៀននេះ</a></p>
+<p>និស្សិតភូមិវិទ្យាជាច្រើនបារម្ភថា ពួកគេត្រូវក្លាយជាអ្នកសរសេរកម្មវិធីមុនប្រើ Earth Engine។ តាមពិត ស្គ្រីបភាគច្រើនក្នុងវគ្គនេះប្រើតែ <strong>ធាតុ JavaScript ប្រហែលដប់</strong> និង <strong>លំនាំតែមួយ</strong>៖ ត្រង → អនុវត្ត → សង្ខេប។ អ្វីដែលពិបាកពិតប្រាកដ មិនមែនវាក្យសម្ពន្ធទេ ប៉ុន្តែជាការយល់ថា <strong>កូដរបស់អ្នកដំណើរការនៅកន្លែងពីរផ្សេងគ្នា</strong>៖ ក្នុងកម្មវិធីរុករក និងនៅលើម៉ាស៊ីនមេរបស់ Google។</p>
+<p>មេរៀននេះបង្រៀន JavaScript គ្រប់គ្រាន់សម្រាប់ Earth Engine ពន្យល់ភាពខុសគ្នារវាង client និង server និងណែនាំមុខងារសំខាន់បំផុត <code>map()</code>។</p>
+<hr />
+<h2 id="_1">២.១. គោលបំណងសិក្សា<a class="headerlink" href="#_1" title="Permanent link">¶</a></h2>
+<p>បន្ទាប់ពីបញ្ចប់មេរៀន និស្សិតអាច៖</p>
+<ol>
+<li>ប្រើអថេរ អារេ វត្ថុ (object) និងមុខងារ (function) ក្នុង JavaScript។</li>
+<li>បែងចែកវត្ថុ JavaScript ធម្មតា ពីវត្ថុ Earth Engine (<code>ee.*</code>) ហើយពន្យល់ថាហេតុអ្វីវាប្រព្រឹត្តខុសគ្នា។</li>
+<li>ស្គាល់ប្រភេទវត្ថុ Earth Engine សំខាន់ៗ៖ Image ImageCollection Geometry Feature FeatureCollection និង Reducer។</li>
+<li>សរសេរកូដដោយភ្ជាប់មុខងារ (method chaining) និងប្រើ <code>map()</code> ជំនួស <code>for</code> loop។</li>
+<li>អានសារកំហុសក្នុង Console ហើយកែកំហុសទូទៅ។</li>
+</ol>
+<h3 id="_2">ចំណេះដឹងមុនត្រូវមាន<a class="headerlink" href="#_2" title="Permanent link">¶</a></h3>
+<ul>
+<li><a href="../lesson-01/">មេរៀនទី១</a>៖ Code Editor និងស្គ្រីបដំបូង។</li>
+<li>សៀវភៅទី២៖ ស្រទាប់វ៉ិចទ័រ និងតារាងគុណលក្ខណៈ (ដើម្បីយល់ Feature)។</li>
+</ul>
+<hr />
+<h2 id="_3">២.២. ស្ថានភាពបើកមេរៀន៖ កូដដែលមើលទៅត្រឹមត្រូវ ប៉ុន្តែមិនដំណើរការ<a class="headerlink" href="#_3" title="Permanent link">¶</a></h2>
+<p>និស្សិតម្នាក់ចង់បោះពុម្ពចំនួនរូបភាពលើខេត្តរបស់គាត់ ហើយបើចំនួនលើស ៥០ គាត់ចង់ឃើញពាក្យ «គ្រប់គ្រាន់»។ គាត់សរសេរ៖</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">s2</span><span class="p">.</span><span class="nx">size</span><span class="p">();</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">50</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">print</span><span class="p">(</span><span class="s1">'គ្រប់គ្រាន់'</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">print</span><span class="p">(</span><span class="s1">'មិនគ្រប់'</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>កូដនេះដំណើរការដោយគ្មានកំហុស ប៉ុន្តែវាបោះពុម្ព <strong>«មិនគ្រប់» ជានិច្ច</strong> ទោះបីមានរូបភាព ២៩០ ក៏ដោយ។ ហេតុអ្វី? ព្រោះ <code>n</code> មិនមែនជាលេខ ២៩០ នៅក្នុងកម្មវិធីរុករកទេ៖ វាជា <strong>ការណែនាំ</strong> ឱ្យម៉ាស៊ីនមេរាប់ ហើយ JavaScript ធម្មតាមិនដឹងពីតម្លៃរបស់វានៅពេលប្រៀបធៀប។</p>
+<p>សំណួរដែលមេរៀននេះឆ្លើយ៖</p>
+<ul>
+<li>តើកូដ Earth Engine ដំណើរការនៅឯណា និងនៅពេលណា?</li>
+<li>តើត្រូវសរសេរលក្ខខណ្ឌ និង loop យ៉ាងដូចម្ដេច នៅពេលទិន្នន័យនៅលើម៉ាស៊ីនមេ?</li>
+</ul>
+<hr />
+<h2 id="_4">២.៣. ទ្រឹស្ដីស្នូល<a class="headerlink" href="#_4" title="Permanent link">¶</a></h2>
+<h3 id="javascript-earth-engine_1">២.៣.១. JavaScript គ្រប់គ្រាន់សម្រាប់ Earth Engine<a class="headerlink" href="#javascript-earth-engine_1" title="Permanent link">¶</a></h3>
+<p>JavaScript ជាភាសាដែលកម្មវិធីរុករកទាំងអស់យល់។ សម្រាប់វគ្គនេះ យើងត្រូវការតែធាតុដូចខាងក្រោម៖</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// ១. អថេរ៖ ដាក់ឈ្មោះឱ្យតម្លៃ</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">province</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Kampong Chhnang'</span><span class="p">;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kd">var</span><span class="w"> </span><span class="nx">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2024</span><span class="p">;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">// ២. អារេ (list)៖ តម្លៃច្រើនតាមលំដាប់</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kd">var</span><span class="w"> </span><span class="nx">bands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'B4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B2'</span><span class="p">];</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1">// ៣. វត្ថុ (object/dictionary)៖ ឈ្មោះ → តម្លៃ</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="kd">var</span><span class="w"> </span><span class="nx">vis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nx">bands</span><span class="o">:</span><span class="w"> </span><span class="nx">bands</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">3000</span><span class="p">};</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1">// ៤. មុខងារ៖ ការងារដែលប្រើឡើងវិញបាន</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="kd">function</span><span class="w"> </span><span class="nx">addNDVI</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">img</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B8'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">);</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">img</span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">ndvi</span><span class="p">);</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="c1">// ៥. មតិយោបល់ (comment)៖ ពន្យល់កូដ មិនដំណើរការ</span>
+</code></pre></div>
+<p>ច្បាប់តូចៗដែលត្រូវចាំ៖ បញ្ចប់បន្ទាត់ដោយ <code>;</code> អក្សរត្រូវក្នុងសញ្ញា <code>'...'</code> ឈ្មោះប្រកាន់អក្សរធំតូច (<code>Map</code> ≠ <code>map</code>) ហើយវង់ក្រចក <code>()</code> <code>[]</code> <code>{}</code> ត្រូវបិទជាគូជានិច្ច។ Code Editor គូសក្រហមលើកំហុសវាក្យសម្ព័ន្ធមុនអ្នកចុច Run។</p>
+<h3 id="client-server">២.៣.២. Client និង Server៖ កូដដំណើរការនៅពីរកន្លែង<a class="headerlink" href="#client-server" title="Permanent link">¶</a></h3>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 440" font-family="Battambang, Siemreap, sans-serif"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs><rect width="1000" height="440" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">ម៉ាស៊ីនភ្ញៀវ (client) និងម៉ាស៊ីនមេ (server)</text><rect x="40.0" y="110.0" width="330.0" height="230.0" rx="12" fill="#ef6c00" stroke="none" stroke-width="1" /><text x="205.0" y="221.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >កម្មវិធីរុករករបស់អ្នក</text><text x="205.0" y="245.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >JavaScript ធម្មតា · var x = 5</text><rect x="630.0" y="110.0" width="330.0" height="230.0" rx="12" fill="#2e7d32" stroke="none" stroke-width="1" /><text x="795.0" y="221.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ម៉ាស៊ីនមេ Google</text><text x="795.0" y="245.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ee.Image · ee.Number · ee.List</text><line x1="375.0" y1="180.0" x2="625.0" y2="180.0" stroke="#607d8b" stroke-width="3" marker-end="url(#arrow)"/><text x="500.0" y="168.0" font-size="14" fill="#263238" text-anchor="middle" font-weight="normal" >សំណើ (ពិពណ៌នាការគណនា)</text><line x1="625.0" y1="280.0" x2="375.0" y2="280.0" stroke="#607d8b" stroke-width="3" marker-end="url(#arrow)"/><text x="500.0" y="305.0" font-size="14" fill="#263238" text-anchor="middle" font-weight="normal" >លទ្ធផល (ក្រឡាផែនទី · print)</text><text x="500.0" y="400.0" font-size="15" fill="#607d8b" text-anchor="middle" font-weight="normal" >វត្ថុ ee.* គ្រាន់តែជា «ការពិពណ៌នា» នៅក្នុងកម្មវិធីរុករក រហូតដល់ត្រូវការលទ្ធផល</text></svg></p>
+<figcaption>រូបទី២.១៖ ហេតុអ្វី if និង for ធម្មតាមិនដំណើរការលើ ee.Number។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>ee.Number(5) មិនមែនលេខ ៥ ក្នុងកម្មវិធីរុករកទេ៖ វាជាការណែនាំឱ្យម៉ាស៊ីនមេគណនា។</li>
+<li>ប្រើ .add() .gt() ee.Algorithms.If() ជំនួស + &gt; និង if។</li>
+<li>print() និង Map.addLayer() ស្នើលទ្ធផលពីម៉ាស៊ីនមេ។</li>
+</ul>
+</div>
+<p>នៅពេលអ្នកសរសេរ <code>var n = s2.size();</code> កម្មវិធីរុករកមិនបានរាប់អ្វីទាំងអស់ទេ។ វាបង្កើត <strong>ការពិពណ៌នា</strong> «រាប់ធាតុក្នុង s2» ហើយរក្សាទុកក្នុងអថេរ <code>n</code>។ តម្លៃពិតគណនាតែពេលអ្នកសួរវា តាមរយៈ <code>print(n)</code> <code>Map.addLayer()</code> ឬ <code>Export</code>។ ដូច្នេះ៖</p>
+<ul>
+<li>វត្ថុ JavaScript ធម្មតា (<code>5</code> <code>'abc'</code> <code>[1,2]</code>) រស់នៅលើ <strong>client</strong> (កម្មវិធីរុករក)។</li>
+<li>វត្ថុ <code>ee.*</code> (<code>ee.Number</code> <code>ee.Image</code> <code>ee.List</code>) រស់នៅលើ <strong>server</strong> ហើយត្រូវប្រើមុខងាររបស់វាផ្ទាល់៖</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ធ្វើលើ client (ខុសសម្រាប់ ee)</th>
+<th>ធ្វើលើ server (ត្រូវ)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n &gt; 50</code></td>
+<td><code>n.gt(50)</code></td>
+</tr>
+<tr>
+<td><code>a + b</code></td>
+<td><code>a.add(b)</code></td>
+</tr>
+<tr>
+<td><code>if (...) {...}</code></td>
+<td><code>ee.Algorithms.If(cond, a, b)</code> ឬ <code>filter</code></td>
+</tr>
+<tr>
+<td><code>for (...)</code></td>
+<td><code>.map(function(x) {...})</code></td>
+</tr>
+<tr>
+<td><code>list[0]</code></td>
+<td><code>list.get(0)</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">getInfo() ៖ ប្រើតិចបំផុត</p>
+<p><code>n.getInfo()</code> ទាញតម្លៃពីម៉ាស៊ីនមេមកកម្មវិធីរុករក ហើយ <strong>បង្កក</strong> កម្មវិធីរុករករហូតដល់ទទួលបាន។ វាដំណើរការលើតម្លៃតូច ប៉ុន្តែធ្វើឱ្យស្គ្រីបយឺត ឬគាំងលើទិន្នន័យធំ។ ប្រើ <code>print()</code> ជំនួស ព្រោះវាទាញតម្លៃដោយមិនបង្កក។</p>
+</div>
+<h3 id="earth-engine">២.៣.៣. វត្ថុ Earth Engine សំខាន់ៗ<a class="headerlink" href="#earth-engine" title="Permanent link">¶</a></h3>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 440" font-family="Battambang, Siemreap, sans-serif"><rect width="1000" height="440" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">ប្រភេទវត្ថុ Earth Engine</text><rect x="40.0" y="90.0" width="290.0" height="100.0" rx="12" fill="#2e7d32" stroke="none" stroke-width="1" /><text x="185.0" y="136.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ee.Image</text><text x="185.0" y="160.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >រ៉ាស្ទ័រ · ក្រុមរលកច្រើន</text><rect x="355.0" y="90.0" width="290.0" height="100.0" rx="12" fill="#388e3c" stroke="none" stroke-width="1" /><text x="500.0" y="136.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ee.ImageCollection</text><text x="500.0" y="160.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >បណ្ដុំរូបភាព</text><rect x="670.0" y="90.0" width="290.0" height="100.0" rx="12" fill="#ef6c00" stroke="none" stroke-width="1" /><text x="815.0" y="136.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ee.Geometry</text><text x="815.0" y="160.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ចំណុច បន្ទាត់ ពហុកោណ</text><rect x="40.0" y="210.0" width="290.0" height="100.0" rx="12" fill="#f57c00" stroke="none" stroke-width="1" /><text x="185.0" y="256.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ee.Feature</text><text x="185.0" y="280.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ធរណីមាត្រ + គុណលក្ខណៈ</text><rect x="355.0" y="210.0" width="290.0" height="100.0" rx="12" fill="#fb8c00" stroke="none" stroke-width="1" /><text x="500.0" y="256.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ee.FeatureCollection</text><text x="500.0" y="280.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ស្រទាប់វ៉ិចទ័រ</text><rect x="670.0" y="210.0" width="290.0" height="100.0" rx="12" fill="#6d4c41" stroke="none" stroke-width="1" /><text x="815.0" y="256.0" font-size="17" fill="#fff" text-anchor="middle" font-weight="bold" >ee.Reducer</text><text x="815.0" y="280.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ស្ថិតិ</text><rect x="40.0" y="340.0" width="920.0" height="70.0" rx="12" fill="#546e7a" stroke="none" stroke-width="1" /><text x="500.0" y="371.0" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold" >ee.Number · ee.String · ee.List · ee.Date · ee.Dictionary</text><text x="500.0" y="395.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ទិន្នន័យសាមញ្ញលើម៉ាស៊ីនមេ</text></svg></p>
+<figcaption>រូបទី២.២៖ វត្ថុសំខាន់ៗ។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>រ៉ាស្ទ័រ៖ ee.Image (មួយ) និង ee.ImageCollection (ច្រើន)។</li>
+<li>វ៉ិចទ័រ៖ ee.Geometry → ee.Feature → ee.FeatureCollection (ដូចស្រទាប់ QGIS)។</li>
+<li>Reducer៖ បម្លែងតម្លៃច្រើនទៅជាស្ថិតិ (មេរៀនទី៤)។</li>
+</ul>
+</div>
+<table>
+<thead>
+<tr>
+<th>វត្ថុ</th>
+<th>ដូចអ្វីក្នុង QGIS</th>
+<th>មុខងារប្រើញឹកញាប់</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ee.Image</code></td>
+<td>ស្រទាប់រ៉ាស្ទ័រ (ក្រុមរលកច្រើន)</td>
+<td><code>select</code> <code>normalizedDifference</code> <code>updateMask</code> <code>clip</code></td>
+</tr>
+<tr>
+<td><code>ee.ImageCollection</code></td>
+<td>ថតដែលមានរ៉ាស្ទ័រច្រើន</td>
+<td><code>filterDate</code> <code>filterBounds</code> <code>map</code> <code>median</code></td>
+</tr>
+<tr>
+<td><code>ee.Geometry</code></td>
+<td>ធរណីមាត្រមួយ</td>
+<td><code>Point</code> <code>Rectangle</code> <code>buffer</code> <code>area</code></td>
+</tr>
+<tr>
+<td><code>ee.Feature</code></td>
+<td>វត្ថុមួយ + គុណលក្ខណៈ</td>
+<td><code>get</code> <code>set</code> <code>geometry</code></td>
+</tr>
+<tr>
+<td><code>ee.FeatureCollection</code></td>
+<td>ស្រទាប់វ៉ិចទ័រ</td>
+<td><code>filter</code> <code>map</code> <code>reduceColumns</code></td>
+</tr>
+<tr>
+<td><code>ee.Reducer</code></td>
+<td>ស្ថិតិ</td>
+<td><code>mean</code> <code>median</code> <code>sum</code> <code>histogram</code></td>
+</tr>
+</tbody>
+</table>
+<p>ឈ្មោះក្រុមរលក គុណលក្ខណៈ (properties) និងប្រព័ន្ធកូអរដោនេ ត្រូវបានរក្សាទុកជាមួយវត្ថុនីមួយៗ។ <code>print(img)</code> បង្ហាញព័ត៌មានទាំងនេះក្នុង Console៖ ទម្លាប់ល្អគឺ print វត្ថុរាល់ពេលអ្នកមិនប្រាកដ។</p>
+<h3 id="_5">២.៣.៤. ការភ្ជាប់មុខងារ និងការគណនាពន្យារពេល<a class="headerlink" href="#_5" title="Permanent link">¶</a></h3>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 400" font-family="Battambang, Siemreap, sans-serif"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs><rect width="1000" height="400" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">ការភ្ជាប់មុខងារ (method chaining)</text><rect x="30.0" y="130.0" width="175.0" height="110.0" rx="12" fill="#a5d6a7" stroke="none" stroke-width="1" /><text x="117.5" y="181.0" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold" >ImageCollection</text><text x="117.5" y="205.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >៥ លាន+</text><line x1="206.0" y1="185.0" x2="220.0" y2="185.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="222.0" y="130.0" width="175.0" height="110.0" rx="12" fill="#81c784" stroke="none" stroke-width="1" /><text x="309.5" y="181.0" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold" >.filterBounds()</text><text x="309.5" y="205.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >~៧ ០០០</text><line x1="398.0" y1="185.0" x2="412.0" y2="185.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="414.0" y="130.0" width="175.0" height="110.0" rx="12" fill="#66bb6a" stroke="none" stroke-width="1" /><text x="501.5" y="181.0" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold" >.filterDate()</text><text x="501.5" y="205.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >~២៥០</text><line x1="590.0" y1="185.0" x2="604.0" y2="185.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="606.0" y="130.0" width="175.0" height="110.0" rx="12" fill="#43a047" stroke="none" stroke-width="1" /><text x="693.5" y="181.0" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold" >.filter(ពពក &lt; ២០)</text><text x="693.5" y="205.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >~៨០</text><line x1="782.0" y1="185.0" x2="796.0" y2="185.0" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/><rect x="798.0" y="130.0" width="175.0" height="110.0" rx="12" fill="#2e7d32" stroke="none" stroke-width="1" /><text x="885.5" y="181.0" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold" >.median()</text><text x="885.5" y="205.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >១ រូបភាព</text><text x="500.0" y="300.0" font-size="14" fill="#607d8b" text-anchor="middle" font-weight="normal" >មុខងារនីមួយៗ ត្រឡប់វត្ថុថ្មី ដែលមុខងារបន្ទាប់ប្រើបន្ត · លេខរូបភាពជាប្រហាក់ប្រហែល</text></svg></p>
+<figcaption>រូបទី២.៣៖ អានកូដពីឆ្វេងទៅស្ដាំ។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>មុខងារនីមួយៗមិនប្ដូរវត្ថុដើមទេ៖ វាត្រឡប់វត្ថុថ្មី។</li>
+<li>ត្រងឱ្យបានច្រើនមុន (filterBounds filterDate) ទើបការគណនាលឿន។</li>
+<li>ចុងក្រោយ reducer (median) បម្លែងបណ្ដុំទៅជារូបភាពមួយ។</li>
+</ul>
+</div>
+<p>មុខងារ Earth Engine នីមួយៗ <strong>ត្រឡប់វត្ថុថ្មី</strong> ដោយមិនកែវត្ថុដើមទេ។ ដូច្នេះយើងអាចភ្ជាប់វាជាខ្សែ ហើយអានពីលើចុះក្រោម ដូចជាប្រយោគ៖ «យកបណ្ណសារ → ត្រងតាមខេត្ត → ត្រងតាមឆ្នាំ → ត្រងពពក → យកតម្លៃកណ្ដាល»។</p>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 380" font-family="Battambang, Siemreap, sans-serif"><rect width="1000" height="380" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">ការគណនាពន្យារពេល (lazy evaluation)</text><rect x="60.0" y="100.0" width="560.0" height="44.0" rx="6" fill="#263238" stroke="none" stroke-width="1" /><text x="76.0" y="128.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace">var col = ee.ImageCollection(...)</text><text x="660.0" y="128.0" font-size="16" fill="#90a4ae" text-anchor="start" font-weight="normal" >គ្មានការគណនា</text><rect x="60.0" y="160.0" width="560.0" height="44.0" rx="6" fill="#263238" stroke="none" stroke-width="1" /><text x="76.0" y="188.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace">var comp = col.median()</text><text x="660.0" y="188.0" font-size="16" fill="#90a4ae" text-anchor="start" font-weight="normal" >គ្មានការគណនា</text><rect x="60.0" y="220.0" width="560.0" height="44.0" rx="6" fill="#263238" stroke="none" stroke-width="1" /><text x="76.0" y="248.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace">var ndvi = comp.normalizedDifference(...)</text><text x="660.0" y="248.0" font-size="16" fill="#90a4ae" text-anchor="start" font-weight="normal" >គ្មានការគណនា</text><rect x="60.0" y="280.0" width="560.0" height="44.0" rx="6" fill="#263238" stroke="none" stroke-width="1" /><text x="76.0" y="308.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace">Map.addLayer(ndvi)</text><text x="660.0" y="308.0" font-size="16" fill="#c62828" text-anchor="start" font-weight="bold" >គណនាឥឡូវ! តែក្រឡាដែលមើល</text></svg></p>
+<figcaption>រូបទី២.៤៖ Earth Engine គណនាតែពេលត្រូវការ។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>បន្ទាត់ var គ្រាន់តែបង្កើតផែនការ (graph) នៃការគណនា។</li>
+<li>ការគណនាពិតកើតឡើងពេល print Map.addLayer ឬ Export។</li>
+<li>នៅកម្រិត zoom ទាប Earth Engine គណនាលើក្រឡាធំ (pyramid) ដើម្បីលឿន។</li>
+</ul>
+</div>
+<p>ការគណនាទាំងមូល <strong>ពន្យារពេល (lazy)</strong> រហូតដល់ត្រូវការលទ្ធផល។ អត្ថប្រយោជន៍៖ Earth Engine មើលខ្សែការគណនាទាំងមូល ហើយគណនាតែក្រឡាដែលចាំបាច់ នៅគុណភាពដែលត្រូវនឹងកម្រិត zoom របស់ផែនទី។ នេះជាមូលហេតុដែលផែនទីបង្ហាញលឿន ទោះបីការគណនាប្រើរូបភាពរាប់រយក៏ដោយ។</p>
+<div class="admonition warning">
+<p class="admonition-title">Scale ប្ដូរតាម zoom</p>
+<p>នៅពេលអ្នក zoom ចេញ Earth Engine គណនាលើក្រឡាធំជាង (pyramid)។ ដូច្នេះតម្លៃដែលអ្នកឃើញក្នុង Inspector នៅ zoom ទាប អាចខុសពីតម្លៃនៅក្រឡា ១០ ម។ សម្រាប់ស្ថិតិ ត្រូវកំណត់ <code>scale</code> ដោយផ្ទាល់ (មេរៀនទី៤)។</p>
+</div>
+<h3 id="map">២.៣.៥. map()៖ អនុវត្តមុខងារលើគ្រប់ធាតុ<a class="headerlink" href="#map" title="Permanent link">¶</a></h3>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 420" font-family="Battambang, Siemreap, sans-serif"><rect width="1000" height="420" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">map() ជំនួស for loop</text><rect x="40.0" y="90.0" width="440.0" height="134.0" rx="8" fill="#263238" stroke="none" stroke-width="1" /><text x="56.0" y="118.0" font-size="14" fill="#a5d6a7" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">// ✗ មិនដំណើរការលើម៉ាស៊ីនមេ</text><text x="56.0" y="140.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">for (var i = 0; i &lt; col.size(); i++) {</text><text x="56.0" y="162.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  var img = col.get(i);</text><text x="56.0" y="184.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  ...</text><text x="56.0" y="206.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">}</text><rect x="520.0" y="90.0" width="440.0" height="134.0" rx="8" fill="#263238" stroke="none" stroke-width="1" /><text x="536.0" y="118.0" font-size="14" fill="#a5d6a7" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">// ✓ map() ស្របគ្នា</text><text x="536.0" y="140.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">var withNdvi = col.map(function(img) {</text><text x="536.0" y="162.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  var nd = img.normalizedDifference([&#x27;B8&#x27;,&#x27;B4&#x27;]);</text><text x="536.0" y="184.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">  return img.addBands(nd.rename(&#x27;NDVI&#x27;));</text><text x="536.0" y="206.0" font-size="14" fill="#80cbc4" text-anchor="start" font-weight="normal" font-family="monospace" xml:space="preserve">});</text><text x="260.0" y="260.0" font-size="14" fill="#c62828" text-anchor="middle" font-weight="normal" >col.size() ជា ee.Number មិនមែនលេខ JS</text><text x="740.0" y="260.0" font-size="14" fill="#2e7d32" text-anchor="middle" font-weight="normal" >មុខងារត្រូវ return រូបភាព</text></svg></p>
+<figcaption>រូបទី២.៥៖ គិតជា «អនុវត្តលើគ្រប់ធាតុ»។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>for loop ដំណើរការក្នុងកម្មវិធីរុករក ហើយមិនស្គាល់ទំហំពិតនៃ collection។</li>
+<li>map() ផ្ញើមុខងារទៅម៉ាស៊ីនមេ ដែលអនុវត្តលើធាតុនីមួយៗស្របគ្នា។</li>
+<li>ក្នុង map() មិនអាចប្រើ print() getInfo() ឬ Map.addLayer() បានទេ។</li>
+</ul>
+</div>
+<p><code>map()</code> យកមុខងារមួយ ហើយអនុវត្តវាលើធាតុនីមួយៗនៃ collection <strong>ស្របគ្នា</strong> នៅលើម៉ាស៊ីនមេ។ លទ្ធផលជា collection ថ្មី ដែលមានចំនួនធាតុដូចគ្នា៖</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">addNDVI</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">img</span><span class="p">.</span><span class="nx">addBands</span><span class="p">(</span><span class="nx">img</span><span class="p">.</span><span class="nx">normalizedDifference</span><span class="p">([</span><span class="s1">'B8'</span><span class="p">,</span><span class="w"> </span><span class="s1">'B4'</span><span class="p">]).</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">));</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">s2ndvi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">s2</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">addNDVI</span><span class="p">);</span><span class="w">         </span><span class="c1">// គ្រប់រូបភាពមានក្រុមរលក NDVI</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nx">print</span><span class="p">(</span><span class="nx">s2ndvi</span><span class="p">.</span><span class="nx">first</span><span class="p">().</span><span class="nx">bandNames</span><span class="p">());</span><span class="w">     </span><span class="c1">// ពិនិត្យ</span>
+</code></pre></div>
+<p>ច្បាប់បីសម្រាប់មុខងារក្នុង <code>map()</code>៖ (១) ត្រូវ <strong>return</strong> វត្ថុប្រភេទដដែល (Image → Image) (២) មិនអាចប្រើ <code>print()</code> <code>getInfo()</code> ឬ <code>Map.addLayer()</code> ខាងក្នុង និង (៣) មិនអាចប្រើអថេរ JavaScript ដែលប្ដូរតម្លៃក្នុង loop។</p>
+<div class="admonition example">
+<p class="admonition-title">ពិសោធន៍៖ map() លើ ImageCollection</p>
+<p>ជ្រើសមុខងារ ហើយចុច «ដំណើរការ»។ សង្កេតថារូបភាពនីមួយៗត្រូវបានប្ដូរ ដាច់ដោយឡែកពីគ្នា ហើយចំនួនរូបភាពមិនប្ដូរ។</p>
+</div>
+<div class="sim" data-sim="gee-map"></div>
+
+<h3 id="filter-map-reduce">២.៣.៦. លំនាំ filter → map → reduce<a class="headerlink" href="#filter-map-reduce" title="Permanent link">¶</a></h3>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 380" font-family="Battambang, Siemreap, sans-serif"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker></defs><rect width="1000" height="380" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">គំរូ filter → map → reduce</text><rect x="60.0" y="130.0" width="260.0" height="120.0" rx="12" fill="#43a047" stroke="none" stroke-width="1" /><text x="190.0" y="186.0" font-size="22" fill="#fff" text-anchor="middle" font-weight="bold" >filter</text><text x="190.0" y="210.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >ជ្រើសតែអ្វីដែលត្រូវការ</text><line x1="322.0" y1="190.0" x2="366.0" y2="190.0" stroke="#607d8b" stroke-width="3" marker-end="url(#arrow)"/><rect x="370.0" y="130.0" width="260.0" height="120.0" rx="12" fill="#ef6c00" stroke="none" stroke-width="1" /><text x="500.0" y="186.0" font-size="22" fill="#fff" text-anchor="middle" font-weight="bold" >map</text><text x="500.0" y="210.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >គណនាលើធាតុនីមួយៗ</text><line x1="632.0" y1="190.0" x2="676.0" y2="190.0" stroke="#607d8b" stroke-width="3" marker-end="url(#arrow)"/><rect x="680.0" y="130.0" width="260.0" height="120.0" rx="12" fill="#6d4c41" stroke="none" stroke-width="1" /><text x="810.0" y="186.0" font-size="22" fill="#fff" text-anchor="middle" font-weight="bold" >reduce</text><text x="810.0" y="210.0" font-size="13" fill="#fff" text-anchor="middle" font-weight="normal" >សង្ខេបជាលទ្ធផលមួយ</text><text x="500.0" y="320.0" font-size="16" fill="#263238" text-anchor="middle" font-weight="normal" >ស្គ្រីប Earth Engine ភាគច្រើនជាបន្សំនៃជំហានទាំងបី</text></svg></p>
+<figcaption>រូបទី២.៦៖ លំនាំស្គ្រីប Earth Engine។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>filter៖ តំបន់ កាលបរិច្ឆេទ ពពក។</li>
+<li>map៖ លុបពពក គណនាសន្ទស្សន៍ កាត់តាមព្រំ។</li>
+<li>reduce៖ median ពេលវេលា ឬស្ថិតិតាមតំបន់។</li>
+</ul>
+</div>
+<p>ស្គ្រីបភាគច្រើនក្នុងសៀវភៅនេះ ធ្វើតាមលំនាំតែមួយ៖ <strong>filter</strong> (ជ្រើសតែអ្វីដែលត្រូវការ) → <strong>map</strong> (គណនាលើធាតុនីមួយៗ) → <strong>reduce</strong> (សង្ខេបជាលទ្ធផលមួយ)។ ឧទាហរណ៍ NDVI អតិបរមារដូវប្រាំង៖</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">ndviMax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">s2</span><span class="p">.</span><span class="nx">filterDate</span><span class="p">(</span><span class="s1">'2024-01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2024-04-30'</span><span class="p">)</span><span class="w">   </span><span class="c1">// filter</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">addNDVI</span><span class="p">)</span><span class="w">                                            </span><span class="c1">// map</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'NDVI'</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p">.</span><span class="nx">max</span><span class="p">();</span><span class="w">                                                  </span><span class="c1">// reduce</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">Map</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">ndviMax</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">min</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">max</span><span class="o">:</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="nx">palette</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">'white'</span><span class="p">,</span><span class="w"> </span><span class="s1">'green'</span><span class="p">]},</span><span class="w"> </span><span class="s1">'NDVI អតិបរមា'</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="_6">២.៣.៧. កំហុសទូទៅ និងការកែ<a class="headerlink" href="#_6" title="Permanent link">¶</a></h3>
+<figure>
+<p><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 440" font-family="Battambang, Siemreap, sans-serif"><rect width="1000" height="440" fill="#ffffff"/><text x="24.0" y="38.0" font-size="24" fill="#2e7d32" text-anchor="start" font-weight="bold" class="ftitle">កំហុសទូទៅក្នុង Code Editor</text><rect x="40.0" y="90.0" width="540.0" height="50.0" rx="6" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" /><text x="56.0" y="121.0" font-size="13" fill="#c62828" text-anchor="start" font-weight="normal" font-family="monospace">Line 5: col.get is not a function</text><text x="600.0" y="121.0" font-size="15" fill="#263238" text-anchor="start" font-weight="normal" >ឈ្មោះមុខងារខុស ឬវត្ថុខុសប្រភេទ</text><rect x="40.0" y="154.0" width="540.0" height="50.0" rx="6" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" /><text x="56.0" y="185.0" font-size="13" fill="#c62828" text-anchor="start" font-weight="normal" font-family="monospace">Collection query aborted after accumulating over 5000 elements</text><text x="600.0" y="185.0" font-size="15" fill="#263238" text-anchor="start" font-weight="normal" >print collection ធំពេក → ប្រើ .limit(10)</text><rect x="40.0" y="218.0" width="540.0" height="50.0" rx="6" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" /><text x="56.0" y="249.0" font-size="13" fill="#c62828" text-anchor="start" font-weight="normal" font-family="monospace">User memory limit exceeded</text><text x="600.0" y="249.0" font-size="15" fill="#263238" text-anchor="start" font-weight="normal" >តំបន់ធំពេក → បង្កើន scale ឬ Export</text><rect x="40.0" y="282.0" width="540.0" height="50.0" rx="6" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" /><text x="56.0" y="313.0" font-size="13" fill="#c62828" text-anchor="start" font-weight="normal" font-family="monospace">Computation timed out</text><text x="600.0" y="313.0" font-size="15" fill="#263238" text-anchor="start" font-weight="normal" >គណនាលើផែនទីយូរ → Export ជា Task</text><rect x="40.0" y="346.0" width="540.0" height="50.0" rx="6" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" /><text x="56.0" y="377.0" font-size="13" fill="#c62828" text-anchor="start" font-weight="normal" font-family="monospace">Image.select: Pattern &#x27;B8&#x27; did not match</text><text x="600.0" y="377.0" font-size="15" fill="#263238" text-anchor="start" font-weight="normal" >ឈ្មោះក្រុមរលកខុស (Landsat vs Sentinel)</text></svg></p>
+<figcaption>រូបទី២.៧៖ អានសារកំហុស។</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">អានរូបនេះ</p>
+<ul>
+<li>សារកំហុសក្នុង Console ប្រាប់លេខបន្ទាត់ និងមូលហេតុ។</li>
+<li>កំហុសអង្គចងចាំ និងពេលវេលា ជាទូទៅដោះស្រាយដោយ Export ឬ scale ធំជាង។</li>
+<li>ឈ្មោះក្រុមរលកខុស ជាកំហុសញឹកញាប់បំផុតពេលប្ដូរពី Sentinel-2 ទៅ Landsat។</li>
+</ul>
+</div>
+<p>នៅពេលស្គ្រីបមិនដំណើរការ សូមធ្វើតាមលំដាប់៖ (១) អានសារក្រហមក្នុង Console និងលេខបន្ទាត់ (២) <code>print()</code> អថេរមុនបន្ទាត់ដែលខុស ដើម្បីមើលប្រភេទ និងឈ្មោះក្រុមរលក (៣) សាកល្បងលើតំបន់តូច និងរយៈពេលខ្លីជាមុន (៤) ស្វែងរកមុខងារក្នុងផ្ទាំង Docs ដើម្បីពិនិត្យអាគុយម៉ង់។</p>
+<hr />
+<h2 id="_7">២.៤. ឧទាហរណ៍ដែលបានដោះស្រាយ៖ កែកូដក្នុងស្ថានភាពបើកមេរៀន<a class="headerlink" href="#_7" title="Permanent link">¶</a></h2>
+<h3 id="_8">ជំហានទី១៖ រកមូលហេតុ<a class="headerlink" href="#_8" title="Permanent link">¶</a></h3>
+<p><code>s2.size()</code> ត្រឡប់ <code>ee.Number</code> (server)។ <code>n &gt; 50</code> ប្រៀបធៀបវត្ថុមួយ ជាមួយលេខ ៥០ លើ client ដែលតែងមិនពិត។</p>
+<h3 id="server">ជំហានទី២៖ សរសេរលក្ខខណ្ឌលើ server<a class="headerlink" href="#server" title="Permanent link">¶</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">s2</span><span class="p">.</span><span class="nx">size</span><span class="p">();</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kd">var</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ee</span><span class="p">.</span><span class="nx">Algorithms</span><span class="p">.</span><span class="nx">If</span><span class="p">(</span><span class="nx">n</span><span class="p">.</span><span class="nx">gt</span><span class="p">(</span><span class="mf">50</span><span class="p">),</span><span class="w"> </span><span class="s1">'គ្រប់គ្រាន់'</span><span class="p">,</span><span class="w"> </span><span class="s1">'មិនគ្រប់'</span><span class="p">);</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nx">print</span><span class="p">(</span><span class="s1">'ចំនួន'</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="_9">ជំហានទី៣៖ ជម្រើសល្អជាង<a class="headerlink" href="#_9" title="Permanent link">¶</a></h3>
+<p>ជាញឹកញាប់ យើងមិនត្រូវការ <code>if</code> ទាល់តែសោះ៖ <code>filter</code> ដោះស្រាយលក្ខខណ្ឌលើធាតុនីមួយៗ ហើយ <code>print(n)</code> គ្រប់គ្រាន់សម្រាប់មនុស្សសម្រេចចិត្ត។</p>
+<h3 id="_10">ជំហានទី៤៖ សេចក្ដីសន្និដ្ឋាន<a class="headerlink" href="#_10" title="Permanent link">¶</a></h3>
+<blockquote>
+<p>«ក្នុង Earth Engine ត្រូវគិតថាអថេរ ee ជាការណែនាំ មិនមែនជាតម្លៃ។ ប្រៀបធៀប គណនា និងលក្ខខណ្ឌ ត្រូវប្រើមុខងាររបស់ ee (gt add If filter) ដើម្បីឱ្យម៉ាស៊ីនមេគណនា។»</p>
+</blockquote>
+<div class="admonition warning">
+<p class="admonition-title">អ្វីដែលយើងមិនអាចសន្និដ្ឋាន</p>
+<p>ការដែលស្គ្រីបដំណើរការដោយគ្មានកំហុស មិនបញ្ជាក់ថាលទ្ធផលត្រឹមត្រូវទេ (ដូចឧទាហរណ៍នេះ)។ ត្រូវ print តម្លៃកណ្ដាលផ្លូវ ហើយពិនិត្យថាវាសមហេតុផល។</p>
+</div>
+<hr />
+<h2 id="_11">២.៥. សកម្មភាពអនុវត្ត<a class="headerlink" href="#_11" title="Permanent link">¶</a></h2>
+<ul>
+<li><strong>លំហាត់ទី២</strong>៖ សរសេរមុខងារ addNDVI ប្រើ map() លើ collection មួយឆ្នាំ ហើយបង្កើត NDVI អតិបរមា និងមធ្យម។ មើល <a href="../../workbook/lab-02/">លំហាត់ទី២</a>។</li>
+<li><strong>ក្នុងថ្នាក់</strong>៖ «ស្វែងរកកំហុស»៖ គ្រូផ្ដល់ស្គ្រីបប្រាំដែលខុស ហើយក្រុមនីមួយៗកែ។</li>
+</ul>
+<hr />
+<h2 id="_12">២.៦. ការយល់ច្រឡំដែលត្រូវប្រុងប្រយ័ត្ន<a class="headerlink" href="#_12" title="Permanent link">¶</a></h2>
+<p><strong>១. «ត្រូវជាអ្នកសរសេរកម្មវិធីទើបប្រើ Earth Engine បាន»</strong>
+ស្គ្រីបភាគច្រើនប្រើធាតុ JavaScript តិចតួច និងលំនាំ filter → map → reduce។</p>
+<p><strong>២. «var n = col.size() គឺជាលេខ»</strong>
+វាជា ee.Number នៅលើម៉ាស៊ីនមេ។ ត្រូវប្រើ print() ដើម្បីឃើញតម្លៃ។</p>
+<p><strong>៣. «map() គឺ for loop»</strong>
+map() ដំណើរការស្របគ្នា ហើយមុខងារខាងក្នុងមិនអាចប្រើ print ឬប្ដូរអថេរខាងក្រៅបានទេ។</p>
+<p><strong>៤. «getInfo() ជាវិធីល្អសម្រាប់មើលតម្លៃ»</strong>
+វាបង្កកកម្មវិធីរុករក។ print() ល្អជាង។</p>
+<p><strong>៥. «ស្គ្រីបគ្មានកំហុស = លទ្ធផលត្រូវ»</strong>
+កំហុសតក្កវិជ្ជា (ដូចលក្ខខណ្ឌលើ client) មិនបង្ហាញសារកំហុសទេ។</p>
+<hr />
+<h2 id="_13">២.៧. សេចក្ដីសង្ខេបមេរៀន<a class="headerlink" href="#_13" title="Permanent link">¶</a></h2>
+<p>JavaScript សម្រាប់ Earth Engine ត្រូវការតែអថេរ អារេ វត្ថុ និងមុខងារ។ ចំណុចសំខាន់គឺការបែងចែក client (កម្មវិធីរុករក) ពី server (ម៉ាស៊ីនមេ)៖ វត្ថុ <code>ee.*</code> ជាការពិពណ៌នាការគណនា ដែលដំណើរការតែពេលត្រូវការលទ្ធផល ហើយត្រូវប្រើមុខងាររបស់វាផ្ទាល់ ជំនួសប្រតិបត្តិករ JavaScript ធម្មតា។</p>
+<p><code>map()</code> អនុវត្តមុខងារលើគ្រប់ធាតុស្របគ្នា ហើយជាមួយ filter និង reduce វាបង្កើតលំនាំស្គ្រីបដែលប្រើក្នុងសៀវភៅទាំងមូល។</p>
+<div class="admonition abstract">
+<p class="admonition-title">គំនិតស្នូលនៃមេរៀន</p>
+<p>ក្នុង Earth Engine អ្នកមិនបញ្ជាកុំព្យូទ័រឱ្យធ្វើម្ដងមួយៗទេ៖ អ្នកពិពណ៌នាលទ្ធផលដែលចង់បាន ហើយម៉ាស៊ីនមេរកវិធីគណនាវា។</p>
+</div>
+<hr />
+<h2 id="_14">២.៨. ពាក្យគន្លឹះខ្មែរ–អង់គ្លេស<a class="headerlink" href="#_14" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>ពាក្យខ្មែរ</th>
+<th>ពាក្យអង់គ្លេស</th>
+<th>អត្ថន័យខ្លី</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>អថេរ</td>
+<td>Variable</td>
+<td>ឈ្មោះដែលរក្សាតម្លៃ</td>
+</tr>
+<tr>
+<td>មុខងារ</td>
+<td>Function</td>
+<td>ការងារដែលប្រើឡើងវិញបាន</td>
+</tr>
+<tr>
+<td>ម៉ាស៊ីនភ្ញៀវ</td>
+<td>Client</td>
+<td>កម្មវិធីរុករករបស់អ្នក</td>
+</tr>
+<tr>
+<td>ម៉ាស៊ីនមេ</td>
+<td>Server</td>
+<td>ម៉ាស៊ីនរបស់ Google ដែលគណនា</td>
+</tr>
+<tr>
+<td>ការភ្ជាប់មុខងារ</td>
+<td>Method chaining</td>
+<td>ហៅមុខងារជាខ្សែ</td>
+</tr>
+<tr>
+<td>ការគណនាពន្យារពេល</td>
+<td>Lazy evaluation</td>
+<td>គណនាតែពេលត្រូវការ</td>
+</tr>
+<tr>
+<td>map</td>
+<td>map</td>
+<td>អនុវត្តមុខងារលើគ្រប់ធាតុ</td>
+</tr>
+<tr>
+<td>Reducer</td>
+<td>Reducer</td>
+<td>បម្លែងតម្លៃច្រើនជាស្ថិតិ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_15">២.៩. សំណួររំលឹក និងវាយតម្លៃ<a class="headerlink" href="#_15" title="Permanent link">¶</a></h2>
+<h3 id="_16">ក. សំណួរយល់ដឹង<a class="headerlink" href="#_16" title="Permanent link">¶</a></h3>
+<ol>
+<li>រាយធាតុ JavaScript ចំនួនបួន ដែលប្រើញឹកញាប់ក្នុង Earth Engine ព្រមឧទាហរណ៍។</li>
+<li>ហេតុអ្វី <code>n &gt; 50</code> មិនដំណើរការលើ ee.Number?</li>
+<li>ពន្យល់ការគណនាពន្យារពេល និងអត្ថប្រយោជន៍របស់វា។</li>
+<li>រាយច្បាប់បីសម្រាប់មុខងារក្នុង map()។</li>
+<li>ហេតុអ្វី print() ល្អជាង getInfo()?</li>
+</ol>
+<h3 id="_17">ខ. សំណួរអនុវត្តគោលគំនិត<a class="headerlink" href="#_17" title="Permanent link">¶</a></h3>
+<ol>
+<li>សរសេរមុខងារដែលបន្ថែមក្រុមរលក NDWI (B3 និង B8) ទៅរូបភាព Sentinel-2។</li>
+<li>កែកូដ៖ <code>var total = 0; col.map(function(img){ total = total + 1; });</code></li>
+<li>ប្ដូរ <code>a + b * 2</code> ទៅជាកូដ ee ដែល a និង b ជា ee.Number។</li>
+<li>ហេតុអ្វីតម្លៃក្នុង Inspector នៅ zoom ៨ ខុសពីនៅ zoom ១៥?</li>
+<li>ពិពណ៌នាជំហាន filter → map → reduce សម្រាប់ «NDVI មធ្យមខែមីនា ២០២៤ លើខេត្តតាកែវ»។</li>
+</ol>
+<h3 id="_18">គ. កិច្ចការខ្លី<a class="headerlink" href="#_18" title="Permanent link">¶</a></h3>
+<p>យកស្គ្រីបពីលំហាត់ទី១ ហើយបន្ថែមមតិយោបល់ជាភាសាខ្មែរ លើបន្ទាត់នីមួយៗ ដោយប្រាប់ថាបន្ទាត់នោះដំណើរការលើ client ឬ server។</p>
+<hr />
+<h2 id="_19">កំណត់សម្គាល់សម្រាប់គ្រូបង្រៀន<a class="headerlink" href="#_19" title="Permanent link">¶</a></h2>
+<h3 id="_20">ក. ការបែងចែកពេលវេលា ១៨០ នាទី<a class="headerlink" href="#_20" title="Permanent link">¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>សកម្មភាព</th>
+<th style="text-align: right;">ពេលវេលា</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ស្ថានភាពបើកមេរៀន៖ if ដែលមិនដំណើរការ</td>
+<td style="text-align: right;">១៥ នាទី</td>
+</tr>
+<tr>
+<td>JavaScript មូលដ្ឋាន (សរសេរតាម)</td>
+<td style="text-align: right;">៣០ នាទី</td>
+</tr>
+<tr>
+<td>Client និង Server</td>
+<td style="text-align: right;">២៥ នាទី</td>
+</tr>
+<tr>
+<td>វត្ថុ Earth Engine</td>
+<td style="text-align: right;">២០ នាទី</td>
+</tr>
+<tr>
+<td>Chaining និង lazy evaluation</td>
+<td style="text-align: right;">២០ នាទី</td>
+</tr>
+<tr>
+<td>map() · ពិសោធន៍</td>
+<td style="text-align: right;">៣០ នាទី</td>
+</tr>
+<tr>
+<td>filter → map → reduce និងកំហុសទូទៅ</td>
+<td style="text-align: right;">២៥ នាទី</td>
+</tr>
+<tr>
+<td>សង្ខេប និងណែនាំលំហាត់</td>
+<td style="text-align: right;">១៥ នាទី</td>
+</tr>
+<tr>
+<td><strong>សរុប</strong></td>
+<td style="text-align: right;"><strong>១៨០ នាទី / ៣ ម៉ោង</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_21">ខ. ការភ្ជាប់ទៅមេរៀនបន្ទាប់<a class="headerlink" href="#_21" title="Permanent link">¶</a></h3>
+<p>យើងអាចត្រង និងអនុវត្តមុខងារលើ collection ហើយ។ ប៉ុន្តែរូបភាពដែលយើងប្រើនៅមានពពក ហើយយើងនៅមិនទាន់ដឹងពីរបៀបផ្គុំរូបភាពរាប់រយជារូបភាពស្អាតមួយ។</p>
+<p>សំណួរនេះនាំទៅ <a href="../lesson-03/"><strong>មេរៀនទី៣៖ Image Collection ការត្រង ការលុបពពក និង Composite</strong></a>។</p>
+<p>⬅️ <a href="../lesson-01/">មេរៀនទី១</a> · ➡️ <a href="../lesson-03/">មេរៀនទី៣</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      CC BY-SA 4.0 · អាចប្រើ និងកែសម្រួលបាន ដោយដកស្រង់ប្រភព
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://khgeo.github.io/" target="_blank" rel="noopener" title="ស៊េរីសៀវភៅទាំង ៤" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/vendor/leaflet/leaflet.js"></script>
+      
+        <script src="../../assets/js/ag-sims.js"></script>
+      
+        <script src="../../assets/js/flood-risk-sim.js"></script>
+      
+        <script src="../../assets/js/s1s2-sim.js"></script>
+      
+        <script src="../../assets/js/lesson-sims.js"></script>
+      
+        <script src="../../assets/js/workbook.js"></script>
+      
+        <script src="../../assets/js/offline-pwa.js"></script>
+      
+    
+  </body>
+</html>

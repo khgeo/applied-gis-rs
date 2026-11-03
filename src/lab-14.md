@@ -127,7 +127,7 @@ panel.add(ui.Button('ទឹក Sentinel-1 (២០២៤, ខែដែលជ្�
 }));
 ```
 
-បន្ទាប់មក៖ **Apps → New App** → ជ្រើស Cloud Project → Publish។ បើក URL លើទូរស័ព្ទ ហើយសាកល្បង។ ឲ្យមិត្តម្នាក់ប្រើដោយគ្មានការពន្យល់ ហើយកត់ត្រាបញ្ហាបី។
+បន្ទាប់មក៖ **Apps → New App** → ជ្រើស Cloud Project → Publish។ បើក URL លើទូរស័ព្ទ ហើយសាកល្បង។ ឱ្យមិត្តម្នាក់ប្រើដោយគ្មានការពន្យល់ ហើយកត់ត្រាបញ្ហាបី។
 
 {{EXPECT}}
 
@@ -141,7 +141,7 @@ panel.add(ui.Button('ទឹក Sentinel-1 (២០២៤, ខែដែលជ្�
 ## ពិនិត្យលទ្ធផលដោយខ្លួនឯង
 
 <div class="self-check" data-answer="evaluate|evaluate()" markdown>
-**១.** មុខងារណាស្នើលទ្ធផលពីម៉ាស៊ីនមេ ដោយមិនធ្វើឲ្យកម្មវិធីកក?
+**១.** មុខងារណាស្នើលទ្ធផលពីម៉ាស៊ីនមេ ដោយមិនធ្វើឱ្យកម្មវិធីកក?
 </div>
 
 <div class="self-check" data-answer="layers().set|layers().set()|set" markdown>
@@ -153,5 +153,5 @@ panel.add(ui.Button('ទឹក Sentinel-1 (២០២៤, ខែដែលជ្�
 </div>
 
 <div class="self-check" data-answer="ui.Map.Linker|Linker" markdown>
-**៤.** វត្ថុណាធ្វើឲ្យផែនទីពីររំកិល និង zoom ជាមួយគ្នា?
+**៤.** វត្ថុណាធ្វើឱ្យផែនទីពីររំកិល និង zoom ជាមួយគ្នា?
 </div>

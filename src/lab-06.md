@@ -68,7 +68,7 @@ print(full.bandNames());
 1. ក្នុង **Geometry Imports** ចុច **+ new layer** ប្រាំដង ហើយដាក់ឈ្មោះ `urban` `bare` `water` `vegetation` `paddy`។
 2. សម្រាប់ស្រទាប់នីមួយៗ ចុចរូបកង់ ⚙ → **Import as: FeatureCollection** → **+ Add property** `landcover` = ០ ១ ២ ៣ ៤ រៀងគ្នា។
 3. ដាក់យ៉ាងហោចណាស់ **៥០ ចំណុចក្នុងមួយថ្នាក់** រាយពេញខេត្ត។ ប្រើរូបភាពពណ៌មិនពិត និង composite រដូវវស្សា ដើម្បីបែងចែកស្រែ (បៃតងក្នុងវស្សា ទំនេរក្នុងប្រាំង) ពីរុក្ខជាតិដទៃ។
-4. រក្សាចំណុចជា Asset ដើម្បីកុំឲ្យបាត់៖
+4. រក្សាចំណុចជា Asset ដើម្បីកុំឱ្យបាត់៖
 
 ```javascript
 var gcps = urban.merge(bare).merge(water).merge(vegetation).merge(paddy);
@@ -149,5 +149,5 @@ Export.table.toDrive({collection: ee.FeatureCollection([ee.Feature(null, {
 </div>
 
 <div class="self-check" data-answer="toByte|toByte()" markdown>
-**៤.** មុខងារណាធ្វើឲ្យ GeoTIFF ផែនទីថ្នាក់មានទំហំតូច (មួយបៃ/ក្រឡា)?
+**៤.** មុខងារណាធ្វើឱ្យ GeoTIFF ផែនទីថ្នាក់មានទំហំតូច (មួយបៃ/ក្រឡា)?
 </div>

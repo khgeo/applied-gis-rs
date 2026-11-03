@@ -103,7 +103,7 @@ var CONFIG = {aoiName: 'Takeo', year: 2024, seed: 42, scale: 10};
 </div>
 
 <div class="self-check" data-answer="Anyone can read" markdown>
-**៣.** Asset ត្រូវចែករំលែកតាមសិទ្ធិណា ដើម្បីឲ្យគ្រូរត់ស្គ្រីបបាន?
+**៣.** Asset ត្រូវចែករំលែកតាមសិទ្ធិណា ដើម្បីឱ្យគ្រូរត់ស្គ្រីបបាន?
 </div>
 
 <div class="self-check" data-answer="2|២" markdown>
