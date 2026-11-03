@@ -1,3 +1,4 @@
 .DS_Store
 build/
 mkdocs.offline.tmp.yml
+site/
