@@ -10,6 +10,7 @@
 
 [:material-presentation-play: ស្លាយបង្រៀន](slides/index.md){ .md-button .md-button--primary }
 [:material-code-braces: បើក Earth Engine Code Editor](https://code.earthengine.google.com/){ .md-button target="_blank" }
+[:material-wifi-off: កំណែ offline (ZIP)](https://khgeo.github.io/applied-gis-rs/downloads/applied-gis-rs-offline.zip){ .md-button }
 
 ## ស៊េរីសៀវភៅទាំង ៤
 
@@ -26,6 +27,14 @@
     សៀវភៅនេះបង្រៀន **ការគណនាលើពពក (Google Earth Engine) JavaScript សម្រាប់ការវិភាគលំហ ការត្រង និងការបង្កើត composite ស្ថិតិតាមតំបន់ ស៊េរីពេលវេលា ការចាត់ថ្នាក់ដោយ Random Forest** និង **ការអនុវត្ត** លើទឹកជំនន់ គ្រោះរាំងស្ងួត ទីសណ្ឋាន ព្រៃឈើ កសិកម្ម ទីក្រុង និងការសម្រេចចិត្តពហុលក្ខខណ្ឌ ព្រមទាំងការចែករំលែកលទ្ធផលជាកម្មវិធីវេប។
 
     **រូបវិទ្យានៃរលក សញ្ញាណស្ពិចត្រាល់ សន្ទស្សន៍ និងទ្រឹស្ដីការចាត់ថ្នាក់** ជាខ្លឹមសារសៀវភៅទី៣ ហើយ **ស្រទាប់វ៉ិចទ័រ មូលទិន្នន័យ បាហ្វ័រ និងការត្រួតស្រទាប់** ជាខ្លឹមសារសៀវភៅទី២។ សៀវភៅនេះប្រើពួកវាជាឧបករណ៍ ដោយមិនបង្រៀនឡើងវិញ។
+
+## អានដោយគ្មានអ៊ីនធឺណិត
+
+<div class="offline-save"></div>
+
+- **ទូរសព្ទ ឬកុំព្យូទ័រផ្ទាល់ខ្លួន**៖ ចុចប៊ូតុងខាងលើម្ដង ពេលមាន Wi-Fi។ ក្រោយមក បើកតំណ [khgeo.github.io/applied-gis-rs](https://khgeo.github.io/applied-gis-rs/) ដដែល ទោះគ្មានអ៊ីនធឺណិតក៏បាន។ មេរៀន លំហាត់ **ស្លាយបង្រៀន** និងពិសោធន៍ ត្រូវបានរក្សាទុកទាំងអស់។ លើទូរសព្ទ ប្រើ «Add to Home screen» ដើម្បីបើកដូចកម្មវិធី។
+- **កុំព្យូទ័របន្ទប់ពិសោធន៍ ឬគ្មានអ៊ីនធឺណិតសោះ**៖ ទាញយក [កំណែ offline (ZIP)](https://khgeo.github.io/applied-gis-rs/downloads/applied-gis-rs-offline.zip) ចម្លងតាម USB ពន្លា (Extract) ហើយបើក `START_HERE.html` ក្នុង Chrome, Edge ឬ Firefox។ មិនចាំបាច់ដំឡើងអ្វីទេ។
+- ស្លាយបើកជារបៀបបញ្ចាំង (slide show) ពេញអេក្រង់បានទាំងពីររបៀប។ ផែនទីផ្ទៃក្រោយ OpenStreetMap ក្នុងលំហាត់ តំណខាងក្រៅ និង Earth Engine នៅតែត្រូវការអ៊ីនធឺណិត។
 
 ## ចាប់ផ្ដើមពីណា?
 
